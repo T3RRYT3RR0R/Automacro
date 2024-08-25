@@ -1,0 +1,15 @@
+@lookup {
+  @lookup usage: %@lookup% <key> <sourceVar> <returnVar>
+  // default delimiter for key:value pairs is the semicolon ':'
+
+  <$
+    Set "@lookup.Keypair.Delim=:"
+    If defined setup.args For /f "delims=" %%C in ("!setup.args: =!") Do (
+      Set "@lookup.Keypair.Delim=%%C"
+    )
+  $>
+
+  For /f "tokens=1,2,3,4" %%K in ("^!@.args^! ^!@lookup.Keypair.Delim^!")Do (
+    For /f "tokens=1 Delims=!@lookup.Keypair.Delim!" %%1 in ("^!%%L:*%%~K%%N=^!")Do Set "%%M=%%1"
+  )
+} @lookup /args

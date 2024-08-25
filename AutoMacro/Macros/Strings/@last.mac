@@ -1,0 +1,17 @@
+@last { dependencies: @strlen
+  @last usage: %@last% <varname> <"delimChar">
+  // returns : $last
+  For /f "tokens=1,* delims= " %%1 in ("^!@.args^!")Do (
+    !@strlen! %%1 $len
+    Set "$char=^^^%%~2"
+    Set "$char=^!$char:~-1^!"
+    Set "@.t=^!%%1^!"
+    Set "$last="
+    For /l %%i in (^!$len^! -1 0)Do if not defined $last (
+      If "^!@.t:~%%i,1^!" == "^!$char^!" (
+        Set "$last=^!@.t:~%%i^!"
+        Set "$last=^!$last:~1^!"
+      )
+    )
+  )
+} @last /args

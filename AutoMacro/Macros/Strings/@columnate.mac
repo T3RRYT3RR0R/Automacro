@@ -1,0 +1,26 @@
+@columnate { dependencies: @strlen
+  @columnate usage: sourceVar [yPos] [xPos] [FGcolor] [BGcolor]
+  // returns      : sourceVar.c
+  // optional arguments are positional. IE, xPos cannot be supplied without first supplying yPos
+
+  For /f "tokens=2,3,4,5,6 delims= " %%1 in ("@^!@.args^!") Do (
+    Set "@.t=^!%%~1^!"
+    !@strlen! @.t $len
+    Set "@.x="
+    Set "@.y="
+    Set "@.FG="
+    Set "@.BG="
+    If not "%%~2" == "" Set "@.x=[%%~2d"
+    If not "%%~3" == "" Set "@.y=[%%~3G"
+    If not "%%~4" == "" Set "@.FG=[38;5;%%~4m"
+    If not "%%~5" == "" Set "@.BG=[48;5;%%~5m"
+    Set "%%~1.c=^!@.y^!^!@.x^!^!@.FG^!^!@.BG^!"
+    For /l %%i in (0 1 ^!$len^!)Do Set "%%~1.c=^!%%~1.c^!^!@.t:~%%i,1^![B[D"
+    Set "%%~1.c=^!%%~1.c^![0m"
+  )
+} @columnate /args /selfref
+
+<; notes:
+  Author T3RRY
+  Version 1.0 04/08/2024
+;>
