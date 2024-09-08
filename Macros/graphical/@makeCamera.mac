@@ -1,0 +1,101 @@
+@Make.Camera { dependencies: @strlen
+  <$ // force quit
+    2>&1 Echo conversion in progress. definition Disallowed
+    Pause
+    EXIT
+  $>
+  $Set "$cam[1]Tokens= ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]"
+  $Set "$cam[2]Tokens= _`abcdefghijklmnopqrstuvwxyz"
+  Set "@.Args=^!@.Args: --=`--^!"
+  Set "@.Args=^!@.Args:--.=--VoidArg:.^!"
+  Set "@.Args=^!@.Args::\=;\^!"
+  Set "@.Args=^!@.Args: .--= .`--^!"
+  Set "@.Args=^!@.Args: .`=:.`^!"
+  Set "$temp=^!@.Args^!"
+  !@StrLen! $temp @.c
+  Set "$temp=^!@.Args:--=^!"
+  !@StrLen! $temp @.i
+  Set /A "@.i=(@.c-@.i)/2"
+  Set "@.args.supportingMATH= 2 3 4 5 6 7 11 12 13 14"
+  For /l %%i in (1 1 ^!@.i^!)do For /f "tokens=1,2 Delims=:`" %%1 in ("^!@.Args:*--=^!")Do (
+    If not "%%1"=="VoidArg" (
+      If "^!@.args.supportingMATH: %%i =^!" == "^!@.args.supportingMATH^!" (
+        Set "@.%%i=%%1"
+        Set "@.%%i.v=%%~2"
+        Set "@.%%i.v=^!@.%%i.v:;\=:\^!"
+        Set "%%1=%%~2"
+        Set "%%1=^!%%1:;\=:\^!"
+      )Else (
+        Set "@.%%i=%%1"
+        Set /A "@.%%i.v=%%~2","%%1=%%~2"
+      )
+    )Else Set "@.%%i="
+    Set "@.Args=^!@.Args:*--%%1:%%2=^!"
+  )
+  Set /A "^!@.6^!=^!@.6.v^!+1"
+  For /f "tokens=1-10 Delims=`" %%1 in ("^!@.1^!`^!@.2^!`^!@.3^!`^!@.4^!`^!@.5^!`^!@.6^!`^!@.7^!`^!@.8^!`^!@.9^!`^!@.10^!") Do (
+    Set /A "%%4.Min=0","%%5.Min=1","%%5.Max=0","@.Frame=^!%%2^!+2","%%4.start=^!%%4^!","%%5.start=^!%%5^!"
+    Set /A "FRAME=0","c.Debug=0"
+    For /f "Delims=" %%G in (^!%%1^!)Do (
+      Set /A "%%5.Max+=1"
+      Set "#[^!%%5.Max^!]=%%G"
+    )
+    Set "$temp=^!#[1]^!"
+    !@StrLen! $temp $Len
+    Set /A "%%4.Max=$Len"
+    Set /A "%%5.End=(^!%%5^!+^!%%3^!)"
+    For /l %%i in (^!%%5.Start^! 1 ^!%%5.End^!)Do (
+      Set /A "@.mapY.index=(%%i - ^!%%5.start^!)+1"
+      Set /A "%%5^!@.mapY.index^!=%%i"
+    )
+    Set "$pan.8=%%5-=1,%%51=%%5"
+    For /l %%i in (2 1 ^!%%3^!)Do (
+      Set /A "@.pan.offset=%%i-1"
+      Set "$pan.8=^!$pan.8^!,%%5%%i=%%51+^!@.pan.offset^!"
+    )
+    Set "$pan.2=^!$pan.8:-=+^!"
+    Set "$pan.4=%%4-=1"
+    Set "$pan.6=%%4+=1"
+    Set "update.%%5=^!$Pan.8:*,=^!"
+    Set "$pan.7=^!$pan.8^!,^!$pan.4^!"
+    Set "$pan.9=^!$pan.8^!,^!$pan.6^!"
+    Set "$pan.1=^!$pan.2^!,^!$pan.4^!"
+    Set "$pan.3=^!$pan.2^!,^!$pan.6^!"
+    For /f "tokens=1,2 delims=." %%G in ("^!%%~:^!")Do (
+      Set "%%~:=^!%%G.%%H^!"
+      Set "DPAD=%%H"
+    )
+    If "^!%%~:^!"=="" Set "%%~:=^!$Pan.E^!"
+    Set "$camera.data[1]=^!%%4^! ^!%%2^!"
+    For /f %%W in ("^!@.Frame^!")Do Set "CAMERA=%esc%[7;^!%%9^!m%esc%[^!%%7^!;^!%%6^!H%esc%7%esc%[1A^!FrameBar:~0,%%W^!"
+    If ^!%%3^! LSS 29 (Set /A "@.tkn.loop.1=^!@.3.v^!")Else Set "@.tkn.loop.1=29"
+    For /l %%i in (1 1 ^!@.tkn.loop.1^!)Do (
+      Set "$camera.data[1]=^!$camera.data[1]^! ^!%%5%%i^!"
+      For /f %%T in ("^!$cam[1]tokens:~%%i,1^!")Do Set "CAMERA=^!CAMERA^!%esc%[1B%esc%[^!%%6^!G%esc%[^!%%2^!X^!Shader^!%esc%[^!%%8^!m^!#[%%%%~T]:~%%?,%%@^!%esc%[^!%%9^!m^!Shader^!"
+    )
+    If ^!%%3^! GTR 29 (
+      Set "$camera.data[2]= "
+      For /l %%i in (30 1 ^!%%3^!)Do (
+        Set "$camera.data[2]=^!$camera.data[2]^! ^!%%5%%i^!"
+        Set /A "@.tkn.Index=(%%i-29)"
+        For /f %%e in ("^!@.tkn.Index^!")Do (
+          For /f %%T in ("^!$cam[2]tokens:~%%e,1^!")Do (
+            Set "CAMERA=^!CAMERA^!%esc%[1B%esc%[^!%%6^!G%esc%[^!%%2^!X^!Shader^!%esc%[^!%%8^!m^!#[%%%%T]:~%%?,%%@^!%esc%[^!%%9^!m^!Shader^!"
+          )
+        )
+      )
+    )
+    For /f %%W in ("^!@.Frame^!")Do Set "CAMERA=^!CAMERA^!%esc%[1B%esc%[^!%%6^!G^!FrameBar:~0,%%W^!%esc%[0m"
+    Set /A "@.tkn.loop.1+=2"
+    Set "$Refresh.Camera=For /f "tokens=1-^!@.tkn.loop.1^!" %%? in ("^!$camera.data[1]^!")Do "
+    If ^!%%3^! GEQ 30 (
+      Set /a "@.tkn.loop.2=^!%%3^!-29"
+      Set "$Refresh.Camera=^!$Refresh.Camera^!For /f "tokens=1-^!@.tkn.loop.2^!" %%_ in ("^!$camera.data[2]^!")Do "
+    )
+    Set "$Refresh.Camera=^!$Refresh.Camera^! (Set "Camera.view=^!CAMERA^!")"
+    Echo(%esc%[?25l
+    Set /A "%%4.max=(%%4.max-^!%%2^!)+1"
+    Set /A "%%5.max=(%%5.max-^!%%3^!)+1"
+  )
+  For /f "tokens=1 Delims==" %%G in ('Set "$temp"')Do Set "%%G="
+} @make.camera /args

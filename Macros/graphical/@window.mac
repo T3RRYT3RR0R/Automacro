@@ -1,0 +1,21 @@
+@window {
+  @window usage: %@window% <width> <height> <1~255> <1~255> 
+  @window usage: Default return variable: $window
+  @window usage: %@window:$window=myReturnVar% <width> <height> <1~255> <1~255>
+  @window usage: note: integers expected for args  1-4
+<;
+ :: Macro Version: 1.0 29/07/2024
+ :: Author:  T3RRY aka T3RRYT3RR0R
+ :: License: Creative Commons 4.0 international
+ ::          https://creativecommons.org/licenses/by/4.0/legalcode.en
+;>
+  $Set "@_substring=                "
+  set "@.magic=^!@_substring: =                ^!"
+  Set "@.Args=^!@.Args:  = ^!"
+  Set "@.Args=^!@.Args:~1^!"
+  Set /a "@.fillWidth=^!@.Args: =-2,@.fillCol=^!,@.fillshift=@.fillWidth+1"
+  For /f "tokens=1,2,3,4,5,6" %%1 in ("^!@.Args^! ^!@.fillWidth^! ^!@.fillShift^!")Do if "^!@.fillCol^!" == "%%4" (
+    Set "$window=^!@.magic:~0,%%2^!"
+    Set "$window=[48;5;%%3m[%%1X[B^!$window: =[X[48;5;%%4m[1C[%%5X[%%5C[48;5;%%3m[X[%%6D[B^![%%1X[B[0m"
+  )
+} @window /args /help /?

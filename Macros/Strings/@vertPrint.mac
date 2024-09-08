@@ -1,0 +1,38 @@
+@vertPrint { dependencies: @interleave
+  @vertPrint usage: %@vertPrint% <Escaped String | ^!expandedVariable^!> [/D]
+  //       returns: $vertPrint
+
+  <$   Preload variables
+    // macro configuration: modify $@.max to change the maximum output height
+    // supported @.max: 256 128 64 32
+    // recommended    : 64
+
+    set "$@.max=64" :: Default
+    set "$@.column="
+    set "$@.strlen= 256 128 64 32 16 8 4 2 1"
+    for %%m in (!$@.max!)Do Set "$@.strlen=!$@.strlen:*%%m=%%m!"
+    for /l %%i in (0 1 !$@.max!)Do Set "$@.column=!$@.column!^!_:~%%i,1^![B[D"
+  $>
+
+  // trim leading whitespace [blind; assume singular]
+  Set "_=^!@.args:~1^!"
+
+  // inject escape sequences between characters assuming max length
+  Set "_=!$@.column!"
+
+  // trim string of excess escape characters
+  Set "$vertPrint=^!_:[B[D[B[D=^!"
+  If /i "^!$vertPrint:~-6^!" == "[B[D" Set "$vertPrint=^!$vertPrint:~0,-6^!"
+  <$ // unload variables
+    set "$@.column="
+    set "$@.strlen="
+    set "$@.max="
+  $>
+} @vertPrint /args
+
+<; notes:
+  Autor: T3RRY
+  Version 1.0 08/08/2024
+  @vertPrint is optimized for execution speed, foregoing arguments for position or color
+  Refer to @columnate.mac for the above functionality.
+;>

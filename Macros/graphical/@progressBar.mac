@@ -1,0 +1,31 @@
+@progressBar {
+  // uses VT sequences to output an animated progress bar and status info at lines 1 and 2.
+
+  @progressBar usage: %@progressBar% <iteration> <end> <barWidth> [color]
+  @progressBar usage: arg syntax: <required> [optional]
+  @progressBar usage:
+  @progressBar usage: iteration : the current count of operations performed
+  @progressBar usage: end       : the expected total count of operations
+  @progressBar usage: barWidth  : the desired width the bar
+  @progressBar usage: * above arguments expect integer values or a variable name defined with such.
+  @progressBar usage:
+  @progressBar usage: color     : vt color sequence IE: 5;<0~255> or 2;<0~255>;<0~255>;<0~255>
+
+  // void custom color variable
+  Set "@.barcolor="
+
+  // split args
+  For /f "tokens=1,2,3,* delims= " %%1 in ("^!@.args^!")Do (
+
+    // test optional arg; assign if provided
+    // invalid RGB values will be ignored; defaulting to red / green gradient
+    If not "%%~4" == "" Set "@.barcolor=!\E![48;%%~4m"
+
+    // calculate percentage and default color gradients
+    Set /a "@.$end=(%%~2)","$percent=((%%~1)*100)/(%%~2)","$Bar=($percent*(%%~3))/100","$R=255-(($percent*15)/10)" ,"$G=(($percent*20)/10)"
+
+    // output progress bar and associated info.
+    Echo(!\E![H!\E![K!\E![48;2;^!$R^!;^!$G^!;0m^!@.barcolor^!!\E![^!$bar^!X!\E![0m!\E![E%%1/^!@.$end^! {^!$percent^!%%} ^!time^!!\E![K!\E![B!\E![K
+  )
+} @progressBar /args /selfRef
+

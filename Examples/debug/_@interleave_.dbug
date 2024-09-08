@@ -1,0 +1,85 @@
+raw.3:   For /f "tokens=1,2,3" %%1 in ("^!@.args^!")Do (
+exp.3:   For /f "tokens=1,2,3" %%1 in ("!@.args!")Do (
+
+raw.4:     !@strlen! %%~1 $len.1
+exp.4:     For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0"))Else Set @strlen.Args= %%~1 $len.1
+
+raw.5:     !@strlen! %%~2 $len.2
+exp.5:     For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0"))Else Set @strlen.Args= %%~2 $len.2
+
+raw.6:     If ^!$len.1^! GEQ ^!$len.2^! (
+exp.6:     If !$len.1! GEQ !$len.2! (
+
+raw.7:       Set "@.t1=^!%%1^!"
+exp.7:       Set "@.t1=!%%1!"
+
+raw.8:       Set "@.t2=^!%%2^!"
+exp.8:       Set "@.t2=!%%2!"
+
+raw.9:       Set /a "$len=$len.1"
+exp.9:       Set /a "$len=$len.1"
+
+raw.10:     )else (
+exp.10:     )else (
+
+raw.11:       Set "@.t1=^!%%2^!"
+exp.11:       Set "@.t1=!%%2!"
+
+raw.12:       Set "@.t2=^!%%1^!"
+exp.12:       Set "@.t2=!%%1!"
+
+raw.13:       Set /a "$len=$len.2"
+exp.13:       Set /a "$len=$len.2"
+
+raw.14:     )
+exp.14:     )
+
+raw.15:     Set "%%3="
+exp.15:     Set "%%3="
+
+raw.16:     For /l %%i in (0 1 ^!$len^!)do (
+exp.16:     For /l %%i in (0 1 !$len!)do (
+
+raw.17:       Set "%3=^!%%3^!^!@.t1:~%%i,1^!^!@.t2:~%%i,1^!"
+exp.17:       Set "%3=!%%3!!@.t1:~%%i,1!!@.t2:~%%i,1!"
+
+raw.18:     )
+exp.18:     )
+
+raw.19:   )
+exp.19:   )
+
+
+======================================================================================
+@interleave=For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3" %1 in ("!@.args!")Do (For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0"))Else Set @strlen.Args= %~1 $len.1
+For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0"))Else Set @strlen.Args= %~2 $len.2
+If !$len.1! GEQ !$len.2! (Set "@.t1=!%1!"
+Set "@.t2=!%2!"
+Set /a "$len=$len.1")else (Set "@.t1=!%2!"
+Set "@.t2=!%1!"
+Set /a "$len=$len.2")
+Set "%3="
+For /l %i in (0 1 !$len!)do (Set "%3=!%3!!@.t1:~%i,1!!@.t2:~%i,1!")))Else Set @.Args=
+@interleave.end=20
+@interleave.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\Strings\@interleave.mac
+@interleave.start=2
+@interleave.switches= @interleave /args
+@interleave_Dependencies= @strlen
+@interleave_usage=@interleave Usage:
+
+ %@interleave% <sourceVar1> <sourceVar2> <returnVar>
+
+======================================================================================
+

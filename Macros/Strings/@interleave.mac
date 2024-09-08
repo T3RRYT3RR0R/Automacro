@@ -1,0 +1,41 @@
+@interleave { dependencies @strlen @while
+<;
+  Interweaves the characters of two source variables, returning in arg 3.
+  example:
+  var1=hello
+  var2=world
+  %@interleave% var1 var2 result
+  result=hweolrllod
+
+  precedence / character order priority is given to the longest string.
+  in the event both strings are of equal length, the first string is given precedence.
+;>
+  @interleave usage: %@interleave% <sourceVar1> <sourceVar2> <returnVar> [/R]
+  @interleave usage: /R = collapse duplicate whitespace
+  For /f "tokens=1,2,3,4" %%1 in ("^!@.args^!")Do (
+    !@strlen! %%~1 $len.1
+    !@strlen! %%~2 $len.2
+    If ^!$len.1^! GEQ ^!$len.2^! (
+      Set "@.t1=^!%%1^!"
+      Set "@.t2=^!%%2^!"
+      Set /a "$len=$len.1"
+    )else (
+      Set "@.t1=^!%%2^!"
+      Set "@.t2=^!%%1^!"
+      Set /a "$len=$len.2"
+    )
+    Set "%%3="
+    For /l %%i in (0 1 ^!$len^!)do (
+      Set "%3=^!%%3^!^!@.t1:~%%i,1^!^!@.t2:~%%i,1^!"
+    )
+    If /i "%%~4" == "/R" (
+      !@while:$=@.! (
+        If "^!%%3:  = ^!" == "^!%%3^!" (
+          !@endwhile:$=@.!
+        )Else Set "%3=^!%%3:  = ^!"
+      )
+    )
+    Set "%3=^!%%3:`=^!"
+
+  )
+} @interleave /args /selfref /flush

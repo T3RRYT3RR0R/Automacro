@@ -1,0 +1,26 @@
+@alignCentre { dependencies: @strlen
+  @alignCentre usage: %@alignCentre% <Xoffset> <width> <stringVar> <returnVar> ["yPos"]
+  @alignCentre usage: supply 0 for Xoffset if no offset is desired
+  // use a positive xOffset when positioning text in a field that is offset from console xHome
+
+  // split arg variables and optional integer/sum for yPos
+  For /f "tokens=1,2,3,4,* delims= " %%1 in ("^!@.args^!")Do (
+
+    // Get length of string
+    !@strlen! %%3 $len
+
+    // calculate centre x position
+    Set /a "$centre=((%%2/2)-($len/2))+%%1"
+
+    // apply position via VT absolute column sequence
+    Set "%%4=[^!$centre^!G^!%%3^!"
+
+    // process optional arg if supplied for yPos
+    If not "%%~5" == "" (
+     Set /a "$centre.y=(%%~5)"
+
+     // prepend reutrn var with VT absolute row sequence
+     Set "%%4=[^!$centre.y^!d^!%%4^!"
+    )
+  )
+} @alignCentre /args /help
