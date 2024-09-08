@@ -1,0 +1,58 @@
+@windowFrame {
+  @windowFrame usage: %@windowFrame% <Width:min=3> <height:min=3> <1~255> <1~255> <character>
+  @windowFrame usage: returnVars = $windowFrame $windowFrame.invertedColor
+<; Constructs a framed window using the properties of the args provided.
+   Author: T3RRY
+   Contributers: Einst; Icarus
+   Version 1.0 31/07/2024
+;>
+  // $set : Defines the variable prior to macro definition; excludes the set command from macro
+  $Set "@.Substring=                "
+
+  // square the length of @.substring = length of 256 characters
+  set "@.height=^!@.substring: =                ^!"
+  set "@.width=^!@.substring: =                ^!"
+
+  // take last charcter of args as frame character
+  Set "@.char=^!@.args:~-1^!"
+
+  // take the second last character as fill character.
+  Set "@.fillChar=^!@.args:~-2,-1^!"
+
+  // reduce duplicate whitespaces
+  Set "@.args=^!@.args:  = ^!"
+
+  // remove character arg from arg string
+  Set "@.args=^!@.args:~1,-2^!"
+
+  // strip trailing whitespace if present
+  If "^!@.args:~-1^!" == " " Set "@.args=^!@.args:~0,-1^!"
+
+  // calculate offset of height for the fill height
+  Set /a "@.fillWidth=^!@.args: =-2,@.fillcol=^!"
+
+  // tokenise processed args for substituion within DE variable; Validate Args
+  For /f "tokens=1,2,3,4,5,6,7 delims=`" %%1 in ("^!@.args: =`^!`^!@.fillWidth^!`^!@.char^!`^!@.fillChar^!")Do If "^!@.fillcol^!" == "%%4" (
+
+    // trim Substring to fill height
+    Set "@.height=^!@.height:~-%%2,-2^!"
+
+    // trim Substring to width
+    Set "@.width=^!@.width:~0,%%1^!"
+
+    // trim Substring to fill width
+    Set "@.fill=^!@.width:~0,%%5^!"
+
+    // Replace whitespace with fill character and expand for substitution
+    For /f "delims=" %%W in ("^!@.fill: =%%7^!")Do (
+
+      // Define framed window to return var by constructing with substitutions
+      Set "$windowFrame=[38;5;%%4m[48;5;%%3m^!@.width: =[38;5;%%4m%%6[38;5;%%3m^![B[%%1D^!@.height: =[38;5;%%4m%%6[38;5;%%3m[48;5;%%4m%%W[38;5;%%4m[48;5;%%3m%%6[B[%%1D^![48;5;%%3m^!@.width: =%%6^![B[%%1D[0m"
+
+      // return inverted + original window Color scheme
+      Set "$windowFrame.invertedColor=[48;5;%%3m[38;5;%%4m"
+      Set "$windowFrame.Color=[48;5;%%4m[38;5;%%3m"
+
+    )
+  )
+} @windowFrame /args /selfRef

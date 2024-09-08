@@ -1,0 +1,31 @@
+@searchArray { dependencies: @push @pop
+  @searchArray usage: %@searchArray% <arrayName> <returnVar> <searchStringVar"> [/E]
+  @searchArray usage: /E : return exact matches to the search value only
+  @searchArray usage:      Default behaviour returns any value containing the search string
+  @searchArray usage:      
+  @searchArray usage:      Matches are returned as a ` delimited list: "value"`"value"
+  @searchArray usage:      the @pop macro can be used to get individual reeturn values.
+
+  // set exact flag if switch present
+  If not "^!@.args: /E=^!" == "^!@.args^!" (
+    Set "@.args=^!@.args: /E=^!"
+    Set "@.exact=1"
+  )Else Set "@.exact="
+
+  // split args and expand searchString variable
+  For /f "tokens=1,2,3 delims= " %%1 in ("^!@.args^!")Do For /f "delims=" %%3 in ("^!%%~3^!")Do (
+
+    // Step through array from end to start
+    For /l %%i in (^!%%1[i]^! -1 1)Do If defined %%1[%%i] (
+
+      // test for presence of search string - Case insensitive
+      If not "^!%%1[%%i]:%%~3=^!" == "^!%%1[%%i]^!" (
+
+        // enact return using @push macro based on value of exact flag
+        if defined @.exact (
+          If "^!%%1[%%i]^!" == "%%~3" !@push! %%2 %%i:^!%%1[%%i]^!
+        )else !@push! %%2 %%i:^!%%1[%%i]^!
+      )
+    )
+  )
+} @searchArray /args

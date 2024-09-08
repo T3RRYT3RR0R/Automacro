@@ -1,0 +1,19 @@
+@average {
+  @average usage: <returnvar> <list>
+<; Calculates the average value of integers in the list provided.
+     Author: T3RRY
+     Version: 1.0 01/08/2024
+     Contributor: Grub4K 
+                 Created of the Bit shifting method used
+                 to convert list elements into arg count
+;>
+  // strip leading whitespaces from args
+  For /f "tokens=1,2* Delims= " %%@ in ("#^!@.args^!")Do (
+
+    // take all tokens after arg 1 as the integer list
+    Set "@.args=%%B"
+
+    // return average to arg 1 by dividing by the arg count
+    Set /a "%%A=(^!@.args: =+^!) / (((^!@.args: =>>31)+3>>1)+((^!>>31)+3>>1))"
+  )
+} @average /args

@@ -1,0 +1,139 @@
+@substring { dependencies: "@strlen 2048"
+  // @substring args total length expected to be less 2048 characters.
+  // @substring's defined state is 5160 characters
+  @substring usage: [/A] [/O] [/N] [/L] [/P] [/K] [[/E] [option]] [/M] [/R 'search=replace'~int,-int'~int,-int'~int'~-int'] [/I 'INT'string'] Arg "or Arg phrase"
+  @substring usage:  
+  @substring usage:  Switches apply after their occurance, and do not affect
+  @substring usage:  arguments or other switches which precede them.
+  @substring usage:  [/SWITCH-] Use "-" after a switch to disable the switch
+  @substring usage:  $* = Arg or "Arg phrase"
+  @substring usage:  
+  @substring usage:  /E /P /K optional switches for /I and /R use prior /I or /R
+  @substring usage:      Default # of substring options supported by /I and /R is 5
+  @substring usage:  /A Disable Array index incrementing.
+  @substring usage:  /E extend number of substring options for /I and /R to 25
+  @substring usage:  /E [INT] extend number of options for /I and /R to INT
+  @substring usage:  /P print current string after each substring modification
+  @substring usage:  /K keep original values in $Return[i].Raw + $Return.Raw.Len
+  @substring usage:  /O output the processed argument string.
+  @substring usage:  /N Emit a Newline after output from /O
+  @substring usage:  /M mirror the argument {string reverse}
+  @substring usage:  /R Replace - standard Substring modification syntax
+  @substring usage:  /I 'INT'substring' Insert Substring at position INT
+  @substring usage:  /I '['substring' Prepend substring to subsequent $*
+  @substring usage:  /I ']'substring'  Append substring to subsequent $*
+  @substring usage:     insertion ALWAYS precedes /R Substring Modifications
+  @substring usage:  Unquoted $* following a switch or switch option
+  @substring usage:    must be seperated using the backtick character '`'
+  @substring usage:  "`" Backtick is the internal argument seperator and
+  @substring usage:               cannot be contained within an argument or switch.
+  @substring usage:  "'" Single Quote is the Switch option seperator
+  @substring usage:               and cannot be contained within Switch options.
+  @substring usage:  Arguments or /I options containing only "$_" will be
+  @substring usage:  expanded to the modified state of the last argument.
+  <;
+    Macro Version: 2.0 27/07/2024
+    Author: T3RRY aka T3RRYT3RR0R
+    License: Creative Commons 4.0 international
+             https://creativecommons.org/licenses/by/4.0/legalcode.en
+  ;>
+  If not defined $Return.i Set "$Return.i=0"
+  Set "$*=^!@.Args^!"
+  Set "$*=^!$*:" "=`^!"
+  Set ^"$*=^!$*:"=`^!"
+  Set "$*=^!$*: /=`/^!"
+  Set "$*=^!$*: `=`^!"
+  Set "$*=^!$*:``=`^!"
+  IF "^!$*:~-1^!"==" " Set "$*=^!$*:~0,-1^!"
+  IF "^!$*:~0,1^!"=="`" Set "$*=^!$*:~1^!"
+  IF "^!$*:~-1^!"=="`" Set "$*=^!$*:~0,-1^!"
+  Set "$?=^!$*^!"
+  !@strlen! $? ${ArgC}
+  Set "$?=^!$*:`=^!"
+  !@StrLen! $? $`
+  Set /A "${ArgC}-=$`"
+  For /l %%i in (0 1 ^!${ArgC}^!)Do If defined $* For /f "tokens=1 Delims=`" %%G in ("^!$*^!")Do (
+    Set "$?=%%G"
+    Set "$@=%%G"
+    If "^!$@^!" == "$_" If defined $_ Set "$@=^!$_^!"
+    !@StrLen! $? $len
+    Set "$*=^!$*:*`=^!"
+    If not "^!$@:~0,1^!"=="/" (
+      Set "$?=^!$@^!"
+      If Defined $\S[M] (
+        Set "$oLen=^!$Len^!"
+        If "%%G"=="$_" (
+           Set "$?=^!$_^!"
+           !@StrLen! $? $oLen
+        )
+        Set "$.="
+        For /l %%i in (^!$oLen^! -1 0)Do Set "$.=^!$.^!^!$@:~%%i,1^!"
+        Set "$@=^!$.^!"
+      )
+      Set "$\Insert=^!$\S[I]^!"
+      If Defined $\Insert If "^!$\Insert:''=^!" == "^!$\Insert^!" (
+        Set "$\S\options.i=5"
+        If defined $\S[E] Set "$\S\options.i=^!$\S[E]:true=25^!"
+        For /l %%i in (1 1 ^!$\S\options.i^!)Do If defined $\Insert For /f "tokens=1,2 Delims='" %%V in ("^!$\Insert^!")Do (
+          Set "$\S[I]pos=%%V"
+          Set "$?=^!$@^!"
+          !@StrLen! $? $cLen
+          Set "$?=%%V'%%W"
+          For /f "delims=" %%I in ("^!$cLen^!")Do (
+            Set "$\S[I]pos=^!$\S[I]pos:]=%%I^!"
+            Set "$\S[I]pos=^!$\S[I]pos:[=0^!"
+            Set /A "$Lead=$\S[I]pos","$Tail=(^!$cLen^!-^!$\S[I]pos^!)"
+          )
+          If ^!$\S[I]pos^! EQU ^!$cLen^! For /f "delims=" %%I in ("^!$\S[I]pos^!")Do Set "$@=^!$@^!%%W"
+          If ^!$\S[I]pos^! EQU 0 For /f "delims=" %%I in ("^!$\S[I]pos^!")Do Set "$@=%%W^!$@^!"
+          If ^!$\S[I]pos^! GTR 0 If ^!$\S[I]pos^! LSS ^!$cLen^! For /f "tokens=1,2" %%I in ("^!$Lead^! ^!$Tail^!")Do Set "$@=^!$@:~0,%%I^!%%W^!$@:~-%%J^!"
+          For /f "Delims=" %%E in ("^!$_^!")Do Set "$@=^!$@:$_=%%E^!"
+          If "^!$\Insert:~0,1^!"=="'" Set "$\Insert=^!$\Insert:~1^!"
+          If defined $\Insert Set "$\Insert=^!$\Insert:*'=^!"
+          If defined $\Insert Set "$\Insert=^!$\Insert:*'=^!"
+          If "^!$\S[P]^!"=="true" If /i not "^!$?^!" == "^!$@^!" Echo(^!$@^!
+      )   )
+      Set "$@.R=^!$\S[R]^!"
+      If defined $@.R (
+          Set "$\S\options.i=5"
+          If defined $\S[E] Set "$\S\options.i=^!$\S[E]:true=25^!"
+          If Defined $\S[R] For /l %%i in (1 1 ^!$\S\options.i^!)Do If defined $@.R For /f "tokens=1 Delims='" %%V in ("^!$@.R^!")Do (
+        Set "$?=%%V
+        For /f "delims=" %%R in ("^!$?^!")Do Set "$@=^!$@:%%R^!"
+        If "^!$@.R:~0,1^!"=="'" Set "$@.R=^!$@.R:~1^!"
+        If defined $@.R Set "$@.R=^!$@.R:*'=^!"
+        If defined $@.R Set "$@.R=^!$@.R:*'=^!"
+        If "^!$\S[P]^!"=="true" If /i "^!$?^!" NEQ "^!$@^!" Echo(^!$@^!
+      )   )
+      If /i not "^!$\S[A]^!"=="true" Set /A "$Return.i+=1"
+      Set "$Return[^!$Return.i^!]=^!$@^!"
+      If "^!$\S[l]^!"=="true" (
+        set /a "$sLen=$Len"
+        If not "^!$@^!" == "%%G" (
+          If "^!$\S[K]^!"=="true" (
+            Set "$Return[^!$Return.i^!].RAW.len=^!$Len^!"
+            Set "$Return[^!$Return.i^!].RAW=%%G"
+            If "%%G"=="$_" (
+              Set "$?=^!$_^!"
+              !@StrLen! $? $oLen
+              Set "$Return[^!$Return.i^!].RAW.len=^!$oLen^!"
+              Set "$Return[^!$Return.i^!].RAW=^!$_^!"
+            )
+          )
+          Set "$?=^!$@^!"
+          !@StrLen! $? $sLen
+        )
+        Set "$Return[^!$Return.i^!].len=^!$sLen^!"
+      )
+      Set "$_=^!$@^!"
+      If "^!$\S[O]^!"=="true" <nul Set /p "=^!$@^! "
+      If "^!$\S[N]^!" == "true" Echo(
+    )Else (
+      For /f "tokens=1,* delims=/ " %%1 in ("^!$@^!")Do (
+        Set "$\S[%%1]=%%~2"
+        if not defined $\S[%%1] Set "$\S[%%1]=true"
+      )
+    )
+  )
+  For %%G in (K P A I R M E L O N)Do Set "$\S[%%~G]="
+} @substring /args /?

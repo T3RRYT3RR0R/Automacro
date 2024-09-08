@@ -1,0 +1,82 @@
+raw.13:   set "@.height=^!@.substring: =                ^!"
+exp.13:   set "@.height=!@.substring: =                !"
+
+raw.14:   set "@.width=^!@.substring: =                ^!"
+exp.14:   set "@.width=!@.substring: =                !"
+
+raw.17:   Set "@.char=^!@.args:~-1^!"
+exp.17:   Set "@.char=!@.args:~-1!"
+
+raw.20:   Set "@.fillChar=^!@.args:~-2,-1^!"
+exp.20:   Set "@.fillChar=!@.args:~-2,-1!"
+
+raw.23:   Set "@.args=^!@.args:  = ^!"
+exp.23:   Set "@.args=!@.args:  = !"
+
+raw.26:   Set "@.args=^!@.args:~1,-2^!"
+exp.26:   Set "@.args=!@.args:~1,-2!"
+
+raw.29:   If "^!@.args:~-1^!" == " " Set "@.args=^!@.args:~0,-1^!"
+exp.29:   If "!@.args:~-1!" == " " Set "@.args=!@.args:~0,-1!"
+
+raw.32:   Set /a "@.fillWidth=^!@.args: =-2,@.fillcol=^!"
+exp.32:   Set /a "@.fillWidth=!@.args: =-2,@.fillcol=!"
+
+raw.35:   For /f "tokens=1,2,3,4,5,6,7 delims=`" %%1 in ("^!@.args: =`^!`^!@.fillWidth^!`^!@.char^!`^!@.fillChar^!")Do If "^!@.fillcol^!" == "%%4" (
+exp.35:   For /f "tokens=1,2,3,4,5,6,7 delims=`" %%1 in ("!@.args: =`!`!@.fillWidth!`!@.char!`!@.fillChar!")Do If "!@.fillcol!" == "%%4" (
+
+raw.38:     Set "@.height=^!@.height:~-%%2,-2^!"
+exp.38:     Set "@.height=!@.height:~-%%2,-2!"
+
+raw.41:     Set "@.width=^!@.width:~0,%%1^!"
+exp.41:     Set "@.width=!@.width:~0,%%1!"
+
+raw.44:     Set "@.fill=^!@.width:~0,%%5^!"
+exp.44:     Set "@.fill=!@.width:~0,%%5!"
+
+raw.47:     For /f "delims=" %%W in ("^!@.fill: =%%7^!")Do (
+exp.47:     For /f "delims=" %%W in ("!@.fill: =%%7!")Do (
+
+raw.50:       Set "$windowFrame=[38;5;%%4m[48;5;%%3m^!@.width: =[38;5;%%4m%%6[38;5;%%3m^![B[%%1D^!@.height: =[38;5;%%4m%%6[38;5;%%3m[48;5;%%4m%%W[38;5;%%4m[48;5;%%3m%%6[B[%%1D^![48;5;%%3m^!@.width: =%%6^![B[%%1D[0m"
+exp.50:       Set "$windowFrame=[38;5;%%4m[48;5;%%3m!@.width: =[38;5;%%4m%%6[38;5;%%3m![B[%%1D!@.height: =[38;5;%%4m%%6[38;5;%%3m[48;5;%%4m%%W[38;5;%%4m[48;5;%%3m%%6[B[%%1D![48;5;%%3m!@.width: =%%6![B[%%1D[0m"
+
+raw.53:       Set "$windowFrame.invertedColor=[48;5;%%3m[38;5;%%4m"
+exp.53:       Set "$windowFrame.invertedColor=[48;5;%%3m[38;5;%%4m"
+
+raw.54:       Set "$windowFrame.Color=[48;5;%%4m[38;5;%%3m"
+exp.54:       Set "$windowFrame.Color=[48;5;%%4m[38;5;%%3m"
+
+raw.56:     )
+exp.56:     )
+
+raw.57:   )
+exp.57:   )
+
+
+======================================================================================
+@windowFrame=For %. in (1 2)Do if %.==2 (set "@windowFrame.height=!@windowFrame.substring: =                !"
+set "@windowFrame.width=!@windowFrame.substring: =                !"
+Set "@windowFrame.char=!@windowFrame.args:~-1!"
+Set "@windowFrame.fillChar=!@windowFrame.args:~-2,-1!"
+Set "@windowFrame.args=!@windowFrame.args:  = !"
+Set "@windowFrame.args=!@windowFrame.args:~1,-2!"
+If "!@windowFrame.args:~-1!" == " " Set "@windowFrame.args=!@windowFrame.args:~0,-1!"
+Set /a "@windowFrame.fillWidth=!@windowFrame.args: =-2,@windowFrame.fillcol=!"
+For /f "tokens=1,2,3,4,5,6,7 delims=`" %1 in ("!@windowFrame.args: =`!`!@windowFrame.fillWidth!`!@windowFrame.char!`!@windowFrame.fillChar!")Do If "!@windowFrame.fillcol!" == "%4" (Set "@windowFrame.height=!@windowFrame.height:~-%2,-2!"
+Set "@windowFrame.width=!@windowFrame.width:~0,%1!"
+Set "@windowFrame.fill=!@windowFrame.width:~0,%5!"
+For /f "delims=" %W in ("!@windowFrame.fill: =%7!")Do (Set "$windowFrame=[38;5;%4m[48;5;%3m!@windowFrame.width: =[38;5;%4m%6[38;5;%3m![B[%1D!@windowFrame.height: =[38;5;%4m%6[38;5;%3m[48;5;%4m%W[38;5;%4m[48;5;%3m%6[B[%1D![48;5;%3m!@windowFrame.width: =%6![B[%1D[0m"
+Set "$windowFrame.invertedColor=[48;5;%3m[38;5;%4m"
+Set "$windowFrame.Color=[48;5;%4m[38;5;%3m")))Else Set @windowFrame.Args=
+@windowFrame.end=58
+@windowFrame.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\graphical\@windowFrame.mac
+@windowFrame.start=3
+@windowFrame.Substring=                
+@windowFrame.switches= @windowFrame /args /selfRef
+@windowFrame_usage=@windowFrame Usage:
+
+ %@windowFrame% <Width:min=3> <height:min=3> <1~255> <1~255> <character>
+ returnVars = $windowFrame $windowFrame.invertedColor
+
+======================================================================================
+

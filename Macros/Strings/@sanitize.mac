@@ -1,0 +1,18 @@
+@sanitize { dependencies: @strlen
+  @sanitize usage: %@sanitize% sourceVar whitelistVar returnVar
+  For /f "tokens=1,2,3,4 Delims= " %%1 in ("^!@.args^!")Do (
+    Set "%%~3="
+    !@strlen! %%1 %%1_len
+    !@strlen:4096 2048 1024 512 =! %%2 %%2_len
+    For /l %%i in (0 1 ^!%%1_len^!)Do (
+      Set "@.safe="
+      For /l %%j in (0 1 ^!%%2_len^!)Do If not defined @.safe (
+        If "^!%%~1:~%%i,1^!" == "^!%%~2:~%%j,1^!" (
+          Set "@.safe=1"
+          Set "%%~3=^!%%~3^!^!%%~1:~%%i,1^!"
+          If /i "%%~4" == "/cull" Set "%%~3=^!%%~3:  = ^!"
+        )
+      )
+    )
+  )
+} @sanitize /args

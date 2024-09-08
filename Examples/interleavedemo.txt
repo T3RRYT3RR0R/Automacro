@@ -1,0 +1,12 @@
+@Echo off & setlocal EnableDelayedExpansion
+cls
+
+REM demo script - a simple animation simulating nightfall
+
+Call "%~dp0automacro.bat" @interleave /debug
+%@interleave% userprofile computername $return
+
+Set $return
+
+
+Endlocal & goto:eof
