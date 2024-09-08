@@ -76,8 +76,10 @@ Set AutomacroRoot="!AutomacroRoot:\=" "!"
 For %%G in (!AutomacroRoot!)Do if not "%%~G" == "_END_" Set "last=%%~G"
 Set "AutomacroRoot=%~dp0"
 Set "AutomacroRoot=!AutomacroRoot:\%last%=!"
-Set "PATH=%Path%;%~dp0;!automacroRoot!"
-Set "PathExt=!PathExt!;.mac"
+If not "!PATH:;%~dp0=!" == "!PATH!" Set "PATH=%Path%;%~dp0"
+If not "!PATH:;%automacroRoot%=!" == "!PATH!" Set "PATH=%Path%;%automacroRoot%"
+If not "!PATHEXT:.mac=!" == "!PATHEXT!" Set "PATHEXT=!PATHEXT!;.mac"
+
 (Set \n=^^^
 
 %= Above empty line required =%)

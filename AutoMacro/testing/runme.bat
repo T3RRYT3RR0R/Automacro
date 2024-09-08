@@ -1,6 +1,9 @@
 @echo off & setlocal Enabledelayedexpansion
 CLS
 
+rem this file in combination with @demo.mac can be used
+rem to familiarise yourself with the syntax of automacro.bat
+
 Call %~dp0automacro.bat @demo /debug
 Echo=======================================================
 Echo !\E![7m Expanded With args !\E![0m
