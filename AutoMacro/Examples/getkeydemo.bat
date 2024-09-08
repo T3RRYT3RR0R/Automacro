@@ -63,3 +63,4 @@ Echo(!\E![1;1H!\E![2J!$prompt:/hide=!!\E!7
       )
     ) 
   )
+Exit /b 0
