@@ -1,5 +1,5 @@
-@vertPrint {
-  @vertPrint usage: %@vertPrint% <Escaped String | ^!expandedVariable^!>
+@vertPrint { dependencies: @interleave
+  @vertPrint usage: %@vertPrint% <Escaped String | ^!expandedVariable^!> [/D]
   //       returns: $vertPrint
 
   <$   Preload variables
