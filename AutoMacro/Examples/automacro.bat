@@ -43,6 +43,7 @@ If "%~1"=="" (
 Set "AutoMacros= %*"
 
 Set AutoMacros | %systemroot%\system32\findstr.exe /li "\/\?" > nul && (
+  mode 130,70
   Setlocal EnableDelayedExpansion
   Set "AutoMacro.help=true"
   Set "AutoMacros=!AutoMacros: /?=!"
@@ -76,21 +77,18 @@ Set AutomacroRoot="!AutomacroRoot:\=" "!"
 For %%G in (!AutomacroRoot!)Do if not "%%~G" == "_END_" Set "last=%%~G"
 Set "AutomacroRoot=%~dp0"
 Set "AutomacroRoot=!AutomacroRoot:\%last%=!"
-Set "PATH=%Path%;%~dp0;!automacroRoot!"
-Set "PathExt=!PathExt!;.mac"
+If not "!PATH:;%~dp0=!" == "!PATH!" Set "PATH=%Path%;%~dp0"
+If not "!PATH:;%automacroRoot%=!" == "!PATH!" Set "PATH=%Path%;%automacroRoot%"
+If /i not "!PATHEXT:.mac=!" == "!PATHEXT!" Set "PATHEXT=!PATHEXT!;.mac"
+
 (Set \n=^^^
 
 %= Above empty line required =%)
 
-If defined Automacro.help if not defined AutoMacros (
-  Rem arg contains help switch only. display names of any .mac files in tree of Root
-  CLS
-  PUSHD "!automacroRoot!"
-  @(For /f "delims=" %%G in ('Dir /b /s @*.mac')Do @Echo(%%~nG) | @more
-  POPD
-  Pause
-  Endlocal & Exit /b 0
-)
+REM the below defines the escape character 0x1B to the variable \E
+REM providing the FULL path to cmd ensures the definition doesn't fail if the CD command is used prior to
+REM its definition. [ windows 11 issue ]
+For /F %%a in ('Echo prompt $E^| %systemroot%\system32\cmd.exe')Do Set \E=%%a
 
 Set StrLen=For %%n in (1 2)Do if %%n==2 (%\n%
   For /f "tokens=1,2 delims= " %%s in ("^!args^!")Do (%\n%
@@ -105,12 +103,38 @@ Set StrLen=For %%n in (1 2)Do if %%n==2 (%\n%
   )%\n%
 )Else set args=
 
+REM help feature requires adherence to .mac extension type for macro files.
+If defined Automacro.help if not defined AutoMacros (
+  Rem arg contains help switch only. display names of any .mac files in tree of Root
+  CLS
+  PUSHD "!automacroRoot!"
+  Set "itemMax=0"
+  Set "item.i=0"
+  Echo for macro specific help, use:
+  Echo %~n0 macroname /?
+  Echo !\E![B!\E![7mAvailable Macros:!\E![0m
+  For /f "delims=" %%G in ('Dir /b /s @*.mac')Do (
+    Set /a item.i+=1
+    Set "item[!item.i!]=%%~nG"
+    %strlen% item[!item.i!] itemWidth
+    If !itemWidth! GTR !itemMax! Set /a itemMax=itemWidth + 1
+  )
+  Set "currentWidth=1"
+  Set "currentHeight=5"
+  Set /a "newRow=130-itemMax"
+  For /l %%i in (1 1 !item.i!)do (
+    Echo(!\E![!currentHeight!;!currentWidth!H!item[%%i]!
+    Set /a currentWidth+=itemMax
+    If !currentWidth! GEQ !newRow! Set /a currentWidth=1,currentHeight+=1
+  )
+  Echo(
+  POPD
+  Pause
+  Endlocal & Exit /b 0
+)
+
 Set HELP=For %%. in (1 2)Do if %%. EQU 2 (For %%H in (^^^!helpfiles^^^!)Do If exist "%TEMP%\%%H.hlp" More ^< "%TEMP%\%%H.hlp"^)Else Set helpfiles=
 
-REM the below defines the escape character 0x1B to the variable \E
-REM providing the FULL path to cmd ensures the definition doesn't fail if the CD command is used prior to
-REM its definition. [ windows 11 issue ]
-For /F %%a in ('Echo prompt $E^| %systemroot%\system32\cmd.exe')Do Set \E=%%a
 (Set LF=^
 
 
