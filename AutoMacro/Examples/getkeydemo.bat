@@ -29,7 +29,7 @@ rem Call:alphanumerical myVar string "description of input type: "
 rem ^^ returns a string of any length that may containin alphanumerical characters + whitespace
 
 Set "$prompt=%~3 %~4"
-Echo(!\E![1;1H!\E![2J!$prompt:/hide=!
+Echo(!\E![1;1H!\E![2J!$prompt:/hide=!!\E!7
   Set "%~1="
   Set "total=0"
   %@while:$=#% (
@@ -52,7 +52,7 @@ Echo(!\E![1;1H!\E![2J!$prompt:/hide=!
         If !total! GEQ %~2 %@endwhile:$=#%
         Set ^"%~1=!%~1!!$pressed!"
         If /i "!$prompt:/hide=!" == "!$prompt!" (
-          <nul Set /p "=!\E![1G!%~1!!\E![K"
+          <nul Set /p "=!\E!8!\E![B!\E![1G!\E![0J!%~1!"
         ) Else <nul Set /p "=*"
       ) Else (
         if defined %~1 (
