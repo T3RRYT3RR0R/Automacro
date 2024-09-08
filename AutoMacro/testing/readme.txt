@@ -20,8 +20,8 @@ Syntax for defining macros with AutoMacro:
  
  note: 'macroname {' and '} macroname' are opening and closing tags.
         Macro Initialization args are available in the Variable setup.args if provided.
-
-        All unremarked lines after the Opening tag (after the last instance of "@macroname usage:" until the matching
+        Each such tag MUST be positioned at the beginning of the line.
+        All unremarked lines after the Opening tag (after the last instance of "@macroname usage:" until the mathcing
         closing tag will be defined to the macro.
         If usage info is provided on the line following the opening tag, it will be defined to macroname_usage
          $Set : defines the subsequent variable / value pair and excludes the line from the macro.
@@ -37,25 +37,25 @@ Syntax for defining macros with AutoMacro:
         /help : displays usage info if @macroname.args not defined. requires /args usage
  .||       /? : creates a help file to be displayed by using the HELP macro, IE %Help% macroname
        /flush : undefine all macro specific temp variables prefixed with @. or @macroname. after executing macro
- Dependencies : Defines supplied macro Arguments to enable embedding in the Host macro definition using
+ Dependencies : Defines supplied macro Arguments to enable embedding in the Host macro definiton using
                 Delayed Expansion. Dependencies are assumed to be in the same file as the host
        
- *** comment lines: " :: " // ", or " REM ", or <; multiline comments ;> will be excluded from the macro definition.
+ *** comment lines: " :: " // ", or " REM ", or <; multiline comments ;> will be excluded from the macro definiton.
                      leading and trailing whitespace is expected for single line comments within macros.
  multiline remarks:  initiate a multiline comment using: <;
                     terminate a multiline comment using: ;>
  
  ! escaping:
-            Single escape any expansion of delayed variable you wish to expand at runtime, IE: ^!@.args^!
+            Single escape any expansion of delayed vairable you wish to expand at runtime, IE: ^!@.args^!
             Embedded macros should not be escaped. 
  To pass arguments containing poison characters to a macro:
             double quote the argument string
             triple escape any ! characters
             example:
-           %@macroname% "some ^^^ <> & poison ^^^!"
+           %@macroname% "some ^^^ <> & posion ^^^!"
  
  AutoMacro's can self reference [via string substitution]. Use the /selfRef switch to automatically replace all
- instances of @. within a macro's definition with macroname.
+ instances of @. within a macro's definition with macroName.
 
  *** To enable macro debugging files, use the /debug switch when calling AutoMacro
 
