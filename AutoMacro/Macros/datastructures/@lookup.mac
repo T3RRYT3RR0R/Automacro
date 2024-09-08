@@ -10,6 +10,8 @@
   $>
 
   For /f "tokens=1,2,3,4" %%K in ("^!@.args^! ^!@lookup.Keypair.Delim^!")Do (
-    For /f "tokens=1 Delims=!@lookup.Keypair.Delim!" %%1 in ("^!%%L:*%%~K%%N=^!")Do Set "%%M=%%1"
+    If not "^!%%L:%%N%%~K%%N=^!" == "^!%%L^!" (
+      For /f "tokens=1 Delims=!@lookup.Keypair.Delim!" %%1 in ("^!%%L:*%%N%%~K%%N=^!")Do Set ^"%%M=%%1"
+    )
   )
 } @lookup /args

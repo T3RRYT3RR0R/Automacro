@@ -1,6 +1,8 @@
 @window {
-  @window usage: %@window% <width> <height> <1~255> <1~255> returnVar = $window
-  @window usage: note: integers expected for all args
+  @window usage: %@window% <width> <height> <1~255> <1~255> 
+  @window usage: Default return variable: $window
+  @window usage: %@window:$window=myReturnVar% <width> <height> <1~255> <1~255>
+  @window usage: note: integers expected for args  1-4
 <;
  :: Macro Version: 1.0 29/07/2024
  :: Author:  T3RRY aka T3RRYT3RR0R

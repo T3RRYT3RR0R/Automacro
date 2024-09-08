@@ -1,0 +1,20 @@
+@cycleNext {
+  @cycleNext usage: <sourceVar> <returnVar> [/O] [/A]
+  For %%L in ( O A D )do (
+    If not "^!@.args:/%%L=^!" == "^!@.args^!" (
+      Set "@.args=^!@.args: /%%L=^!"
+      Set "@.switch[%%L]=1"
+    )else Set "@.switch[%%L]="
+  )
+  For /f "tokens=1,2" %%? in ("^!@.args^!")Do (
+    For /f "tokens=1 delims=`" %%1 in ("^!%%?^!")Do (
+      Set "%%?=^!%%?:*%%1`=^!`%%1"
+      If defined @.Switch[A] (
+        Set "%%@=^!%%@^!"%%~1"`"
+        Set "%%@=^!%%@:``=`^!"
+      )Else Set "%%@=%%~1"
+      If defined @.Switch[O] Echo(%%~1
+      If defined @.Switch[D] Echo(^!%%@:`= ^!
+    )
+  )
+} @cycleNext /args

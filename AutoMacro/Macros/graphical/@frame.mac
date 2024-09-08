@@ -1,0 +1,36 @@
+@frame {
+<; Macro function:
+   execute commands every [ %2 or greater ] centiseconds
+   Author: T3RRY
+   Version: 1.0.0
+   License: Creative Commons 4.0 international
+            https://creativecommons.org/licenses/by/4.0/legalcode.en
+;>
+
+  @frame usage: %@frame: args = returnVar Int % ( interval commands )
+  @frame usage:                 %1        %2
+  @frame usage: %1 = return variable
+  @frame usage: %2 = integer value of target centisecond interval between execution of command/s
+  @frame usage: Additional returns - days hours minutes seconds centiseconds:
+  @frame usage: %1.days
+  @frame usage: %1.hours
+  @frame usage: %1.minutes
+  @frame usage: %1.seconds
+  @frame usage: %1.centiseconds
+  @frame usage: %1.elapsed         : total centiseconds elapsed
+  @frame usage: 
+  @frame usage: Note: %@frame% Arguments are provided by substring modification *only*.
+  @frame usage: 
+
+  // calculate interval in step 1; conditionally execute trailing commands during step 2
+  For %%. in (1 2)Do if %%.==1 (
+    For /f "tokens=1,2 Delims= " %%i in (" args ")Do If not "^!%%i.CS^!"=="^!time:~-1^!" (
+      Set /A "tDiff=^!time:~-1^!-%%i.CS","%%i.CS=^!time:~-1^!"
+      If "^!tDiff:~0,-1^!"=="-" (
+        Set /A "tdiff+=10,%%i.elapsed=%%i.elapsed %% 100000000+tDiff,%%i=%%i %% 100000000+tDiff,%%i.seconds=(%%i.elapsed/100)%%60,%%i.minutes=(%%i.elapsed/(100*60))%%60,%%i.hours=(%%i.elapsed/(100*60*60))%%24,%%i.days=(%%i.elapsed/(100*60*60*24))"
+      )Else Set /A "%%i.elapsed=%%i.elapsed %% 100000000+tDiff,%%i=%%i %% 100000000+tDiff,%%i.centiseconds=(%%i.elapsed%%99),%%i.seconds=(%%i.elapsed/100)%%60,%%i.minutes=(%%i.elapsed/(100*60))%%60,%%i.hours=(%%i.elapsed/(100*60*60))%%24,%%i.days=(%%i.elapsed/(100*60*60*24))"
+      Set /a "Target=%%j","Frame=^!%%i^!"
+      Set "FrameNAME=%%i"
+    )
+  )Else if ^!FRAME^! GEQ ^!TARGET^! Set /A "Frame=0,^!FrameName^!=0"^& 
+} @frame
