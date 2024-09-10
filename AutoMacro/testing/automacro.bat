@@ -43,9 +43,19 @@ If "%~1"=="" (
 Set "AutoMacros= %*"
 
 Set AutoMacros | %systemroot%\system32\findstr.exe /li "\/\?" > nul && (
+  mode 130,70
   Setlocal EnableDelayedExpansion
   Set "AutoMacro.help=true"
   Set "AutoMacros=!AutoMacros: /?=!"
+
+  %= automacro /? styling for available macros. Supported - left centre right =%
+  Set "alignmentStyle=left"
+  For %%G in (left centre right) Do If defined AutoMacros (
+    If not "!AutoMacros: /%%G=!" == "!AutoMacros!" (
+      Set "alignmentStyle=%%G"
+      Set "AutoMacros=!AutoMacros: /%%G=!"
+    )
+  )
 )
 
 if not defined AutoMacro.help If not "!!"=="" (
@@ -78,21 +88,14 @@ Set "AutomacroRoot=%~dp0"
 Set "AutomacroRoot=!AutomacroRoot:\%last%=!"
 If not "!PATH:;%~dp0=!" == "!PATH!" Set "PATH=%Path%;%~dp0"
 If not "!PATH:;%automacroRoot%=!" == "!PATH!" Set "PATH=%Path%;%automacroRoot%"
-If not "!PATHEXT:.mac=!" == "!PATHEXT!" Set "PATHEXT=!PATHEXT!;.mac"
+If /i not "!PATHEXT:.mac=!" == "!PATHEXT!" Set "PATHEXT=!PATHEXT!;.mac"
 
 (Set \n=^^^
 
 %= Above empty line required =%)
 
-If defined Automacro.help if not defined AutoMacros (
-  Rem arg contains help switch only. display names of any .mac files in tree of Root
-  CLS
-  PUSHD "!automacroRoot!"
-  @(For /f "delims=" %%G in ('Dir /b /s @*.mac')Do @Echo(%%~nG) | @more
-  POPD
-  Pause
-  Endlocal & Exit /b 0
-)
+REM the below defines the escape character 0x1B to the variable \E
+For /F %%a in ('Echo prompt $E^| %comspec%')Do Set \E=%%a
 
 Set StrLen=For %%n in (1 2)Do if %%n==2 (%\n%
   For /f "tokens=1,2 delims= " %%s in ("^!args^!")Do (%\n%
@@ -107,12 +110,42 @@ Set StrLen=For %%n in (1 2)Do if %%n==2 (%\n%
   )%\n%
 )Else set args=
 
+REM help feature requires adherence to .mac extension type for macro files.
+If defined Automacro.help if not defined AutoMacros (
+  Rem arg contains help switch only. display names of any .mac files in tree of Root
+  CLS
+  PUSHD "!automacroRoot!"
+  Set "itemMax=0"
+  Set "item.i=0"
+  Echo !\E![33m%~n0 /? !\E![90mThis help output!\E![0m       - display available macros
+  Echo !\E![33m%~n0 /?!\E![0m [!\E![36m/left!\E![90m^|!\E![36m/centre!\E![90m^|!\E![36m/right!\E![0m] - apply formatting to the displayed output
+  Echo for macro specific help, use:
+  Echo !\E![33m%~n0 macroname /?!\E![0m
+  Echo !\E![B!\E![7mAvailable Macros:!\E![0m
+  For /f "delims=" %%G in ('Dir /b /s @*.mac')Do (
+    Set /a item.i+=1
+    Set "item[!item.i!]=%%~nG"
+    %strlen% item[!item.i!] itemWidth
+    Set /a item[!item.i!].len=itemWidth
+    If !itemWidth! GTR !itemMax! Set /a itemMax=itemWidth + 1
+  )
+  Set "currentWidth=1"
+  Set "currentHeight=7"
+  Set /a "newRow=130-itemMax"
+  For /l %%i in (1 1 !item.i!)do (
+    Set /a "alignLeft=currentWidth","alignRight=currentWidth + ( itemMax - item[%%i].len )","alignCentre=currentWidth + ((( itemMax - item[%%i].len )+1)/2)"
+    Echo(!\E![!currentHeight!;!align%alignmentStyle%!H!item[%%i]!
+    Set /a currentWidth+=itemMax
+    If !currentWidth! GEQ !newRow! Set /a currentWidth=1,currentHeight+=1
+  )
+  Echo(
+  POPD
+  Pause
+  Endlocal & Exit /b 0
+)
+
 Set HELP=For %%. in (1 2)Do if %%. EQU 2 (For %%H in (^^^!helpfiles^^^!)Do If exist "%TEMP%\%%H.hlp" More ^< "%TEMP%\%%H.hlp"^)Else Set helpfiles=
 
-REM the below defines the escape character 0x1B to the variable \E
-REM providing the FULL path to cmd ensures the definition doesn't fail if the CD command is used prior to
-REM its definition. [ windows 11 issue ]
-For /F %%a in ('Echo prompt $E^| %systemroot%\system32\cmd.exe')Do Set \E=%%a
 (Set LF=^
 
 
@@ -308,7 +341,7 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
       If not "!%%~1.switches:/selfRef=!" == "!%%~1.switches!" Set "!AutoMacro!=!%%~1:@.=%%~1.!"
     )
 
-    Rem end stage macro parseing
+    Rem end stage macro parsing
     Set "!AutoMacro!=!%%~1:%%%%=%%!"
     Set "!AutoMacro!=!%%~1:~0,-4!"
 
@@ -338,7 +371,7 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
     If defined AutoMacro.help (
       If not defined !AutoMacro!.dependency (
         If defined !Automacro!_usage (
-          Echo(!%%1_usage!
+          Echo(!\E![0m!\E![K!\E![E!%%1_usage!!\E![0J
         )Else Echo(!AutoMacro! contains no usage information.
       )
     )
