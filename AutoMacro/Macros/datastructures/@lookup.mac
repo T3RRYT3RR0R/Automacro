@@ -1,15 +1,42 @@
 @lookup {
-  @lookup usage: %@lookup% <key> <sourceVar> <returnVar>
-  // default delimiter for key:value pairs is the semicolon ':'
+  
+  @lookup usage: !\E![36m%!\E![33m@lookup!\E![36m% !\E![90m<!\E![33mkey!\E![90m> <!\E![33msourceVar!\E![90m> <!\E![33mreturnVar!\E![90m>!\E![0m
+  @lookup usage: !\E![48;2;150;150;150m!\E![38;2;0;0;0m!\E![KReturns the first value following a matched key.!\E![0m
+  @lookup usage: Default delimiter for !\E![33mkey!\E![0m:!\E![33mvalue!\E![0m pairs is the semicolon '!\E![33m:!\E![0m'
+  @lookup usage:   ^! Key strings must be unique. The first match will always be treated as the Key
+  @lookup usage:     any subsequent matches will be disregarded - effectively treated as a value, not the key.
+  @lookup usage:     To prevent a value being indavertantly treated as the key if it is a match, it must 
+  @lookup usage:     be positioned after the matching key. IE:
+  @lookup usage:     !\E![33mSet "integerToggle.table=:1:one:1:2:two:2:"!\E![0m
+  @lookup usage:     !\E![33mSet "$toggle=1"!\E![0m
+  @lookup usage:     !\E![36m%!\E![33m@lookup!\E![36m%!\E![33m ^!$toggle^! integerToggle.table $toggle!\E![0m
+  @lookup usage:     $toggle=one
+  @lookup usage:     !\E![36m%!\E![33m@lookup!\E![36m%!\E![33m ^!$toggle^! integerToggle.table $toggle!\E![0m
+  @lookup usage:     $toggle=1
+  @lookup usage:
+  @lookup usage:
+  @lookup usage: !\E![33mkey!\E![0m       : string        - the lookup key used to identify the return value
+  @lookup usage: !\E![33msourceVar!\E![0m : Variable name - the variable defined with the lookup table
+  @lookup usage: !\E![33mreturnVar!\E![0m : Variable name - the variable to define the value to.
+  @lookup usage:
+  @lookup usage: Supports automacro definition argument:
+  @lookup usage:
+  @lookup usage: !\E![33mCall automacro.bat "@lookup !\E![90m[!\E![32mdelimCharacter!\E![90m]!\E![33m"!\E![0m
+  @lookup usage:  Valid argument value: A printable ASCCI character excluding whitespace and: < > | & ~ = ^!
+  @lookup usage:  - modifies the delimiter to be used for the lookup table.
+  @lookup usage:
 
   <$
     Set "@lookup.Keypair.Delim=:"
-    If defined setup.args For /f "delims=" %%C in ("!setup.args: =!") Do (
-      Set "@lookup.Keypair.Delim=%%C"
-    )
     Set "weekday.lookup=:mon:Monday:tue:Tuesday:wed:Wednesday:thu:Thursday:fri:Friday:sat:Saturday:sun:Sunday:"
-    Set "month.lookup=:01:Jabuary:02:February:03:March:04:April:05:May:06:June:07:July:08:August:09:September:10:October:11:November:12:December"
-    Set "daynumber.lookup=:01:1st:02:2nd:03:3rd:04:4th:05:5th:06:6th:07:7th:08:8th:09:9th:10:10th:11:11th:12:12th:13:13th:14:14th:15:15th:16:16th:17:17th:18:18th:19:19th:20:20th:21:21st:22:22nd:23:23rd:24:24th:25:25th:26:26th:27:27th:28:28th:29:29th:30:30th:31:31st"
+    Set "month.lookup=:01:January:02:February:03:March:04:April:05:May:06:June:07:July:08:August:09:September:10:October:11:November:12:December:"
+    Set "daynumber.lookup=:01:1st:02:2nd:03:3rd:04:4th:05:5th:06:6th:07:7th:08:8th:09:9th:10:10th:11:11th:12:12th:13:13th:14:14th:15:15th:16:16th:17:17th:18:18th:19:19th:20:20th:21:21st:22:22nd:23:23rd:24:24th:25:25th:26:26th:27:27th:28:28th:29:29th:30:30th:31:31st:"
+    If defined @lookup.init For /f "delims=" %%C in ("!@lookup.init: =!") Do (
+      Set "@lookup.Keypair.Delim=%%C"
+      Set "weekday.lookup=!weekday.lookup::=%%C!"
+      Set "month.lookup=!month.lookup::=%%C!"
+      Set "daynumber.lookup=!daynumber.lookup::=%%C!"
+    )
   $>
 
   For /f "tokens=1,2,3,4" %%K in ("^!@.args^! ^!@lookup.Keypair.Delim^!")Do (
@@ -17,4 +44,4 @@
       For /f "tokens=1 Delims=!@lookup.Keypair.Delim!" %%1 in ("^!%%L:*%%N%%~K%%N=^!")Do Set ^"%%M=%%1"
     )
   )
-} @lookup /args
+} @lookup /args /selfref
