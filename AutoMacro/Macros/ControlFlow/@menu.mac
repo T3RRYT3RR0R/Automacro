@@ -1,0 +1,107 @@
+@menu { dependencies: @lookup @while
+
+  @menu usage: !\E![36m%!\E![33m@Menu!\E![36m%!\E![33m "DoubleQuoted List" "Of Options"!\E![0m
+  @menu usage: !\E![36m%!\E![33m@Menu!\E![36m%
+  @menu usage: !\E![90mExpansion without Arguments will display this help info.!\E![0m
+  @menu usage:
+  @menu usage:Return Variables:
+  @menu usage:      Menu{String}  :  The literal String
+  @menu usage:      Menu{Key}     :  The Key Pressed
+  @menu usage:      Menu{Number}  :  The Integer value of the options argument index
+  @menu usage:        IE: Option 1 = 1, Option A = 10
+  @menu usage:
+  @menu usage: Defining @menu:
+  @menu usage: !\E![33mCall "automacro.bat" @Menu!\E![0m
+  @menu usage:   - Default definition, supports header and outputs dividing line.
+  @menu usage: !\E![36;5m*!\E![0;32m @menu supports the following optional automacro definition arguments!\E![0;36;5m *!\E![0m 
+  @menu usage: !\E![33mCall "automacro.bat" "@Menu /basic"!\E![0m
+  @menu usage:   - Disables dividing line and removes support for custom headers and colors.
+  @menu usage: !\E![33mCall "automacro.bat" "@Menu !\E![90m[!\E![33mR;G;B!\E![90m] !\E![90m[!\E![33mR;G;B!\E![90m] [!\E![33mR;G;B!\E![90m]!\E![33m"!\E![0m
+  @menu usage:   Where !\E![33mR G !\E![0mand !\E![33mB !\E![0mare integer values in the range !\E![33m0!\E![90m~!\E![33m255!\E![0m:
+  @menu usage:   - first  R;G;B = Dividing line color
+  @menu usage:   - second R;G;B = Option foreground Color
+  @menu usage:   - third  R;G;B = Option background Color
+  @menu usage: 
+
+<;
+  Author: T3RRY aka T3RRYT3RR0R
+  Discord: https://discord.gg/batch
+  Github: https://github.com/T3RRYT3RR0R/
+  Version: 1.0.0
+  License: Creative Commons Attribution 4.0 International
+  https://creativecommons.org/licenses/by/4.0/legalcode.en
+;>
+
+<$ // initialize macro output styling
+  Set "@menu.Div=!\E![48;2;155;155;155m!\E![K!\E![0m"
+  Set "@menu.hash=Header"
+  Set "@menu.Color="
+  If defined @menu.init If not "!@menu.init:/basic=!" == "!@menu.init!" (
+    Set "@menu.init="
+    Set "@menu.Div="
+    Set "@menu.Color="
+    Set "@menu.hash="
+  )
+  If defined @menu.init (
+    For /f "tokens=1,2,3 Delims= " %%1 in ("!@menu.init!")Do (
+      Set "@menu.Div=!\E![48;2;%%1m!\E![K!\E![0m"
+      If not "%%~2" == "" Set "@menu.Color=!\E![38;2;%%2m!\E![K"
+      If not "%%~3" == "" Set "@menu.Color=!\E![48;2;%%3m!@menu.Color!"
+    )
+  )
+  // define lookup table to tranlate key:index
+  Set "@menu.keytable=:key.0:36:key.1:1:key.2:2:key.3:3:key.4:4:key.5:5:key.6:6:key.7:7:key.8:8:key.9:9:key.a:10:key.b:11:key.c:12:key.d:13:key.e:14:key.f:15:key.g:16:key.h:17:key.i:18:key.j:19:key.k:20:key.l:21:key.m:22:key.n:23:key.o:24:key.p:25:key.q:26:key.r:27:key.s:28:key.t:29:key.u:30:key.v:31:key.w:32:key.x:33:key.y:34:key.z:35:"
+  Set "@menu.keys=123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0"
+$>
+
+  // conditionally implement styling ruleset
+  If Defined @Menu.Div Echo(^!@Menu.Div^!
+  If defined @menu.hash (
+    If /i not "Header" == "^!@menu.hash^!" (
+      Set "@menu.title=Header"
+      Echo(^!@.color^!^!@menu.title^!!\E![0m
+      Echo(^!@Menu.Div^!
+    )
+  )
+
+  // define and output array of options formatted as: [key] option text
+  Set "@.#=0"
+  Set "@.Chars="
+  For %%G in (^!@.args^!)Do (
+    For %%i in (^!@.#^!)Do If not %%i GTR 35 (
+      Set "@.Chars=^!@.Chars^!^!@.Keys:~%%i,1^!"
+      Set "@.Item[^!@.Keys:~%%i,1^!]=%%~G"
+      Set "@.Output=%%~G"
+      Echo(^!@.color^![^!@.Keys:~%%i,1^!] ^!@.Output^!!\E![0m
+      Set /A "@.#+=1"
+    )
+  )
+  Set /A "@.#-=1"
+  If Defined @menu.Div Echo(^!@Menu.Div^!
+
+  // Take single key input
+  Set "@menu.validate="
+
+  // store cursor pos to restore buffer state in event of cancelled CTRL+C
+  <nul set /p "=!\E!7"
+  // utilizes a while loop to ensure input still taken after a cancelled CTRL+C action
+  !@While:$while=$menu! (
+    // restore buffer state
+    <nul set /p "=!\E!8!\E![0J"
+    if not defined @menu.validate (
+      For /f "delims=" %%o in ('%__APPDIR__%Choice.exe /N /C:^!@.Chars^!')Do (
+        // confirm input
+        Set "@menu.validate=%%o"
+        // return from subscript or exit script if selected option string = exit
+        If /I "^!@.Item[%%o]^!" == "Exit" Exit /B 2
+
+        // return option text
+        Set "Menu{String}=^!@.Item[%%o]^!"
+        // @lookup translates literal keypress to the options index, returned in Menu{Number}
+        !@lookup! key.%%o @menu.keytable Menu{Number}
+        // return literal keypress
+        Set "Menu{Key}=%%o"
+      )
+    ) Else !@endWhile:$while=$menu!
+  )
+} @menu /args /selfRef /help
