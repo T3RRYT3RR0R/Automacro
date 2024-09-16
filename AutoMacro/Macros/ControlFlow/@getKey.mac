@@ -1,10 +1,15 @@
 @getKey { dependencies: @while @lookup
-  @getKey usage: <lightblue>%<yellow>@getKey<lightblue>% <grey>[<yellow>returnVar<grey>] [<yellow>/nonblocking<grey>]
-  @getKey usage: Default return: The literal keypress is returned to the variable: $key
-  @getKey usage:   <yellow>returnVar<default>  : Overrides the default, using the provided variable name instead of $key
-  @getKey usage:     -> If no returnVar is provided, the keypress is returned in: $key
-  @getKey usage: <yellow>/nonblocking<default> : returns if a keypress event has occured but does not wait.
-  @getKey usage:     -> Used when the script should continue until a desired input is recieved.
+  @getKey usage: <lightblue>%<yellow>@getKey<lightblue>% <grey>[<yellow>returnVar<grey>] [<yellow>/nonblocking<grey>] [<yellow>/prompt <grey>[<yellow>string<grey>] [<yellow>/p<grey>] [<yellow>/cls<grey>]]
+
+  @getKey usage: Default return: The literal keypress is returned to the variable: <yellow>$key
+  @getKey usage: <yellow>returnVar<default>         : Override the default. The provided variable name replaces $key
+  @getKey usage:    -> If no returnVar is provided, the keypress is returned in: $key
+  @getKey usage: <yellow>/nonblocking<default>      : returns if a keypress event has occured but does not wait.
+  @getKey usage:    -> Used when the script should continue until a desired input is recieved.
+  @getKey usage: <yellow>/prompt<default>           : Use @getkey as an alternative for pause. Returns the key pressed.
+  @getKey usage: <yellow>/prompt string<default>    : Uses the custom prompt string instead of 'Press any key to continue.'
+  @getKey usage: <yellow>/prompt string /p<default> : custom prompt string followed by 'Press any key to continue.'
+  @getKey usage: <yellow>/cls<default>              : clear the screen after recieving input.
 
 <;
   // This macro generates an exe file 'BG.exe' to facilitate capture of extended keys 
@@ -41,6 +46,11 @@ $>
 
   // set default mode of bg.exe - blocking input
   Set "@.mode=kbd"
+  Set "@.cls="
+  If not "^!@.args^!" == "" If not "^!@.args: /cls=^!" == "^!@.args^!" (
+    Set "@.args=^!@.args: /cls=^!"
+    Set "@.cls=1"
+  )
 
   // overide default mode to non-blocking if 2nd argument provided
   If not "^!@.args^!" == "" If not "^!@.args: /nonblocking=^!" == "^!@.args^!" (
@@ -48,7 +58,19 @@ $>
     Set "@.mode=lastkbd"
   )
 
-  // effect default return variable $keuy if no arguments.
+  If not "^!@.args^!" == "" If not "^!@.args: /prompt=^!" == "^!@.args^!" (
+    Set "@.output="
+    Set "@.args=^!@.args:* /prompt =^!"
+    If not "^!@.args^!" == "" Set "@.args=^!@.args:* /prompt=^!"
+
+    If not "^!@.args^!" == "" Set "@.output=^!@.args^!"
+    If not "^!@.output^!" == "" Set "@.output=^!@.output: /p=[EPress any key to continue.^!"
+    If not "^!@.output^!" == "" Echo(^!@.output:\n=%\E%[E^!
+    If "^!@.args^!" == "" Echo(Press any key to continue.
+    Set "@.args="
+  )
+
+  // effect default return variable $key if no arguments.
   For /f "tokens=1 Delims= " %%1 in ("^!@.args^! $Key")Do (
 
     // ensure return var undefined
@@ -77,6 +99,7 @@ $>
         !@endwhile:$while=@getKey.while!
       )
     )Else !@endWhile:$while=@getKey.while!
+    If not "^!@.cls^!" == "" CLS
   )
 } @getKey /args
 
