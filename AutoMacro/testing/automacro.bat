@@ -1,6 +1,13 @@
 :AutoMacro <macroname> [macroname]
-:AutoMacro <macroname> /?
+:AutoMacro <macroname> /? [/centre] [/right]
+:AutoMacro <macroname> /? [macroname]
 @echo off
+(More <"%~f0:firstRun.dat") 2> nul 1> nul || (
+  REM apply read only attribute to automacro.bat and it's helpfile.
+  Echo(true 1>"%~f0:firstRun.dat"
+  attrib +R "%~f0"
+  attrib +R "%~dp0readme.txt"
+) 
 REM calling / opening this script without args will display it's helpfile.
 
 REM :: Author T3RRY
@@ -40,6 +47,7 @@ If "%~1"=="" (
   Exit /b 1
 )
 
+:Recurse
 Set "AutoMacros= %*"
 
 Set AutoMacros | %systemroot%\system32\findstr.exe /li "\/\?" > nul && (
@@ -183,7 +191,19 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
         If not defined !AutoMacro!_usage Set "!AutoMacro!_usage=!AutoMacro! Usage:!LF!!LF!"
         Set "!AutoMacro!.start=%%U"
         Set "Line=%%V"
-        Set "!AutoMacro!_usage=!%%~1_usage!!line:*usage:=!!LF!"
+        Set "!AutoMacro!_usage=!%%~1_usage!!line:*usage:=!!\E![0m!LF!"
+      )
+      If defined !AutoMacro!_Usage (
+        Set "!Automacro!_usage=!%%~1_usage:<red>=%\E%[31m!"
+        Set "!Automacro!_usage=!%%~1_usage:<green>=%\E%[32m!"
+        Set "!Automacro!_usage=!%%~1_usage:<yellow>=%\E%[33m!"
+        Set "!Automacro!_usage=!%%~1_usage:<darkblue>=%\E%[34m!"
+        Set "!Automacro!_usage=!%%~1_usage:<purple>=%\E%[35m!"
+        Set "!Automacro!_usage=!%%~1_usage:<lightblue>=%\E%[36m!"
+        Set "!Automacro!_usage=!%%~1_usage:<white>=%\E%[37m!"
+        Set "!Automacro!_usage=!%%~1_usage:<grey>=%\E%[90m!"
+        Set "!Automacro!_usage=!%%~1_usage:<flash>=%\E%[5m!"
+        Set "!Automacro!_usage=!%%~1_usage:<default>=%\E%[0m!"
       )
     )
 
@@ -194,7 +214,7 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
         For /f "tokens=1 delims= " %%C in ("!AutoMacro.temp!")Do Set "%%C.dependency=1"
         Set "Automacro.temp="
       )
-      Call:AutoMacro %%D
+      Call:Recurse %%D
       If "!Errorlevel!" == "1" Exit /b 1
       Set "AutoMacro=%%~1"
       Set "debug.file=%~dp0debug\_!AutoMacro!_.dbug"
@@ -371,6 +391,7 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
     If defined AutoMacro.help (
       If not defined !AutoMacro!.dependency (
         If defined !Automacro!_usage (
+          CLS
           Echo(!\E![0m!\E![K!\E![E!%%1_usage!!\E![0J
         )Else Echo(!AutoMacro! contains no usage information.
       )

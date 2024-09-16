@@ -18,4 +18,5 @@ Call "%~dp0automacro.bat" @formatDate
 
 
   Echo(!\E![E
-Endlocal
+Pause
+Endlocal & goto:eof

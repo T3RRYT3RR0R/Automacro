@@ -23,4 +23,5 @@ Set start=%time%
   )
 )
 <nul set /p "=!\E!8!\E![E"
+Pause > nul
 Endlocal & goto:eof

@@ -1,23 +1,23 @@
 @menu { dependencies: @lookup @while
 
-  @menu usage: !\E![36m%!\E![33m@Menu!\E![36m%!\E![33m "DoubleQuoted List" "Of Options"!\E![0m
-  @menu usage: !\E![36m%!\E![33m@Menu!\E![36m%
-  @menu usage: !\E![90mExpansion without Arguments will display this help info.!\E![0m
+  @menu usage: <lightblue>%<yellow>@Menu<lightblue>%<yellow> "DoubleQuoted List" "Of Options"
+  @menu usage: <lightblue>%<yellow>@Menu<lightblue>%
+  @menu usage: <grey>Expansion without Arguments will display this help info.
   @menu usage:
   @menu usage:Return Variables:
-  @menu usage:      Menu{String}  :  The literal String
-  @menu usage:      Menu{Key}     :  The Key Pressed
-  @menu usage:      Menu{Number}  :  The Integer value of the options argument index
+  @menu usage:      <yellow>Menu{String}  <default>:  The literal String
+  @menu usage:      <yellow>Menu{Key}     <default>:  The Key Pressed
+  @menu usage:      <yellow>Menu{Number}  <default>:  The Integer value of the options argument index
   @menu usage:        IE: Option 1 = 1, Option A = 10
   @menu usage:
   @menu usage: Defining @menu:
-  @menu usage: !\E![33mCall "automacro.bat" @Menu!\E![0m
+  @menu usage: <yellow>Call "automacro.bat" @Menu
   @menu usage:   - Default definition, supports header and outputs dividing line.
-  @menu usage: !\E![36;5m*!\E![0;32m @menu supports the following optional automacro definition arguments!\E![0;36;5m *!\E![0m 
-  @menu usage: !\E![33mCall "automacro.bat" "@Menu /basic"!\E![0m
+  @menu usage: <lightblue><flash>*<default><green> @menu supports the following optional automacro definition arguments <lightblue><flash>*
+  @menu usage: <yellow>Call "automacro.bat" "@Menu /basic"
   @menu usage:   - Disables dividing line and removes support for custom headers and colors.
-  @menu usage: !\E![33mCall "automacro.bat" "@Menu !\E![90m[!\E![33mR;G;B!\E![90m] !\E![90m[!\E![33mR;G;B!\E![90m] [!\E![33mR;G;B!\E![90m]!\E![33m"!\E![0m
-  @menu usage:   Where !\E![33mR G !\E![0mand !\E![33mB !\E![0mare integer values in the range !\E![33m0!\E![90m~!\E![33m255!\E![0m:
+  @menu usage: <yellow>Call "automacro.bat" "@Menu <grey>[<yellow>R;G;B<grey>] <grey>[<yellow>R;G;B<grey>] [<yellow>R;G;B<grey>]<yellow>"
+  @menu usage:   Where <yellow>R G<default> and <yellow>B <default>are integer values in the range <yellow>0<grey>~<yellow>255<default>:
   @menu usage:   - first  R;G;B = Dividing line color
   @menu usage:   - second R;G;B = Option foreground Color
   @menu usage:   - third  R;G;B = Option background Color
@@ -27,7 +27,7 @@
   Author: T3RRY aka T3RRYT3RR0R
   Discord: https://discord.gg/batch
   Github: https://github.com/T3RRYT3RR0R/
-  Version: 1.0.0
+  Version: 1.0.0 14/09/2024
   License: Creative Commons Attribution 4.0 International
   https://creativecommons.org/licenses/by/4.0/legalcode.en
 ;>
@@ -78,12 +78,12 @@ $>
   )
   Set /A "@.#-=1"
   If Defined @menu.Div Echo(^!@Menu.Div^!
-
-  // Take single key input
   Set "@menu.validate="
 
   // store cursor pos to restore buffer state in event of cancelled CTRL+C
   <nul set /p "=!\E!7"
+
+  // Take single key input
   // utilizes a while loop to ensure input still taken after a cancelled CTRL+C action
   !@While:$while=$menu! (
     // restore buffer state

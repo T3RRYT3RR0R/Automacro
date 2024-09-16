@@ -1,5 +1,8 @@
 @average {
-  @average usage: <returnvar> <list>
+  @average usage: <lightblue>%<yellow>@average<lightblue>% <grey><<yellow>returnVar<grey>> <grey><<yellow>list<grey>>
+  @average usage: Returns the average of the integer values in the provided list.
+  @average usage: Example:
+  @average usage: <lightblue>%<yellow>@average<lightblue>%<yellow> $return 10 21 23 1 17 98 45 103
 <; Calculates the average value of integers in the list provided.
      Author: T3RRY
      Version: 1.0 01/08/2024
