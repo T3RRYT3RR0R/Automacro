@@ -23,9 +23,10 @@ Syntax for defining macros with AutoMacro:
         Each such tag MUST be positioned at the beginning of the line.
         All unremarked lines after the Opening tag (after the last instance of "[33m@macroname usage:[0m" until the mathcing
         closing tag will be defined to the macro.
-        If usage info is provided using the on the line following the opening tag, it will be defined to [33mmacroname_usage[0m.
+        If usage info is provided using the on the line following the opening tag, it will be defined to [33mmacroname_usage.[0m
+
         Macro usage info is defined by prefixing lines using:
-        @macroname usage: 
+[33m        @macroname usage:[0m
         Macro usage info supports the following styling tags to apply VT color codes and graphics rendition settings:
 [0m        [31m<red> [32m<green> [33m<yellow> [34m<darkblue> [35m<purple> [36m<lightblue> [37m<white> [0m<default> [5m<flash>[0m
 
