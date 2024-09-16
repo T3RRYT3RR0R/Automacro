@@ -1,27 +1,27 @@
 @lookup {
   
-  @lookup usage: !\E![36m%!\E![33m@lookup!\E![36m% !\E![90m<!\E![33mkey!\E![90m> <!\E![33msourceVar!\E![90m> <!\E![33mreturnVar!\E![90m>!\E![0m
-  @lookup usage: !\E![48;2;150;150;150m!\E![38;2;0;0;0m!\E![KReturns the first value following a matched key.!\E![0m
-  @lookup usage: Default delimiter for !\E![33mkey!\E![0m:!\E![33mvalue!\E![0m pairs is the semicolon '!\E![33m:!\E![0m'
+  @lookup usage: <lightblue>%<yellow>@lookup<lightblue>% <grey><<yellow>key<grey>> <<yellow>sourceVar<grey>> <<yellow>returnVar<grey>>!\E![0m
+  @lookup usage: Returns the first value following a matched key.
+  @lookup usage: Default delimiter for <yellow>key!\E![0m:<yellow>value!\E![0m pairs is the semicolon '<yellow>:<default>'
   @lookup usage:   ^! Key strings must be unique. The first match will always be treated as the Key
   @lookup usage:     any subsequent matches will be disregarded - effectively treated as a value, not the key.
-  @lookup usage:     To prevent a value being indavertantly treated as the key if it is a match, it must 
+  @lookup usage:     To prevent a value being indavertantly treated as the key if it is a match, it must
   @lookup usage:     be positioned after the matching key. IE:
-  @lookup usage:     !\E![33mSet "integerToggle.table=:1:one:1:2:two:2:"!\E![0m
-  @lookup usage:     !\E![33mSet "$toggle=1"!\E![0m
-  @lookup usage:     !\E![36m%!\E![33m@lookup!\E![36m%!\E![33m ^!$toggle^! integerToggle.table $toggle!\E![0m
+  @lookup usage:     <yellow>Set "integerToggle.table=:1:one:1:2:two:2:"
+  @lookup usage:     <yellow>Set "$toggle=1"
+  @lookup usage:     <lightblue>%<yellow>@lookup<lightblue>%<yellow> ^!$toggle^! integerToggle.table $toggle
   @lookup usage:     $toggle=one
-  @lookup usage:     !\E![36m%!\E![33m@lookup!\E![36m%!\E![33m ^!$toggle^! integerToggle.table $toggle!\E![0m
+  @lookup usage:     <lightblue>%<yellow>@lookup<lightblue>%<yellow> ^!$toggle^! integerToggle.table $toggle
   @lookup usage:     $toggle=1
   @lookup usage:
   @lookup usage:
-  @lookup usage: !\E![33mkey!\E![0m       : string        - the lookup key used to identify the return value
-  @lookup usage: !\E![33msourceVar!\E![0m : Variable name - the variable defined with the lookup table
-  @lookup usage: !\E![33mreturnVar!\E![0m : Variable name - the variable to define the value to.
+  @lookup usage: <yellow>key!\E![0m       : string        - the lookup key used to identify the return value
+  @lookup usage: <yellow>sourceVar!\E![0m : Variable name - the variable defined with the lookup table
+  @lookup usage: <yellow>returnVar!\E![0m : Variable name - the variable to define the value to.
   @lookup usage:
   @lookup usage: Supports automacro definition argument:
   @lookup usage:
-  @lookup usage: !\E![33mCall automacro.bat "@lookup !\E![90m[!\E![32mdelimCharacter!\E![90m]!\E![33m"!\E![0m
+  @lookup usage: <yellow>Call automacro.bat "@lookup <grey>[<green>delimCharacter<grey>]<yellow>"
   @lookup usage:  Valid argument value: A printable ASCCI character excluding whitespace and: < > | & ~ = ^!
   @lookup usage:  - modifies the delimiter to be used for the lookup table.
   @lookup usage:

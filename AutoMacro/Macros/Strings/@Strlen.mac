@@ -1,8 +1,23 @@
 @Strlen {
-  @Strlen usage: %@strlen% <sourceVar> <returnVar>
+  @Strlen usage: !\E![36m%!\E![33m@strlen!\E![36m% !\E![90m<!\E![33msourceVar!\E![90m> <!\E![33mreturnVar!\E![90m>!\E![0m
+  @Strlen usage:
+  @Strlen usage: @strLen definition:
+  @Strlen usage: !\E![33mCall automacro.bat @strlen!\E![0m
+  @Strlen usage:
+  @Strlen usage: Supports automacro definition argument:
+  @Strlen usage:
+  @Strlen usage: !\E![33mCall automacro.bat "@strlen !\E![90m[!\E![32minteger!\E![90m]!\E![33m"!\E![0m
+  @Strlen usage:  Valid argument values:!\E![32m 4096 2048 1024 512 256 128 64 32 !\E![0m
+  @Strlen usage:  - modifies the number of steps taken to calculate the strings length
+  @Strlen usage:    with the integer value provided acting as the expected maximum length.
+  @Strlen usage:    IE:!\E![33m Call automacro.bat "@strlen !\E![32m64!\E![33m"!\E![0m
+  @Strlen usage:    would only test up to a string length of 64 characters, reducing the 
+  @Strlen usage:    number of steps required by 6 iterations.
+  @Strlen usage:
+
   <$
     Set "$max.strLen= 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 "
-    If defined setup.args For /f "tokens=1 delims= " %%V in ("!setup.args!") Do (
+    If defined @strlen.init For /f "tokens=1 delims= " %%V in ("!@strlen.init!") Do (
       If not "!$max.strLen: %%~V =!" == "!$max.strLen!" (
         Set "$max.strLen=!$max.strLen:*%%~V=%%~V!"
     )  )

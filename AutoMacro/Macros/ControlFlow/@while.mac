@@ -1,14 +1,24 @@
 @while {
-  @while usage: %@while% (
-  @while usage:   commands 
-  @while usage:   If "value" == "^!variable^!" %@endWile%
-  @while usage: ) 
-  // returns: $while : The current iteration of the while loop - incremented at the beginning of each loop.
-  // Variable enigma : $while.start - the starting value of $while, value is 0 unless defined by user.
-  //                   $doWhile     - the removal of this variables definition terminates the While loop
-  //                   @EndWhile    - Macro to undefine $doWhile
+  @while usage: <lightblue>%<yellow>@while<lightblue>% <yellow>(
+  @while usage: <grey>  commands 
+  @while usage: <yellow>  If "value" == "<lightblue>^!<yellow>variable<lightblue>^!<yellow>" <lightblue>%<yellow>@endWile<lightblue>%
+  @while usage: <yellow>)
+  @while usage:
+  @while usage: <lightblue>%<yellow>@while<lightblue>:<green>$while<lightblue>=<yellow>yourVariable<lightblue>% <yellow>(
+  @while usage: <grey>  commands 
+  @while usage: <yellow>  If "value" == "<lightblue>^!<yellow>variable<lightblue>^!<yellow>" <lightblue>%<yellow>@endWile<lightblue>:<green>$while<lightblue>=<yellow>yourVariable<lightblue>%
+  @while usage: )
+  @while usage:
+  @while usage: returns: <green>$while <default>: The current iteration of the while loop - incremented at the beginning of each loop.
+  @while usage: Variable enigma : <green>$while<yellow>.start <default> - the starting value of $while, value is 0 unless defined by user.
+  @while usage:                   <green>$while<yellow>.do    <default> - the removal of this variables definition terminates the While loop
+  @while usage:                   <yellow>@EndWhile    <default> - Terminates the while loop if your condition is met.
+  @while usage:                   Where substring modification is used to replace the $while prefix with your own prefix,
+  @while usage:                   $while will be replaced with the substituted prefix. This allows variable localisation
+  @while usage:                   and nesting of @While Blocks.
+  @while usage:
 
-  $Set @EndWhile=Set "$doWhile="
-  Set /a "$while=$while.start","$doWhile=1" & For /l %%^~ in (1 1 16)Do if defined $doWhile For /l %%^~ in (1 1 16)Do if defined $doWhile For /l %%^~ in (1 1 16)Do if defined $doWhile For /l %%^~ in (1 1 16)Do if defined $doWhile Set /a "$while+=1" & 
+  $Set @EndWhile=Set "$while.do="
+  Set /a "$while=$while.start","$while.do=1" & For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do Set /a "$while+=1" & 
 } @while
 

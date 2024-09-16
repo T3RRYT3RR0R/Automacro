@@ -1,54 +1,68 @@
 @getKey { dependencies: @while @lookup
-@getKey usage: %@getKey% <returnVar> [/nonblocking]
+  @getKey usage: <lightblue>%<yellow>@getKey<lightblue>% <grey>[<yellow>returnVar<grey>] [<yellow>/nonblocking<grey>]
+  @getKey usage: Default return: The literal keypress is returned to the variable: $key
+  @getKey usage:   <yellow>returnVar<default>  : Overrides the default, using the provided variable name instead of $key
+  @getKey usage:     -> If no returnVar is provided, the keypress is returned in: $key
+  @getKey usage: <yellow>/nonblocking<default> : returns if a keypress event has occured but does not wait.
+  @getKey usage:     -> Used when the script should continue until a desired input is recieved.
+
 <;
-  // This macro generates an exe file to facilitate capture of extended keys 
+  // This macro generates an exe file 'BG.exe' to facilitate capture of extended keys 
   // and permit input in either a blocking or non-blocking manner
-  Macro Author: T3RRY
-  Version: 1.0.0 05/09/2024
+  Author: T3RRY aka T3RRYT3RR0R
+  Discord: https://discord.gg/batch
+  Github: https://github.com/T3RRYT3RR0R/
+  Version: 1.0.1 15/09/2024
+  License: Creative Commons Attribution 4.0 International
+  https://creativecommons.org/licenses/by/4.0/legalcode.en
 ;>
 <$
  // lookup table translates errorlevel returned by bg.exe into either key literals or descriptive values
- Set "$keytable=:0:nul:8:backspace:33:^^^!:35:#:36:$:37:%%:38:^&:39:':40:(:41:):42:*:60:^<:62:^>:63:?:64:@:124:^|:331:left:333:right:328:up:336:down"
- Set "$keytable=!$keytable!:65:A:66:B:67:C:68:D:69:E:70:F:71:G:72:H:73:I:74:J:75:K:76:L:77:M:78:N:79:O:80:P:81:Q:82:R:83:S:84:T:85:U:86:V:87:W:88:X:89:Y:90:Z"
- Set "$keytable=!$keytable!:91:[:93:]:123:{:125:}:92:\:47:/:43:+:45:-:44:,:46:.:58:colon:59:semicolon:61:=:95:_:96:`"
- Set "$keytable=!$keytable!:97:a:98:b:99:c:100:d:101:e:102:f:103:g:104:h:105:i:106:j:107:k:108:l:109:m:110:n:111:o:112:p:113:q:114:r:115:s:116:t:117:u:118:v:119:w:120:x:121:y:122:z"
- Set "$keytable=!$keytable!:126:~:327:home:329:pageup:335:end:337:pagedown:338:insert:339:del:9:tab:13:enter:27:escape:32:space"
- Set "$keytable=!$keytable!:315:F1:316:F2:317:F3:318:F4:319:F5:320:F6:321:F7:322:F8:323:F9:324:F10:389:F11:390:F12"
- Set ^"$keytable=!$keytable!:34:":48:0:49:1:50:2:51:3:52:4:53:5:54:6:55:7:56:8:57:9:94:^^:"
+ Set "$BG.keytable=:0:nul:8:backspace:33:^^^!:35:#:36:$:37:%%:38:^&:39:':40:(:41:):42:*:60:^<:62:^>:63:?:64:@:124:^|:331:left:333:right:328:up:336:down"
+ Set "$BG.keytable=!$BG.keytable!:65:A:66:B:67:C:68:D:69:E:70:F:71:G:72:H:73:I:74:J:75:K:76:L:77:M:78:N:79:O:80:P:81:Q:82:R:83:S:84:T:85:U:86:V:87:W:88:X:89:Y:90:Z"
+ Set "$BG.keytable=!$BG.keytable!:91:[:93:]:123:{:125:}:92:\:47:/:43:+:45:-:44:,:46:.:58:colon:59:semicolon:61:=:95:_:96:`"
+ Set "$BG.keytable=!$BG.keytable!:97:a:98:b:99:c:100:d:101:e:102:f:103:g:104:h:105:i:106:j:107:k:108:l:109:m:110:n:111:o:112:p:113:q:114:r:115:s:116:t:117:u:118:v:119:w:120:x:121:y:122:z"
+ Set "$BG.keytable=!$BG.keytable!:126:~:327:home:329:pageup:335:end:337:pagedown:338:insert:339:del:9:tab:13:enter:27:escape:32:space"
+ Set "$BG.keytable=!$BG.keytable!:315:F1:316:F2:317:F3:318:F4:319:F5:320:F6:321:F7:322:F8:323:F9:324:F10:389:F11:390:F12"
+ Set ^"$BG.keytable=!$BG.keytable!:34:":48:0:49:1:50:2:51:3:52:4:53:5:54:6:55:7:56:8:57:9:94:^^:"
 
  // unpack exe if not already present
  Set BG.exe="!TEMP!\BG.exe"
- If not exist "!BG.exe!" (
-   Certutil -decode "!@getkey.path!" "!TEMP!\BG.exe" > nul
+ If not exist !BG.exe! (
+   Certutil -decode "!@getkey.path!" !BG.exe! > nul
  )
  // test exe unpack success / return exit code on fail
- If not exist "!TEMP!\BG.exe" (
+ If not exist !BG.exe! (
    2>&1 Echo critical resource failure. BG.exe could not be exported to "!temp!"
    exit /b 1
  )
 
 $>
 
-  // split args 
-  For /f "tokens=1,2" %%1 in ("^!@.args^!")Do (
+  // set default mode of bg.exe - blocking input
+  Set "@.mode=kbd"
 
-    // set default mode of bg.exe - blocking input
-    Set "@.mode=kbd"
+  // overide default mode to non-blocking if 2nd argument provided
+  If not "^!@.args^!" == "" If not "^!@.args: /nonblocking=^!" == "^!@.args^!" (
+    Set "@.args=^!@.args: /nonblocking=^!"
+    Set "@.mode=lastkbd"
+  )
 
-    // overide default mode to non-blocking if 2nd argument provided
-    If not "%%~2" == "" Set "@.mode=lastkbd"
+  // effect default return variable $keuy if no arguments.
+  For /f "tokens=1 Delims= " %%1 in ("^!@.args^! $Key")Do (
 
     // ensure return var undefined
     Set "%%~1="
+    Set "$key="
 
-    // use while loop to wait for input; localise @while macro returnVar prefixing via substring modification.
-    !@while:$=@getKey.! if not defined %%~1 (
+    // use while loop to wait for input; localise @while macro returnVar with macro specific prefix via substring modification.
+    !@while:$while=@getKey.while! if not defined %%~1 (
       // execute bg.exe to capture keypress based on active mode
       !bg.exe! ^!@.mode^!
       Set "%%~1=^!errorlevel^!"
 
       // use lookup table to translate exit code
-      !@lookup! ^!errorlevel^! $keytable %%~1
+      !@lookup! ^!errorlevel^! $BG.keytable %%~1
 
       // substitute strings for character literals
       // these characters act as delimiters and cannot be used directly in the lookup table.
@@ -60,9 +74,9 @@ $>
 
       // conditionally terminate while loop in accordance with the macro execution mode
       If /i "^!@.mode^!" == "lastkbd" (
-        !@endwhile:$=@getKey.!
+        !@endwhile:$while=@getKey.while!
       )
-    )Else !@endWhile:$=@getKey.!
+    )Else !@endWhile:$while=@getKey.while!
   )
 } @getKey /args
 
