@@ -7,7 +7,7 @@
 
 <$
   for /F "delims=#" %%B in ('"prompt #$H# &echo on &for %%b in (1) do rem"') do Set "BS=%%B"
-  Set "@typewriter.errors=:a:qzwsx:b: vghn:c: xdfv:d:cresf:e:wsdrf:f:drgvc:g:ftyhb:h:gyujn:i:olkju:j:uiknh:k:il,mj:l:pokmi:m: njkl:n:bhjkm:o:iklp;:p:0ol;[:q:wsa12:r:tgfde:s:awedx:t:yrgfh:u:yhjki:v:cfgb :w:qeads:x:zasdc:y:tghju:z:asx x:0:123.o:1:240qw:2:10.35:3:.265e:4:7513r:5:r6t24:6:57y93:7:8456u:8:/7954:9:8560i"
+  Set "@typewriter.errors=:a:qzwsx:b: vghn:c: xdfv:d:cresf:e:wsdrf:f:drgvc:g:ftyhb:h:gyujn:i:olkju:j:uiknh:k:il,mj:l:pokmi:m: njkl:n:bhjkm:o:iklp;:p:0ol;[:q:wsa12:r:tgfde:s:awedx:t:yrgfh:u:yhjki:v:cfgb :w:qeads:x:zasdc:y:tghju:z:asx x:0:123.o:1:240qw:2:10.35:3:.265e:4:7513r:5:r6t24:6:57y93:7:8456u:8:/7954:9:8560i:"
 $>
   Set "@.FG=!\e![38;2;242;242;242m"
   Set "@.BG=!\e![48;2;12;12;12m"
