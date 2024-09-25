@@ -18,12 +18,11 @@ $>
     For /l %%i in (0 1 ^!$len^!)Do (
       Set /a "@.mistake=^!random^! %% 24 + 1","@.i=^!random^! %% 26"
       If "^!@.mistake^!" == "14" (
-        !@wait! 3
         For %%n in ("^!@.i^!")do ^<nul set /p "=^!@.FG^!^!@.BG^!^!@.chars:~%%~n,1^!!\e![K"
-        !@wait! "^!random^! %% 8 + 8"
+        !@wait! "^!random^! %% 9 + 9"
         ^<nul set /p "=^!@.FG^!^!@.BG^!^!BS^!!\e![K"
       )
-      !@wait! "^!random^! %% 3 + (^!random^! %% 4 + (^!random^! %% 3+2))"
+      !@wait! "^!random^! %% 8 + (^!random^! %% 8 + (^!random^! %% 4 + 3))"
       ^<nul set /p "=^!@.FG^!^!@.BG^!^!%%1:~%%i,1^!!\e![K"
     )
     ^<nul set /p "=!\e![E!\e![0m"
