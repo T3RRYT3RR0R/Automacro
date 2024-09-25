@@ -1,4 +1,4 @@
-@typewriter { dependencies: @wait @strlen
+@typewriter { dependencies: @wait @strlen @lookup
   @typewriter usage: %@typewriter% <sourceVar> [R;G;B] [R;G;B]
   @typewriter usage: sourceVar : arg 1 <mandatory> : the variable containing the string to be 'written.
   @typewriter usage: R;G;B     : arg 2 [optional]  : foreground color. default : white
@@ -7,7 +7,7 @@
 
 <$
   for /F "delims=#" %%B in ('"prompt #$H# &echo on &for %%b in (1) do rem"') do Set "BS=%%B"
-  Set "@typewriter.chars=abcdefghijklmnopqrstuvwxyz"
+  Set "@typewriter.errors=:a:qzwsx:b: vghn:c: xdfv:d:cresf:e:wsdrf:f:drgvc:g:ftyhb:h:gyujn:i:olkju:j:uiknh:k:il,mj:l:pokmi:m: njkl:n:bhjkm:o:iklp;:p:0ol;[:q:wsa12:r:tgfde:s:awedx:t:yrgfh:u:yhjki:v:cfgb :w:qeads:x:zasdc:y:tghju:z:asx x:0:123.o:1:240qw:2:10.35:3:.265e:4:7513r:5:r6t24:6:57y93:7:8456u:8:/7954:9:8560i"
 $>
   Set "@.FG=!\e![38;2;242;242;242m"
   Set "@.BG=!\e![48;2;12;12;12m"
@@ -16,11 +16,16 @@ $>
     If not "%%~3" == "" Set "@.BG=!\e![48;2;%%~3m"
     !@Strlen! %%1 $len
     For /l %%i in (0 1 ^!$len^!)Do (
-      Set /a "@.mistake=^!random^! %% 24 + 1","@.i=^!random^! %% 26"
+      Set /a "@.mistake=^!random^! %% 24 + 1","@.i=^!random^! %% 5"
       If "^!@.mistake^!" == "14" (
-        For %%n in ("^!@.i^!")do ^<nul set /p "=^!@.FG^!^!@.BG^!^!@.chars:~%%~n,1^!!\e![K"
-        !@wait! "^!random^! %% 9 + 9"
-        ^<nul set /p "=^!@.FG^!^!@.BG^!^!BS^!!\e![K"
+        For %%n in ("^!@.i^!")do (
+          !@lookup! ^^^!%%1:~%%i,1^^^! @typewriter.errors $typewriter.error
+          if defined $typewriter.error (
+            ^<nul set /p "=^!@.FG^!^!@.BG^!^!$typewriter.error:~%%~n,1^!!\e![K"
+            !@wait! "^!random^! %% 9 + 9"
+            ^<nul set /p "=^!@.FG^!^!@.BG^!^!BS^!!\e![K"
+          )
+        )
       )
       !@wait! "^!random^! %% 8 + (^!random^! %% 8 + (^!random^! %% 4 + 3))"
       ^<nul set /p "=^!@.FG^!^!@.BG^!^!%%1:~%%i,1^!!\e![K"
