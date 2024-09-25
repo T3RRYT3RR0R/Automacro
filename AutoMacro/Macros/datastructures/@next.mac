@@ -1,5 +1,5 @@
 @next { dependencies: @strlen @push
-  @next usage: %@next% <varname> <returnVar> <"delimChar">
+  @next usage: %@next% <sourceVar> <returnVar> <"delimChar">
   @next usage: @push can be used to create variables structured for use with @next
   Set "$next="
   For /f "tokens=1,2,* delims= " %%1 in ("^!@.args^!")Do (

@@ -2,8 +2,8 @@
   @columnate usage: %@columnate% <sourceVar> [yPos] [xPos] [FGcolor] [BGcolor] [/D]
   @columnate usage: /D : doubles the width and height of the font
   @columnate usage: macro returns:
-  @columnate usage:   sourceVar.c - the vertically formatted output string
-  @columnate usage:   $reset.size - contains the vt sequence needed to restore default font size.
+  @columnate usage:   sourceVar.c : the vertically formatted output string
+  @columnate usage:   $reset.size : contains the vt sequence needed to restore default font size.
   @columnate usage:   [optional arguments] are positional. IE, xPos cannot be supplied without first supplying yPos
 
   $Set "$reset.size=#5"

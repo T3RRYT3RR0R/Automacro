@@ -1,0 +1,31 @@
+@typewriter { dependencies: @wait @strlen
+  @typewriter usage: %@typewriter% <sourceVar> [R;G;B] [R;G;B]
+  @typewriter usage: sourceVar : arg 1 <mandatory> : the variable containing the string to be 'written.
+  @typewriter usage: R;G;B     : arg 2 [optional]  : foreground color. default : white
+  @typewriter usage: R;G;B     : arg 3 [optional]  : background color. default : black
+  @typewriter usage: %@typewriter% : No arguments   : this help output
+
+<$
+  for /F "delims=#" %%B in ('"prompt #$H# &echo on &for %%b in (1) do rem"') do Set "BS=%%B"
+  Set "@typewriter.chars=abcdefghijklmnopqrstuvwxyz"
+$>
+  Set "@.FG=!\e![38;2;242;242;242m"
+  Set "@.BG=!\e![48;2;12;12;12m"
+  For /f "tokens=1,2,3 delims= " %%1 in ("^!@.args^!") do (
+    If not "%%~2" == "" Set "@.FG=!\e![38;2;%%~2m"
+    If not "%%~3" == "" Set "@.BG=!\e![48;2;%%~3m"
+    !@Strlen! %%1 $len
+    For /l %%i in (0 1 ^!$len^!)Do (
+      Set /a "@.mistake=^!random^! %% 24 + 1","@.i=^!random^! %% 26"
+      If "^!@.mistake^!" == "14" (
+        !@wait! 3
+        For %%n in ("^!@.i^!")do ^<nul set /p "=^!@.FG^!^!@.BG^!^!@.chars:~%%~n,1^!!\e![K"
+        !@wait! "^!random^! %% 8 + 8"
+        ^<nul set /p "=^!@.FG^!^!@.BG^!^!BS^!!\e![K"
+      )
+      !@wait! "^!random^! %% 3 + (^!random^! %% 4 + (^!random^! %% 3+2))"
+      ^<nul set /p "=^!@.FG^!^!@.BG^!^!%%1:~%%i,1^!!\e![K"
+    )
+    ^<nul set /p "=!\e![E!\e![0m"
+  )
+} @typewriter /args /selfref /help

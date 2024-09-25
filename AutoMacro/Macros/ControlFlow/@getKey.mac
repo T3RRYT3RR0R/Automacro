@@ -1,15 +1,14 @@
 @getKey { dependencies: @while @lookup
-  @getKey usage: <lightblue>%<yellow>@getKey<lightblue>% <grey>[<yellow>returnVar<grey>] [<yellow>/nonblocking<grey>] [<yellow>/prompt <grey>[<yellow>string<grey>] [<yellow>/p<grey>] [<yellow>/cls<grey>]]
+  @getKey usage: %@getKey% [returnVar] [/nonblocking] [/prompt [string] [/p] [/cls]]
 
   @getKey usage: Default return: The literal keypress is returned to the variable: <yellow>$key
-  @getKey usage: <yellow>returnVar<default>         : Override the default. The provided variable name replaces $key
-  @getKey usage:    -> If no returnVar is provided, the keypress is returned in: $key
-  @getKey usage: <yellow>/nonblocking<default>      : returns if a keypress event has occured but does not wait.
+  @getKey usage: returnVar         : Override the default. The provided variable name replaces $key
+  @getKey usage: /nonblocking      : returns if a keypress event has occured but does not wait.
   @getKey usage:    -> Used when the script should continue until a desired input is recieved.
-  @getKey usage: <yellow>/prompt<default>           : Use @getkey as an alternative for pause. Returns the key pressed.
-  @getKey usage: <yellow>/prompt string<default>    : Uses the custom prompt string instead of 'Press any key to continue.'
-  @getKey usage: <yellow>/prompt string /p<default> : custom prompt string followed by 'Press any key to continue.'
-  @getKey usage: <yellow>/cls<default>              : clear the screen after recieving input.
+  @getKey usage: /prompt           : Use @getkey as an alternative for pause. Returns the key pressed.
+  @getKey usage: /prompt string    : Uses the custom prompt string instead of 'Press any key to continue.'
+  @getKey usage: /prompt string /p : custom prompt string followed by 'Press any key to continue.'
+  @getKey usage: /cls              : clear the screen after recieving input.
 
 <;
   // This macro generates an exe file 'BG.exe' to facilitate capture of extended keys 
@@ -17,7 +16,8 @@
   Author: T3RRY aka T3RRYT3RR0R
   Discord: https://discord.gg/batch
   Github: https://github.com/T3RRYT3RR0R/
-  Version: 1.0.1 15/09/2024
+  Version: 1.1.0 16/09/2024
+  Version change: Implemented Automated syntax highlighting for usage information.
   License: Creative Commons Attribution 4.0 International
   https://creativecommons.org/licenses/by/4.0/legalcode.en
 ;>

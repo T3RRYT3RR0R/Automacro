@@ -1,17 +1,19 @@
 @csvArray { dependencies: @strlen @while
-  @csvArray usage: <arrayName> <comma, separated, value list>
+  @csvArray usage: %@csvArray% <arrayName> <comma, separated, value list>
+  @csvArray usage: arrayName            : your custom return variable
+  @csvArray usage: comma seperated list : the values to be appended to the array seperated by ','
   <$
     Set "Set @.csvArray.returnLen="
     If defined @.init if not "!@.init:/len=!" == "!@.init!" Set @.returnLen=true
   $>
 
+  // remove any doublequotes
+  Set ^"@.args=^!@.args:"=^!"
+
   For /f "tokens=1 delims= " %%1 in ("^!@.args^!")Do (
 
     // split array name from element list
     Set "@.args=^!@.args:*%%1 =^!"
-
-    // trim leading and trailing doublequotes if present
-    If "^!@.args:~0,1^!^!@.args:~-1^!" == """" Set "@.args=^!@.args:~1,-1^!"
 
     // add trailing delim for substring operations
     Set "@.args=^!@.args^!, "

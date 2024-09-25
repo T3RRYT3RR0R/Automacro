@@ -1,8 +1,12 @@
 @lookup {
   
-  @lookup usage: <lightblue>%<yellow>@lookup<lightblue>% <grey><<yellow>key<grey>> <<yellow>sourceVar<grey>> <<yellow>returnVar<grey>>!\E![0m
+  @lookup usage: %@lookup% <key> <sourceVar> <returnVar>
+  @lookup usage: key       : the string used to find the lookup value
+  @lookup usage: sourceVar : the variable containing the list of keys and values. IE:
+  @lookup usage: <yellow>weekday.lookup<default>=<green>:mon:Monday:tue:Tuesday:wed:Wednesday:thu:Thursday:fri:Friday:sat:Saturday:sun:Sunday:
+  @lookup usage: returnVar : your custom return variable
   @lookup usage: Returns the first value following a matched key.
-  @lookup usage: Default delimiter for <yellow>key!\E![0m:<yellow>value!\E![0m pairs is the semicolon '<yellow>:<default>'
+  @lookup usage: Default delimiter for <yellow>key:value<default> pairs is the semicolon '<yellow>:<default>'
   @lookup usage:   ^! Key strings must be unique. The first match will always be treated as the Key
   @lookup usage:     any subsequent matches will be disregarded - effectively treated as a value, not the key.
   @lookup usage:     To prevent a value being indavertantly treated as the key if it is a match, it must
@@ -14,12 +18,7 @@
   @lookup usage:     <lightblue>%<yellow>@lookup<lightblue>%<yellow> ^!$toggle^! integerToggle.table $toggle
   @lookup usage:     $toggle=1
   @lookup usage:
-  @lookup usage:
-  @lookup usage: <yellow>key!\E![0m       : string        - the lookup key used to identify the return value
-  @lookup usage: <yellow>sourceVar!\E![0m : Variable name - the variable defined with the lookup table
-  @lookup usage: <yellow>returnVar!\E![0m : Variable name - the variable to define the value to.
-  @lookup usage:
-  @lookup usage: Supports automacro definition argument:
+  @lookup usage: <yellow>@lookup<default> Supports automacro definition argument:
   @lookup usage:
   @lookup usage: <yellow>Call automacro.bat "@lookup <grey>[<green>delimCharacter<grey>]<yellow>"
   @lookup usage:  Valid argument value: A printable ASCCI character excluding whitespace and: < > | & ~ = ^!
@@ -39,9 +38,10 @@
     )
   $>
 
-  For /f "tokens=1,2,3,4" %%K in ("^!@.args^! ^!@lookup.Keypair.Delim^!")Do (
+  For /f "tokens=1,2,3,4" %%K in ("^!@.args: /o=^! ^!@lookup.Keypair.Delim^!")Do (
     If not "^!%%L:%%N%%~K%%N=^!" == "^!%%L^!" (
       For /f "tokens=1 Delims=!@lookup.Keypair.Delim!" %%1 in ("^!%%L:*%%N%%~K%%N=^!")Do Set ^"%%M=%%1"
+      If not "^!@.args: /o=^!" == "^!@.args^!" echo(^^^!%%M^^^!
     )
   )
 } @lookup /args /selfref
