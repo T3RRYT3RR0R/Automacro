@@ -1,5 +1,10 @@
-@cycleNext {
-  @cycleNext usage: <sourceVar> <returnVar> [/O] [/A]
+@cycleNext { dependencies: @pushUnique @push
+  @cycleNext usage: %@cycleNext% <sourceVar> <returnVar> [/A] [/D] [/O]
+  @cycleNext usage: sourceVar : the variable containing the ` delimited values to be cycled.
+  @cycleNext usage: returnVar : your custom return variable
+  @cycleNext usage: /A : Append the value to the return variable. Default behaviour overwrites the variable.
+  @cycleNext usage: /D : Echo the returned value/s without the ` delimiter
+  @cycleNext usage: /O : Echo the returned value/s
   For %%L in ( O A D )do (
     If not "^!@.args:/%%L=^!" == "^!@.args^!" (
       Set "@.args=^!@.args: /%%L=^!"

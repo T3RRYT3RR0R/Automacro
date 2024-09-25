@@ -190,27 +190,7 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
       For /f "tokens=1,* Delims=:" %%U in ('%SystemRoot%\System32\findstr.exe /linc:"!AutoMacro! usage" "!%%~1.path!"')Do (
         If not defined !AutoMacro!_usage Set "!AutoMacro!_usage=!AutoMacro! Usage:!LF!!LF!"
         Set "!AutoMacro!.start=%%U"
-        rem trailing whitespace supports automated syntax highlighting.
-        Set "Line=%%V "
-        Rem apply syntax highlighting to primary usage info.
-        If /i not "!Line: %%%%~1%% =!" == "!line!" (
-          Set "line=!line:]] =] ] !"
-          Set "line=!line: [[= [ [!"
-          Set "line=!line: %%@=```<lightblue>```%%```<yellow>```@!"
-          Set "line=!line:%% =```<lightblue>```%%```<yellow>``` !"
-          Set "line=!line: <= ```<grey>```<```<yellow>```!"
-          Set "line=!line:> =```<grey>```>```<yellow>``` !"
-          Set "line=!line: [= ```<grey>```[```<yellow>```!"
-          Set "line=!line:] =```<grey>```]```<yellow>``` !"
-          Set "line=!line: | =```<grey>``` | ```<yellow>```!"
-          Set "line=!line:```=!"
-        )
-        rem if line contains ' : ' seperator style yellow : white
-        rem unless line is contionation / bullet point marked by ' - '
-        If /i not "!Line: : =!" == "!line!" If "!Line: - =!" == "!line!" (
-          Set "Line=!Line:usage:=usage:<yellow>!"
-          Set "Line=<yellow>!Line: : = <default>: !"
-        )
+        Set "Line=%%V"
         Set "!AutoMacro!_usage=!%%~1_usage!!line:*usage:=!!\E![0m!LF!"
       )
       If defined !AutoMacro!_Usage (
@@ -376,7 +356,7 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
       )
       If not "!%%~1.switches:/args=!" == "!%%~1.switches!" (
         Set "!AutoMacro!=For %%. in (1 2)Do if %%.==2 ([LF]!%%~1!"
-        Set "!AutoMacro!=!%%~1!) Else Set @.Args=[LF]"
+        Set "!AutoMacro!=!%%~1!)Else Set @.Args=[LF]"
       )
       If not "!%%~1.switches:/selfRef=!" == "!%%~1.switches!" Set "!AutoMacro!=!%%~1:@.=%%~1.!"
     )

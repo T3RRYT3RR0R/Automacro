@@ -1,7 +1,7 @@
 @substring { dependencies: "@strlen 2048"
   // @substring args total length expected to be less 2048 characters.
   // @substring's defined state is 5160 characters
-  @substring usage: [/A] [/O] [/N] [/L] [/P] [/K] [[/E] [option]] [/M] [/R 'search=replace'~int,-int'~int,-int'~int'~-int'] [/I 'INT'string'] Arg "or Arg phrase"
+  @substring usage: %@substring% [/A] [/O] [/N] [/L] [/P] [/K] [[/E] [option]] [/M] [/R 'search=replace'~int,-int'~int,-int'~int'~-int'] [/I 'INT'string'] Arg "or Arg phrase"
   @substring usage:  
   @substring usage:  Switches apply after their occurance, and do not affect
   @substring usage:  arguments or other switches which precede them.

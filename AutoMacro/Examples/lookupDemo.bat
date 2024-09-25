@@ -1,7 +1,7 @@
 @echo off & Setlocal enableDelayedExpansion
-CLS
-  Call "%~dp0automacro.bat" @lookup @formatDate
 
+  Call "%~dp0automacro.bat" @lookup @formatDate
+  CLS
   %@formatDate% $date / DD MM YYYY
 
 rem the below .lookup variables are initialised with the @lookup macro

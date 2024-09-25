@@ -1,5 +1,5 @@
 @while {
-  @while usage: <lightblue>%<yellow>@while<lightblue>% <yellow>(
+  @while usage: %@while% (
   @while usage: <grey>  commands 
   @while usage: <yellow>  If "value" == "<lightblue>^!<yellow>variable<lightblue>^!<yellow>" <lightblue>%<yellow>@endWile<lightblue>%
   @while usage: <yellow>)

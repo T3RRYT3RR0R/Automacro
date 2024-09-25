@@ -1,4 +1,10 @@
 @interleave { dependencies @strlen @while
+
+  @interleave usage: %@interleave% <sourceVar1> <sourceVar2> <returnVar> [/R] [/fuse]
+  @interleave usage: /R    : remove duplicate whitespace from the interleaved string
+  @interleave usage: /fuse : merges the top half of the first string with
+  @interleave usage:         the bottom half of the second string.
+
 <;
   Interweaves the characters of two source variables, returning in arg 3.
   example:
@@ -10,8 +16,18 @@
   precedence / character order priority is given to the longest string.
   in the event both strings are of equal length, the first string is given precedence.
 ;>
-  @interleave usage: %@interleave% <sourceVar1> <sourceVar2> <returnVar> [/R]
-  @interleave usage: /R = collapse duplicate whitespace
+
+  Set "@.startfuse="
+  Set "@.endfuse="
+  Set "@.up="
+  Set "@.down="
+  If not "^!@.args^!" == "" If not "^!@.args: /fuse=^!" == "^!@.args^!" (
+    Set "@.args=^!@.args: /fuse=^!"
+    Set "@.startfuse=#3"
+    Set "@.endfuse=[B[0m"
+    Set "@.up=[A#3"
+    Set "@.down=[B[D#4"
+  )
   For /f "tokens=1,2,3,4" %%1 in ("^!@.args^!")Do (
     !@strlen! %%~1 $len.1
     !@strlen! %%~2 $len.2
@@ -26,16 +42,15 @@
     )
     Set "%%3="
     For /l %%i in (0 1 ^!$len^!)do (
-      Set "%3=^!%%3^!^!@.t1:~%%i,1^!^!@.t2:~%%i,1^!"
+      Set "%3=^!%%3^!^!@.t1:~%%i,1^!^!@.down^!^!@.t2:~%%i,1^!^!@.up^!"
     )
-    If /i "%%~4" == "/R" (
+    If /i "%%~4" == "/R" If not defined @.fuse{ (
       !@while:$=@.! (
         If "^!%%3:  = ^!" == "^!%%3^!" (
           !@endwhile:$=@.!
         )Else Set "%3=^!%%3:  = ^!"
       )
     )
-    Set "%3=^!%%3:`=^!"
-
+    Set "%3=^!@.startfuse^!^!%%3:`=^!^!@.endfuse^!"
   )
 } @interleave /args /selfref /flush

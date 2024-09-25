@@ -1,13 +1,13 @@
 @menu { dependencies: @lookup @while
 
-  @menu usage: <lightblue>%<yellow>@Menu<lightblue>%<yellow> "DoubleQuoted List" "Of Options"
-  @menu usage: <lightblue>%<yellow>@Menu<lightblue>%
-  @menu usage: <grey>Expansion without Arguments will display this help info.
+  @menu usage: %@Menu% "DoubleQuoted List" "Of Options"
+  @menu usage: %@Menu%
+  @menu usage: Expansion without Arguments will display this help info.
   @menu usage:
   @menu usage:Return Variables:
-  @menu usage:      <yellow>Menu{String}  <default>:  The literal String
-  @menu usage:      <yellow>Menu{Key}     <default>:  The Key Pressed
-  @menu usage:      <yellow>Menu{Number}  <default>:  The Integer value of the options argument index
+  @menu usage:      Menu{String}  :  The literal String
+  @menu usage:      Menu{Key}     :  The Key Pressed
+  @menu usage:      Menu{Number}  :  The Integer value of the options argument index
   @menu usage:        IE: Option 1 = 1, Option A = 10
   @menu usage:
   @menu usage: Defining @menu:
@@ -18,9 +18,9 @@
   @menu usage:   - Disables dividing line and removes support for custom headers and colors.
   @menu usage: <yellow>Call "automacro.bat" "@Menu <grey>[<yellow>R;G;B<grey>] <grey>[<yellow>R;G;B<grey>] [<yellow>R;G;B<grey>]<yellow>"
   @menu usage:   Where <yellow>R G<default> and <yellow>B <default>are integer values in the range <yellow>0<grey>~<yellow>255<default>:
-  @menu usage:   - first  R;G;B = Dividing line color
-  @menu usage:   - second R;G;B = Option foreground Color
-  @menu usage:   - third  R;G;B = Option background Color
+  @menu usage:   - first  R;G;B : Dividing line color
+  @menu usage:   - second R;G;B : Option foreground Color
+  @menu usage:   - third  R;G;B : Option background Color
   @menu usage: 
 
 <;
