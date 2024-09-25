@@ -27,7 +27,7 @@ $>
           )
         )
       )
-      !@wait! "^!random^! %% 8 + (^!random^! %% 8 + (^!random^! %% 4 + 3))"
+      !@wait! "^!random^! %% 10 + (^!random^! %% 8 + (^!random^! %% 4 + 4))"
       ^<nul set /p "=^!@.FG^!^!@.BG^!^!%%1:~%%i,1^!!\e![K"
     )
     ^<nul set /p "=!\e![E!\e![0m"
