@@ -1,0 +1,11 @@
+@removeLeadingZeros { dependencies: @while
+  @removeLeadingZeros usage: %@removeLeadingZeros% sourceVar
+  @removeLeadingZeros usage: sourceVar : the variable te be modified
+  For /f "tokens=1 delims= " %%1 in ("^!@.args^!") do if defined %%1 (
+    !@while! (
+      If "^!%%1:~0,1^!" == "0" (
+        Set "%%1=^!%%1:~1^!"
+      )Else !@endWhile!
+    )
+  )
+} @removeLeadingZeros /args

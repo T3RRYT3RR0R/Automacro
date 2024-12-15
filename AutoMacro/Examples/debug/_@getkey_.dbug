@@ -1,0 +1,155 @@
+raw.48:   Set "@.mode=kbd"
+exp.48:   Set "@.mode=kbd"
+
+raw.49:   Set "@.cls="
+exp.49:   Set "@.cls="
+
+raw.50:   If not "^!@.args^!" == "" If not "^!@.args: /cls=^!" == "^!@.args^!" (
+exp.50:   If not "!@.args!" == "" If not "!@.args: /cls=!" == "!@.args!" (
+
+raw.51:     Set "@.args=^!@.args: /cls=^!"
+exp.51:     Set "@.args=!@.args: /cls=!"
+
+raw.52:     Set "@.cls=1"
+exp.52:     Set "@.cls=1"
+
+raw.53:   )
+exp.53:   )
+
+raw.56:   If not "^!@.args^!" == "" If not "^!@.args: /nonblocking=^!" == "^!@.args^!" (
+exp.56:   If not "!@.args!" == "" If not "!@.args: /nonblocking=!" == "!@.args!" (
+
+raw.57:     Set "@.args=^!@.args: /nonblocking=^!"
+exp.57:     Set "@.args=!@.args: /nonblocking=!"
+
+raw.58:     Set "@.mode=lastkbd"
+exp.58:     Set "@.mode=lastkbd"
+
+raw.59:   )
+exp.59:   )
+
+raw.61:   If not "^!@.args^!" == "" If not "^!@.args: /prompt=^!" == "^!@.args^!" (
+exp.61:   If not "!@.args!" == "" If not "!@.args: /prompt=!" == "!@.args!" (
+
+raw.62:     Set "@.output="
+exp.62:     Set "@.output="
+
+raw.63:     Set "@.args=^!@.args:* /prompt =^!"
+exp.63:     Set "@.args=!@.args:* /prompt =!"
+
+raw.64:     If not "^!@.args^!" == "" Set "@.args=^!@.args:* /prompt=^!"
+exp.64:     If not "!@.args!" == "" Set "@.args=!@.args:* /prompt=!"
+
+raw.65:     If not "^!@.args^!" == "" Set "@.output=^!@.args^!"
+exp.65:     If not "!@.args!" == "" Set "@.output=!@.args!"
+
+raw.66:     If not "^!@.output^!" == "" Set "@.output=^!@.output: /p=[EPress any key to continue.^!"
+exp.66:     If not "!@.output!" == "" Set "@.output=!@.output: /p=[EPress any key to continue.!"
+
+raw.67:     If not "^!@.output^!" == "" echo(^!@.output:\n =!\E![E^!
+exp.67:     If not "!@.output!" == "" echo(!@.output:\n =[E!
+
+raw.68:     If "^!@.args^!" == "" Echo(Press any key to continue.
+exp.68:     If "!@.args!" == "" Echo(Press any key to continue.
+
+raw.69:     Set "@.args="
+exp.69:     Set "@.args="
+
+raw.70:   )
+exp.70:   )
+
+raw.73:   For /f "tokens=1 Delims= " %%1 in ("^!@.args^! $Key")Do (
+exp.73:   For /f "tokens=1 Delims= " %%1 in ("!@.args! $Key")Do (
+
+raw.76:     Set "%%~1="
+exp.76:     Set "%%~1="
+
+raw.77:     Set "$key="
+exp.77:     Set "$key="
+
+raw.80:     !@while:$while=@getKey.while! if not defined %%~1 (
+exp.80:     Set /a "@getKey.while=@getKey.while.start","@getKey.while.do=1" & For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do Set /a "@getKey.while+=1" &  if not defined %%~1 (
+
+raw.82:       !bg.exe! ^!@.mode^!
+exp.82:       "C:\Users\tcdou\AppData\Local\Temp\BG.exe" !@.mode!
+
+raw.83:       Set "%%~1=^!errorlevel^!"
+exp.83:       Set "%%~1=!errorlevel!"
+
+raw.86:       !@lookup! ^!errorlevel^! $BG.keytable %%~1
+exp.86:       For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3,4" %K in ("!@lookup.args: /o=! !@lookup.Keypair.Delim!")Do (If not "!%L:%N%~K%N=!" == "!%L!" (For /f "tokens=1 Delims=:" %1 in ("!%L:*%N%~K%N=!")Do Set "%M=%1"
+If not "!@lookup.args: /o=!" == "!@lookup.args!" echo(^!%M^!))) Else Set @lookup.Args= !errorlevel! $BG.keytable %%~1
+
+raw.90:       Set "%%~1=^!%%~1:semicolon=;^!"
+exp.90:       Set "%%~1=!%%~1:semicolon=;!"
+
+raw.91:       Set "%%~1=^!%%~1:colon=:^!"
+exp.91:       Set "%%~1=!%%~1:colon=:!"
+
+raw.94:       Set "%%~1=^!%%~1:nul=^!"
+exp.94:       Set "%%~1=!%%~1:nul=!"
+
+raw.97:       If /i "^!@.mode^!" == "lastkbd" (
+exp.97:       If /i "!@.mode!" == "lastkbd" (
+
+raw.98:         !@endwhile:$while=@getKey.while!
+exp.98:         Set "@getKey.while.do="
+
+raw.99:       )
+exp.99:       )
+
+raw.100:     )Else !@endWhile:$while=@getKey.while!
+exp.100:     )Else Set "@getKey.while.do="
+
+raw.101:     If not "^!@.cls^!" == "" CLS
+exp.101:     If not "!@.cls!" == "" CLS
+
+raw.102:   )
+exp.102:   )
+
+
+======================================================================================
+@getkey=For %. in (1 2)Do if %.==2 (Set "@.mode=kbd"
+Set "@.cls="
+If not "!@.args!" == "" If not "!@.args: /cls=!" == "!@.args!" (Set "@.args=!@.args: /cls=!"
+Set "@.cls=1")
+If not "!@.args!" == "" If not "!@.args: /nonblocking=!" == "!@.args!" (Set "@.args=!@.args: /nonblocking=!"
+Set "@.mode=lastkbd")
+If not "!@.args!" == "" If not "!@.args: /prompt=!" == "!@.args!" (Set "@.output="
+Set "@.args=!@.args:* /prompt =!"
+If not "!@.args!" == "" Set "@.args=!@.args:* /prompt=!"
+If not "!@.args!" == "" Set "@.output=!@.args!"
+If not "!@.output!" == "" Set "@.output=!@.output: /p=[EPress any key to continue.!"
+If not "!@.output!" == "" echo(!@.output:\n =[E!
+If "!@.args!" == "" Echo(Press any key to continue.
+Set "@.args=")
+For /f "tokens=1 Delims= " %1 in ("!@.args! $Key")Do (Set "%~1="
+Set "$key="
+Set /a "@getKey.while=@getKey.while.start","@getKey.while.do=1" & For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do Set /a "@getKey.while+=1" &  if not defined %~1 ("C:\Users\tcdou\AppData\Local\Temp\BG.exe" !@.mode!
+Set "%~1=!errorlevel!"
+For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3,4" %K in ("!@lookup.args: /o=! !@lookup.Keypair.Delim!")Do (If not "!%L:%N%~K%N=!" == "!%L!" (For /f "tokens=1 Delims=:" %1 in ("!%L:*%N%~K%N=!")Do Set "%M=%1"
+If not "!@lookup.args: /o=!" == "!@lookup.args!" echo(^!%M^!))) Else Set @lookup.Args= !errorlevel! $BG.keytable %~1
+Set "%~1=!%~1:semicolon=;!"
+Set "%~1=!%~1:colon=:!"
+Set "%~1=!%~1:nul=!"
+If /i "!@.mode!" == "lastkbd" (Set "@getKey.while.do="))Else Set "@getKey.while.do="
+If not "!@.cls!" == "" CLS)) Else Set @.Args=
+@getkey.end=103
+@getkey.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\ControlFlow\@getKey.mac
+@getkey.start=11
+@getkey.switches= @getKey /args
+@getkey_Dependencies= @while @lookup
+@getkey_usage=@getkey Usage:
+
+[36m%[33m@getKey[36m%[33m [90m[[33mreturnVar[90m][33m [90m[[33m/nonblocking[90m][33m [90m[[33m/prompt [90m[[33mstring[90m][33m [90m[[33m/p[90m][33m [90m[[33m/cls[90m][33m [90m][33m [0m
+ Default return: The literal keypress is returned to the variable: [33m$key [0m
+[33m returnVar         [0m: Override the default. The provided variable name replaces $key [0m
+[33m /nonblocking      [0m: returns if a keypress event has occured but does not wait. [0m
+    -> Used when the script should continue until a desired input is recieved. [0m
+[33m /prompt           [0m: Use @getkey as an alternative for pause. Returns the key pressed. [0m
+[33m /prompt string    [0m: Uses the custom prompt string instead of 'Press any key to continue.' [0m
+[33m /prompt string /p [0m: custom prompt string followed by 'Press any key to continue.' [0m
+[33m /cls              [0m: clear the screen after recieving input. [0m
+
+======================================================================================
+

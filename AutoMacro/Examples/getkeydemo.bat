@@ -1,5 +1,6 @@
 @echo off & setlocal enableDelayedExpansion
 Call "%~dp0automacro.bat" @getKey @while
+
 CLS
 Echo press any key. press escape to proceed to the next demo
 :loop

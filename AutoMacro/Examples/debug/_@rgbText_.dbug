@@ -1,0 +1,118 @@
+raw.8:   For /f "tokens=1,2,3,4" %%1 in ("^!@.args^!")do (
+exp.8:   For /f "tokens=1,2,3,4" %%1 in ("!@.args!")do (
+
+raw.9:     if not "%%~4" == "" (
+exp.9:     if not "%%~4" == "" (
+
+raw.10:       Set "@.pos=!\E![%%~3;%%4H"
+exp.10:       Set "@.pos=[%%~3;%%4H"
+
+raw.11:     )else (
+exp.11:     )else (
+
+raw.12:       Set "@.pos=!\E!7"
+exp.12:       Set "@.pos=7"
+
+raw.13:       <nul Set /P "=!\E!7"
+exp.13:       <nul Set /P "=7"
+
+raw.14:     )
+exp.14:     )
+
+raw.15:     !@strLen! %%1 $len
+exp.15:     For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strLen.Args!")Do (Set "@strLen.t=!%~i!"
+If defined @strLen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strLen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strLen.t=!@strLen.t:~%P!")))Else set "%~j=0")) Else Set @strLen.Args= %%1 $len
+
+raw.16:     Set "$string="
+exp.16:     Set "$string="
+
+raw.17:     Set "$colShift="
+exp.17:     Set "$colShift="
+
+raw.18:     For /l %%i in (0 1 ^!$len^!)do (
+exp.18:     For /l %%i in (0 1 !$len!)do (
+
+raw.19:       Set "$string=^!$string^!!\E![38;5;^^^!c.%%i^^^!m^!%%1:~%%i,1^!"
+exp.19:       Set "$string=!$string![38;5;^!c.%%i^!m!%%1:~%%i,1!"
+
+raw.20:       Set /a "c.%%i=(%%i+50) %% 255 + 1"
+exp.20:       Set /a "c.%%i=(%%i+50) %% 255 + 1"
+
+raw.21:       if "^!$colShift^!" == "" (
+exp.21:       if "!$colShift!" == "" (
+
+raw.22:         Set "$colShift=c.%%i=c.%%i %% 255 + 1"
+exp.22:         Set "$colShift=c.%%i=c.%%i %% 255 + 1"
+
+raw.23:       )else Set "$colShift=^!$colShift^!,c.%%i=c.%%i %% 255 + 1"
+exp.23:       )else Set "$colShift=!$colShift!,c.%%i=c.%%i %% 255 + 1"
+
+raw.24:     )
+exp.24:     )
+
+raw.25:     Set "$string=^!$String^!!\E![0m"
+exp.25:     Set "$string=!$String![0m"
+
+raw.26:     For /l %%i in (1 1 %%2)do (
+exp.26:     For /l %%i in (1 1 %%2)do (
+
+raw.27:       For /f "delims=" %%G in ("^!$string^!")do Set "@.output=%%G"
+exp.27:       For /f "delims=" %%G in ("!$string!")do Set "@.output=%%G"
+
+raw.28:       <nul Set /P "=!\E!8^!@.pos^!^!@.output^!"
+exp.28:       <nul Set /P "=8!@.pos!!@.output!"
+
+raw.29:       Set /a "^!$colShift^!"
+exp.29:       Set /a "!$colShift!"
+
+raw.30:       !@wait! 4
+exp.30:       For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitamount !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j"
+if !%i! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,%i=0"
+Set "$wait.do=" )))) Else Set @wait.Args= 4
+
+raw.31:     )
+exp.31:     )
+
+raw.32:   )
+exp.32:   )
+
+
+======================================================================================
+@rgbText=For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3,4" %1 in ("!@.args!")do (if not "%~4" == "" (Set "@.pos=[%~3;%4H")else (Set "@.pos=7"
+<nul Set /P "=7")
+For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strLen.Args!")Do (Set "@strLen.t=!%~i!"
+If defined @strLen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strLen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strLen.t=!@strLen.t:~%P!")))Else set "%~j=0")) Else Set @strLen.Args= %1 $len
+Set "$string="
+Set "$colShift="
+For /l %i in (0 1 !$len!)do (Set "$string=!$string![38;5;^!c.%i^!m!%1:~%i,1!"
+Set /a "c.%i=(%i+50) % 255 + 1"
+if "!$colShift!" == "" (Set "$colShift=c.%i=c.%i % 255 + 1")else Set "$colShift=!$colShift!,c.%i=c.%i % 255 + 1")
+Set "$string=!$String![0m"
+For /l %i in (1 1 %2)do (For /f "delims=" %G in ("!$string!")do Set "@.output=%G"
+<nul Set /P "=8!@.pos!!@.output!"
+Set /a "!$colShift!"
+For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitamount !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j"
+if !%i! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,%i=0"
+Set "$wait.do=" )))) Else Set @wait.Args= 4))) Else Set @.Args=
+@rgbText.end=33
+@rgbText.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\graphical\@rgbText.mac
+@rgbText.start=7
+@rgbText.switches= @rgbText /args
+@rgbText_Dependencies= @wait @strLen
+@rgbText_usage=@rgbText Usage:
+
+[36m%[33m@rgbText[36m%[33m [90m<[33msourceVar[90m>[33m [90m<[33mCycles[90m>[33m [90m[[33mY[90m][33m [90m[[33mX[90m][33m [0m
+[33m sourceVar [0m: The variable containing the string to be animated [0m
+[33m Cycles    [0m: The numer of steps in the animation [0m
+             Animation steps have a 4 centisecond interval. [0m
+[33m Y         [0m: The Y position of the string [ requires X ] [0m
+[33m X         [0m: The X position of the string [ requires Y ] [0m
+
+======================================================================================
+

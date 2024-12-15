@@ -1,5 +1,6 @@
 @waveprint { dependencies: @strlen
-  @waveprint usage: <sourceVar> <x> <y> <waveheight> returns = $wavePrint
+  /?: %@waveprint% <sourceVar> <x> <y> <waveheight>
+  /?: returns : $wavePrint
   Set "$wavePrint="
   For /f "tokens=1,2,3,4,*" %%1 in ("^!@.args^!") Do (
     !@strlen! %%1 $len

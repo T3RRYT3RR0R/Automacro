@@ -1,9 +1,11 @@
-@typewriter { dependencies: @wait @strlen @lookup
-  @typewriter usage: %@typewriter% <sourceVar> [R;G;B] [R;G;B]
-  @typewriter usage: sourceVar : arg 1 <mandatory> : the variable containing the string to be 'written.
-  @typewriter usage: R;G;B     : arg 2 [optional]  : foreground color. default : white
-  @typewriter usage: R;G;B     : arg 3 [optional]  : background color. default : black
-  @typewriter usage: %@typewriter% : No arguments   : this help output
+@typewriter { dependencies: @getkey @wait @strlen @lookup
+  /?: %@typewriter% <sourceVar> [R;G;B] [R;G;B] [/fill]
+  /?: sourceVar : arg 1 <mandatory> : the variable containing the string to be 'written.
+  /?: R;G;B     : arg 2 [optional]  : foreground color. default : white
+  /?: R;G;B     : arg 3 [optional]  : background color. default : black
+  /?: /fill     : switch [optional] : fill the subsequent line with space characters.
+  /?:              - applies background color to the fill.
+  /?: %@typewriter% : No arguments   : this help output
 
 <$
   for /F "delims=#" %%B in ('"prompt #$H# &echo on &for %%b in (1) do rem"') do Set "BS=%%B"
@@ -11,24 +13,42 @@
 $>
   Set "@.FG=!\e![38;2;242;242;242m"
   Set "@.BG=!\e![48;2;12;12;12m"
+  Set "@.end="
+  Set "@.interval="
+    Set "@.fill="
+  If not "^!@.args: /fill=^!" == "^!@.args^!" (
+    Set "@.fill=!\E![K"
+    Set "@.args=^!@.args: /fill=^!"
+  )
   For /f "tokens=1,2,3 delims= " %%1 in ("^!@.args^!") do (
     If not "%%~2" == "" Set "@.FG=!\e![38;2;%%~2m"
     If not "%%~3" == "" Set "@.BG=!\e![48;2;%%~3m"
     !@Strlen! %%1 $len
-    For /l %%i in (0 1 ^!$len^!)Do (
-      Set /a "@.mistake=^!random^! %% 24 + 1","@.i=^!random^! %% 5"
-      If "^!@.mistake^!" == "14" (
-        For %%n in ("^!@.i^!")do (
-          !@lookup! ^^^!%%1:~%%i,1^^^! @typewriter.errors $typewriter.error
-          if defined $typewriter.error (
-            ^<nul set /p "=^!@.FG^!^!@.BG^!^!$typewriter.error:~%%~n,1^!!\e![K"
-            !@wait! "^!random^! %% 9 + 9"
-            ^<nul set /p "=^!@.FG^!^!@.BG^!^!BS^!!\e![K"
-          )
-        )
+    For /l %%i in (0 1 ^!$len^!)Do if not defined @.end (
+      Set /a "@.mistake=^!random^! %% 24 + 1","@.distracted=^!random^! %% 150 + 1","@.i=^!random^! %% 5"
+      if not "^!@.interval^!" == "0" Set /a "@.interval=^!random^! %% 10 + (^!random^! %% 8 + (^!random^! %% 4 + 4))"
+      !@getkey! /nonblocking
+      If defined $key (
+        If /i "^!$key^!" == "escape" set "@.end=1"
+        If /i "^!$key^!" == "tab" set "@.interval=0"
       )
-      !@wait! "^!random^! %% 10 + (^!random^! %% 8 + (^!random^! %% 4 + 4))"
-      ^<nul set /p "=^!@.FG^!^!@.BG^!^!%%1:~%%i,1^!!\e![K"
+      if not "^!@.interval^!" == "0" (
+        If "^!@.distracted^!" == "75" (
+          !@wait! "^!random^!%%75+40"
+        )
+        If "^!@.mistake^!" == "14" (
+          For %%n in ("^!@.i^!")do (
+           !@lookup! ^^^!%%1:~%%i,1^^^! @typewriter.errors $typewriter.error
+           if defined $typewriter.error (
+             ^<nul set /p "=^!@.FG^!^!@.BG^!^!$typewriter.error:~%%~n,1^!^!@.fill^!"
+             !@wait! "^!random^! %% 9 + 9"
+             ^<nul set /p "=^!@.FG^!^!@.BG^!^!BS^!^!@.fill^!"
+           )
+         )
+       )
+       !@wait! "^!@.interval^!"
+     )
+      ^<nul set /p "=^!@.FG^!^!@.BG^!^!%%1:~%%i,1^!^!@.fill^!"
     )
     ^<nul set /p "=!\e![E!\e![0m"
   )

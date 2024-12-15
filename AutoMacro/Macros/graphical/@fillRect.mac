@@ -3,6 +3,8 @@
 
 <; Constructs a rectangle using the properties of the args provided.
    Author: T3RRY
+   Note  : \E variable contains the Escape character U+001b ; Defined by automacro.bat
+   https://github.com/T3RRYT3RR0R/Automacro/blob/main/AutoMacro/Examples/automacro.bat
 ;>
   // $set : Defines the variable prior to macro definition; excludes the set command from macro
   $Set "@.Substring=                "

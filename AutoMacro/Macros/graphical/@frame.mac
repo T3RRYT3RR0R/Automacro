@@ -7,20 +7,20 @@
             https://creativecommons.org/licenses/by/4.0/legalcode.en
 ;>
 
-  @frame usage: %@frame: args = returnVar Int % ( interval commands )
-  @frame usage:                 %1        %2
-  @frame usage: %1 = return variable
-  @frame usage: %2 = integer value of target centisecond interval between execution of command/s
-  @frame usage: Additional returns - days hours minutes seconds centiseconds:
-  @frame usage: %1.days
-  @frame usage: %1.hours
-  @frame usage: %1.minutes
-  @frame usage: %1.seconds
-  @frame usage: %1.centiseconds
-  @frame usage: %1.elapsed         : total centiseconds elapsed
-  @frame usage: 
-  @frame usage: Note: %@frame% Arguments are provided by substring modification *only*.
-  @frame usage: 
+  /?:                 %1        %2
+  /?: <lightblue>%<yellow>@frame<white>:<yellow> args <green>= <yellow>returnVar Int <lightblue>% <yellow>(<white> interval commands <yellow>)
+  /?: %1 = return variable
+  /?: %2 = integer value of target centisecond interval between execution of command/s
+  /?: Additional returns - days hours minutes seconds centiseconds:
+  /?: %1.days
+  /?: %1.hours
+  /?: %1.minutes
+  /?: %1.seconds
+  /?: %1.centiseconds
+  /?: %1.elapsed         : total centiseconds elapsed
+  /?: 
+  /?: Note: %@frame% Arguments are provided by substring modification *only*.
+  /?: 
 
   // calculate interval in step 1; conditionally execute trailing commands during step 2
   For %%. in (1 2)Do if %%.==1 (

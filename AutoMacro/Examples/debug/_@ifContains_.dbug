@@ -1,0 +1,84 @@
+raw.13:   For /f "tokens=1,2,3" %%1 in ("^!@.args^!") Do (
+exp.13:   For /f "tokens=1,2,3" %%1 in ("!@.args!") Do (
+
+raw.14:     !@strlen! %%1 @.len[1]
+exp.14:     For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0")) Else Set @strlen.Args= %%1 @.len[1]
+
+raw.15:     !@strlen! %%2 @.len[2]
+exp.15:     For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0")) Else Set @strlen.Args= %%2 @.len[2]
+
+raw.16:     Set "@.true="
+exp.16:     Set "@.true="
+
+raw.17:     If ^^^!@.len[2]^^^! LEQ ^^^!@.len[2]^^^! (
+exp.17:     If ^!@.len[2]^! LEQ ^!@.len[2]^! (
+
+raw.18:       For /f "tokens=1,2" %%i in ("^!@.len[1]^! ^!@.len[2]^!") Do (
+exp.18:       For /f "tokens=1,2" %%i in ("!@.len[1]! !@.len[2]!") Do (
+
+raw.19:         For /l %%# in (0 1 %%i)do if "^!@.true^!" == "" (
+exp.19:         For /l %%# in (0 1 %%i)do if "!@.true!" == "" (
+
+raw.20:           if "^!%%1:~%%#,%%j^!"=="^!%%2^!" (
+exp.20:           if "!%%1:~%%#,%%j!"=="!%%2!" (
+
+raw.21:             Set "@.true=%%#"
+exp.21:             Set "@.true=%%#"
+
+raw.22:           )
+exp.22:           )
+
+raw.23:         )
+exp.23:         )
+
+raw.24:       )
+exp.24:       )
+
+raw.25:     )
+exp.25:     )
+
+raw.26:     If /i "%%3" == "/e" If defined @.true ((call))else ((call ))
+exp.26:     If /i "%%3" == "/e" If defined @.true ((call))else ((call ))
+
+raw.27:   )
+exp.27:   )
+
+
+======================================================================================
+@ifContains=For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3" %1 in ("!@ifContains.args!") Do (For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0")) Else Set @strlen.Args= %1 @ifContains.len[1]
+For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0")) Else Set @strlen.Args= %2 @ifContains.len[2]
+Set "@ifContains.true="
+If ^!@ifContains.len[2]^! LEQ ^!@ifContains.len[2]^! (For /f "tokens=1,2" %i in ("!@ifContains.len[1]! !@ifContains.len[2]!") Do (For /l %# in (0 1 %i)do if "!@ifContains.true!" == "" (if "!%1:~%#,%j!"=="!%2!" (Set "@ifContains.true=%#"))))
+If /i "%3" == "/e" If defined @ifContains.true ((call))else ((call )))) Else Set @ifContains.Args=
+@ifContains.end=28
+@ifContains.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\Strings\@ifContains.mac
+@ifContains.start=11
+@ifContains.switches= @ifContains /args /selfref
+@ifContains_Dependencies= @strlen
+@ifContains_usage=@ifContains Usage:
+
+[36m%[33m@ifContains[36m%[33m [90m<[33msearchVar[90m>[33m [90m<[33msubstringVar[90m>[33m [90m[[33m/E[90m][33m [0m
+[33m searchVar    [0m: the variable containing the string to be seached [0m
+[33m substringVar [0m: the variable containing the substring to search for. [0m
+[33m /E [0m: Optional switch. returns the following errorlevels: [0m
+[33m  0 [0m: False. Searchee does not contain the substring.  [0m
+[33m  1 [0m: True.  Searchee contains the substring [0m
+ Additional returns: [0m
+[33m @ifContains.true [0m: The first index at which the string is found if true. [0m
+            notes - @ifContains.true is Undefined if not true. [0m
+                  - @ifContains.true returns the numeric position from a zero index. [0m
+
+======================================================================================
+

@@ -1,0 +1,206 @@
+raw.14:   For /f "tokens=1,* delims= " %%1 in ("^!@.args^!")Do (
+exp.14:   For /f "tokens=1,* delims= " %%1 in ("!@.args!")Do (
+
+raw.16:     Set "@.args=^!@.args:*%%1 =^!"
+exp.16:     Set "@.args=!@.args:*%%1 =!"
+
+raw.19:     Set ^"@.args=^!@.args:"=^!"
+exp.19:     Set "@.args=!@.args:"=!"
+
+raw.22:     Set "@.args=^!@.args:mm=MM^!"
+exp.22:     Set "@.args=!@.args:mm=MM!"
+
+raw.23:     Set "@.args=^!@.args:DD=dd^!"
+exp.23:     Set "@.args=!@.args:DD=dd!"
+
+raw.24:     Set "@.args=^!@.args:YY=yy^!"
+exp.24:     Set "@.args=!@.args:YY=yy!"
+
+raw.27:     Set "@.delim=^!@.args:~0,1^!"
+exp.27:     Set "@.delim=!@.args:~0,1!"
+
+raw.28:     Set "@.args=^!@.args:* =^!"
+exp.28:     Set "@.args=!@.args:* =!"
+
+raw.31:     Set "@.error="
+exp.31:     Set "@.error="
+
+raw.32:     Set "@.test=^!@.args^!"
+exp.32:     Set "@.test=!@.args!"
+
+raw.33:     Set "@.test=^!@.test: =^!"
+exp.33:     Set "@.test=!@.test: =!"
+
+raw.34:     Set "@.test=^!@.test:d=^!"
+exp.34:     Set "@.test=!@.test:d=!"
+
+raw.35:     if defined @.test Set "@.test=^!@.test:m=^!"
+exp.35:     if defined @.test Set "@.test=!@.test:m=!"
+
+raw.36:     if defined @.test Set "@.test=^!@.test:y=^!"
+exp.36:     if defined @.test Set "@.test=!@.test:y=!"
+
+raw.37:     if defined @.test Set "@.error=2"
+exp.37:     if defined @.test Set "@.error=2"
+
+raw.38:     If not defined @.error (
+exp.38:     If not defined @.error (
+
+raw.39:       !@argCount! ^!@.args^!
+exp.39:       For %. in (1 2)Do if %.==2 (For /f "tokens=1,* Delims= " %? in ("@!@argCount.Args:-=!")Do Set "@argCount.args=%@"
+Set /a "$argCount=0","$argCountError=0"
+For /f "delims=-\@$.[]{}:;_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ " %G in ("!@argCount.args!")Do Set "$argCountError=1"
+If !$argCountError! EQU 0  (If "!@argCount.args:~-1!"==" " Set "@argCount.args=!@argCount.args:~0,-1!"
+Set /A "$argCount=(((!@argCount.args: =>>31)+3>>1)+((!>>31)+3>>1))")) Else Set @argCount.Args= !@.args!
+
+raw.40:       If ^!$argcount^! GTR 3 Set "@.error=1"
+exp.40:       If !$argcount! GTR 3 Set "@.error=1"
+
+raw.41:       If ^!$argcountError^! NEQ 0 Set "@.error=2"
+exp.41:       If !$argcountError! NEQ 0 Set "@.error=2"
+
+raw.42:     )
+exp.42:     )
+
+raw.43:     If not defined @.error (
+exp.43:     If not defined @.error (
+
+raw.46:       Set "@.delim=^!@.delim:\=/^!"
+exp.46:       Set "@.delim=!@.delim:\=/!"
+
+raw.49:       For /f "tokens=1 eol=\" %%_ in ("^!@.delim:'=`^!")Do Set "@.args=^!@.args: =%%_^!"
+exp.49:       For /f "tokens=1 eol=\" %%_ in ("!@.delim:'=`!")Do Set "@.args=!@.args: =%%_!"
+
+raw.50:       for /f "usebackq delims=" %%G in (`PowerShell -Command "& {Get-Date -format '^!@.args^!'}"`) do set "%%1=%%G"
+exp.50:       for /f "usebackq delims=" %%G in (`PowerShell -Command "& {Get-Date -format '!@.args!'}"`) do set "%%1=%%G"
+
+raw.53:       if defined @.init (Call )
+exp.53:       if defined @.init (Call )
+
+raw.54:     )Else (
+exp.54:     )Else (
+
+raw.57:       1>&2 Echo( Error:
+exp.57:       1>&2 Echo( Error:
+
+raw.58:       If "^!@.error^!"=="1" 1>&2 Echo( - Maximum args for date format is 3 tokens. Invalid args: "^!@.args^!"
+exp.58:       If "!@.error!"=="1" 1>&2 Echo( - Maximum args for date format is 3 tokens. Invalid args: "!@.args!"
+
+raw.59:       If "^!@.error^!"=="2" (
+exp.59:       If "!@.error!"=="2" (
+
+raw.60:         1>&2 Echo( - Invalid character/s in argument "^!@.args^!" : "^!@.test^!"
+exp.60:         1>&2 Echo( - Invalid character/s in argument "!@.args!" : "!@.test!"
+
+raw.61:         1>&2 Echo( Supported characters: D M Y
+exp.61:         1>&2 Echo( Supported characters: D M Y
+
+raw.62:       )
+exp.62:       )
+
+raw.64:       if defined @.init (Call)
+exp.64:       if defined @.init (Call)
+
+raw.65:     )
+exp.65:     )
+
+raw.66:   )
+exp.66:   )
+
+======================================================================================
+ traditional macro. requires escaping to be added.
+======================================================================================
+Set @formatDate.clone=For %. in (1 2)Do if %.==2 (%\n%
+If not "!@.Args!"=="" (%\n%
+For /f "tokens=1,* delims= " %%1 in ("!@.args!")Do (%\n%
+Set "@.args=!@.args:*%%1 =!"%\n%
+Set "@.args=!@.args:"=!"%\n%
+Set "@.args=!@.args:mm=MM!"%\n%
+Set "@.args=!@.args:DD=dd!"%\n%
+Set "@.args=!@.args:YY=yy!"%\n%
+Set "@.delim=!@.args:~0,1!"%\n%
+Set "@.args=!@.args:* =!"%\n%
+Set "@.error="%\n%
+Set "@.test=!@.args!"%\n%
+Set "@.test=!@.test: =!"%\n%
+Set "@.test=!@.test:d=!"%\n%
+if defined @.test Set "@.test=!@.test:m=!"%\n%
+if defined @.test Set "@.test=!@.test:y=!"%\n%
+if defined @.test Set "@.error=2"%\n%
+If not defined @.error (%\n%
+For %. in (1 2)Do if %.==2 (For /f "tokens=1,* Delims= " %? in ("@!@argCount.Args:-=!")Do Set "@argCount.args=%@"
+Set /a "$argCount=0","$argCountError=0"
+For /f "delims=-\@$.[]{}:;_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ " %G in ("!@argCount.args!")Do Set "$argCountError=1"
+If !$argCountError! EQU 0  (If "!@argCount.args:~-1!"==" " Set "@argCount.args=!@argCount.args:~0,-1!"
+Set /A "$argCount=(((!@argCount.args: =>>31)+3>>1)+((!>>31)+3>>1))")) Else Set @argCount.Args= !@.args!%\n%
+If !$argcount! GTR 3 Set "@.error=1"%\n%
+If !$argcountError! NEQ 0 Set "@.error=2"%\n%
+)%\n%
+If not defined @.error (%\n%
+Set "@.delim=!@.delim:\=/!"%\n%
+For /f "tokens=1 eol=\" %%_ in ("!@.delim:'=`!")Do Set "@.args=!@.args: =%%_!"%\n%
+for /f "usebackq delims=" %%G in (`PowerShell -Command "& {Get-Date -format '!@.args!'}"`) do set "%%1=%%G"%\n%
+if defined @.init (Call )%\n%
+)Else (%\n%
+1>&2 Echo( Error:%\n%
+If "!@.error!"=="1" 1>&2 Echo( - Maximum args for date format is 3 tokens. Invalid args: "!@.args!"%\n%
+If "!@.error!"=="2" (%\n%
+1>&2 Echo( - Invalid character/s in argument "!@.args!" : "!@.test!"%\n%
+1>&2 Echo( Supported characters: D M Y%\n%
+)%\n%
+if defined @.init (Call)%\n%
+)%\n%
+)%\n%
+)Else Echo(!@formatDate_usage!%\n%
+) Else Set @.Args=
+======================================================================================
+
+
+======================================================================================
+@formatDate=For %. in (1 2)Do if %.==2 (If not "!@.Args!"=="" (For /f "tokens=1,* delims= " %1 in ("!@.args!")Do (Set "@.args=!@.args:*%1 =!"
+Set "@.args=!@.args:"=!"
+Set "@.args=!@.args:mm=MM!"
+Set "@.args=!@.args:DD=dd!"
+Set "@.args=!@.args:YY=yy!"
+Set "@.delim=!@.args:~0,1!"
+Set "@.args=!@.args:* =!"
+Set "@.error="
+Set "@.test=!@.args!"
+Set "@.test=!@.test: =!"
+Set "@.test=!@.test:d=!"
+if defined @.test Set "@.test=!@.test:m=!"
+if defined @.test Set "@.test=!@.test:y=!"
+if defined @.test Set "@.error=2"
+If not defined @.error (For %. in (1 2)Do if %.==2 (For /f "tokens=1,* Delims= " %? in ("@!@argCount.Args:-=!")Do Set "@argCount.args=%@"
+Set /a "$argCount=0","$argCountError=0"
+For /f "delims=-\@$.[]{}:;_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ " %G in ("!@argCount.args!")Do Set "$argCountError=1"
+If !$argCountError! EQU 0  (If "!@argCount.args:~-1!"==" " Set "@argCount.args=!@argCount.args:~0,-1!"
+Set /A "$argCount=(((!@argCount.args: =>>31)+3>>1)+((!>>31)+3>>1))")) Else Set @argCount.Args= !@.args!
+If !$argcount! GTR 3 Set "@.error=1"
+If !$argcountError! NEQ 0 Set "@.error=2")
+If not defined @.error (Set "@.delim=!@.delim:\=/!"
+For /f "tokens=1 eol=\" %_ in ("!@.delim:'=`!")Do Set "@.args=!@.args: =%_!"
+for /f "usebackq delims=" %G in (`PowerShell -Command "& {Get-Date -format '!@.args!'}"`) do set "%1=%G"
+if defined @.init (Call ))Else (1>&2 Echo( Error:
+If "!@.error!"=="1" 1>&2 Echo( - Maximum args for date format is 3 tokens. Invalid args: "!@.args!"
+If "!@.error!"=="2" (1>&2 Echo( - Invalid character/s in argument "!@.args!" : "!@.test!"
+1>&2 Echo( Supported characters: D M Y)
+if defined @.init (Call))))Else Echo(!@formatDate_usage!) Else Set @.Args=
+@formatDate.end=67
+@formatDate.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\Strings\@formatDate.mac
+@formatDate.start=11
+@formatDate.switches= @formatDate /args /help
+@formatDate_Dependencies= @argCount
+@formatDate_usage=@formatDate Usage:
+
+[36m%[33m@formatDate[36m%[33m [90m<[33mreturnvar[90m>[33m [90m<[33m"delimChar"[90m>[33m [90m[[33mMM[90m][33m [90m[[33mdd[90m][33m [90m[[33myyyy[90m][33m [0m
+ format style may use one or more of the above optional arguments in any order. [0m
+ eaxmple:   [36m%[33m@formatDate[36m%[33m $myVar - yyyy MM dd [0m
+  [0m
+ Unsupported delimiters:  [0m
+[33m  ' [0m: becomes ` [0m
+[33m  \ [0m: becomes / [0m
+[33m  " [0m: becomes whitespace [0m
+
+======================================================================================
+

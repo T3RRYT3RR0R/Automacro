@@ -1,0 +1,66 @@
+raw.25:   For /f "tokens=1,2" %%i in ("^!@.Args^!")Do (
+exp.25:   For /f "tokens=1,2" %%i in ("!@.Args!")Do (
+
+raw.26:     Set "@.t=^!%%~i^!"
+exp.26:     Set "@.t=!%%~i!"
+
+raw.27:     If defined @.t (
+exp.27:     If defined @.t (
+
+raw.28:       Set "%%j=1"
+exp.28:       Set "%%j=1"
+
+raw.29:       For %%P in (!$max.strLen!)Do (
+exp.29:       For %%P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (
+
+raw.30:         If not "^!@.t:~%%P,1^!" == "" (
+exp.30:         If not "!@.t:~%%P,1!" == "" (
+
+raw.31:           Set /a "%%~j+=%%P"
+exp.31:           Set /a "%%~j+=%%P"
+
+raw.32:           Set "@.t=^!@.t:~%%P^!"
+exp.32:           Set "@.t=!@.t:~%%P!"
+
+raw.33:         )
+exp.33:         )
+
+raw.34:       )
+exp.34:       )
+
+raw.35:     )Else set "%%~j=0"
+exp.35:     )Else set "%%~j=0"
+
+raw.36:   )
+exp.36:   )
+
+
+======================================================================================
+@strlen=For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0")) Else Set @strlen.Args=
+@strlen.end=38
+@strlen.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\Strings\@Strlen.mac
+@strlen.start=16
+@strlen.switches= @Strlen /args /selfRef
+@strlen_usage=@strlen Usage:
+
+ [36m%[33m@strlen[36m% [90m<[33msourceVar[90m> <[33mreturnVar[90m>[0m [0m
+ [0m
+ @strLen definition: [0m
+ [33mCall automacro.bat @strlen[0m [0m
+ [0m
+ Supports automacro definition argument: [0m
+ [0m
+ [33mCall automacro.bat "@strlen [90m[[32minteger[90m][33m"[0m [0m
+  Valid argument values:[32m 4096 2048 1024 512 256 128 64 32 [0m [0m
+  - modifies the number of steps taken to calculate the strings length [0m
+    with the integer value provided acting as the expected maximum length. [0m
+    IE:[33m Call automacro.bat "@strlen [32m64[33m"[0m [0m
+    would only test up to a string length of 64 characters, reducing the  [0m
+    number of steps required by 6 iterations. [0m
+ [0m
+
+======================================================================================
+

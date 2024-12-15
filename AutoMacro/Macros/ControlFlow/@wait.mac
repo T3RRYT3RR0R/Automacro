@@ -13,16 +13,15 @@
 ;>
 
   !@while:$while=$wait! (
-    For /f "tokens=1,* Delims= " %%i in ("$waitCS ^!@.args:* =^!")Do If not "^!%%i.CS^!"=="^!time:~-1^!" (
+    For /f "tokens=1,* Delims= " %%i in ("$waitamount ^!@.args:* =^!")Do If not "^!%%i.CS^!"=="^!time:~-1^!" (
       Set /A "@.tDiff=^!time:~-1^!-%%i.CS","%%i.CS=^!time:~-1^!"
       If "^!@.tDiff:~0,-1^!"=="-" (
-        Set /A "@.tDiff+=10,%%i.elapsed=%%i.elapsed %% 100000000+@.tDiff,%%i=%%i %% 100000000+@.tDiff"
-      )Else Set /A "%%i.elapsed=%%i.elapsed %% 100000000+@.tDiff,%%i=%%i %% 100000000+@.tDiff"
-      Set /a "@.Target=%%~j","@.current=%%i"
-    )
-    if ^!@.current^! GEQ ^!@.TARGET^! (
-       Set /a "@.tDiff=0,@.current=0,$WaitCS=0"
-      !@EndWhile:$while=$wait! 
+        Set /A "@.tDiff+=10,%%i.elapsed=%%i.elapsed %% 100000000+@.tDiff,%%i=%%i %% 100000000+@.tDiff","@.Target=%%~j"
+      )Else Set /A "%%i.elapsed=%%i.elapsed %% 100000000+@.tDiff,%%i=%%i %% 100000000+@.tDiff","@.Target=%%~j"
+      if ^!%%i^! GEQ ^!@.TARGET^! (
+         Set /a "@.tDiff=0,@.current=0,%%i=0"
+        !@EndWhile:$while=$wait! 
+      )
     )
   )
 } @wait /args /selfRef

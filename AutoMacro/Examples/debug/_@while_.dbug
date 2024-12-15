@@ -1,0 +1,32 @@
+raw.22:   Set /a "$while=$while.start","$while.do=1" & For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do Set /a "$while+=1" & 
+exp.22:   Set /a "$while=$while.start","$while.do=1" & For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do For /l %%^~ in (1 1 16)Do if defined $while.do Set /a "$while+=1" & 
+
+
+======================================================================================
+@while=Set /a "$while=$while.start","$while.do=1" & For /l %^~ in (1 1 16)Do if defined $while.do For /l %^~ in (1 1 16)Do if defined $while.do For /l %^~ in (1 1 16)Do if defined $while.do For /l %^~ in (1 1 16)Do if defined $while.do For /l %^~ in (1 1 16)Do if defined $while.do Set /a "$while+=1" & 
+@while.end=23
+@while.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\ControlFlow\@while.mac
+@while.start=19
+@while_usage=@while Usage:
+
+[36m%[33m@while[36m%[33m ( [0m
+ [90m  commands  [0m
+ [33m  If "value" == "[36m![33mvariable[36m![33m" [36m%[33m@endWile[36m% [0m
+ [33m) [0m
+ [0m
+ [36m%[33m@while[36m:[32m$while[36m=[33myourVariable[36m% [33m( [0m
+ [90m  commands  [0m
+ [33m  If "value" == "[36m![33mvariable[36m![33m" [36m%[33m@endWile[36m:[32m$while[36m=[33myourVariable[36m% [0m
+ ) [0m
+ [0m
+ returns: [32m$while [0m: The current iteration of the while loop - incremented at the beginning of each loop. [0m
+ Variable enigma : [32m$while[33m.start [0m - the starting value of $while, value is 0 unless defined by user. [0m
+                   [32m$while[33m.do    [0m - the removal of this variables definition terminates the While loop [0m
+                   [33m@EndWhile    [0m - Terminates the while loop if your condition is met. [0m
+                   Where substring modification is used to replace the $while prefix with your own prefix, [0m
+                   $while will be replaced with the substituted prefix. This allows variable localisation [0m
+                   and nesting of @While Blocks. [0m
+ [0m
+
+======================================================================================
+

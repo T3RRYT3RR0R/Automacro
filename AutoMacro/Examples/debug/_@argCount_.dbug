@@ -1,0 +1,54 @@
+raw.13:   For /f "tokens=1,* Delims= " %%? in ("@^!@.Args:-=^!")Do Set "@.args=%%@"
+exp.13:   For /f "tokens=1,* Delims= " %%? in ("@!@.Args:-=!")Do Set "@.args=%%@"
+
+raw.16:   Set /a "$argCount=0","$argCountError=0"
+exp.16:   Set /a "$argCount=0","$argCountError=0"
+
+raw.18:   For /f "delims=-\@$.[]{}:;_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ " %%G in ("^!@.args^!")Do Set "$argCountError=1"
+exp.18:   For /f "delims=-\@$.[]{}:;_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ " %%G in ("!@.args!")Do Set "$argCountError=1"
+
+raw.20:   If ^!$argCountError^! EQU 0  (
+exp.20:   If !$argCountError! EQU 0  (
+
+raw.22:     If "^!@.args:~-1^!"==" " Set "@.args=^!@.args:~0,-1^!"
+exp.22:     If "!@.args:~-1!"==" " Set "@.args=!@.args:~0,-1!"
+
+raw.26:     Set /A "$argCount=(((^!@.args: =>>31)+3>>1)+((^!>>31)+3>>1))"
+exp.26:     Set /A "$argCount=(((!@.args: =>>31)+3>>1)+((!>>31)+3>>1))"
+
+raw.27:   )
+exp.27:   )
+
+======================================================================================
+ traditional macro. requires escaping to be added.
+======================================================================================
+Set @argCount.clone=For %. in (1 2)Do if %.==2 (%\n%
+For /f "tokens=1,* Delims= " %%? in ("@!@argCount.Args:-=!")Do Set "@argCount.args=%%@"%\n%
+Set /a "$argCount=0","$argCountError=0"%\n%
+For /f "delims=-\@$.[]{}:;_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ " %%G in ("!@argCount.args!")Do Set "$argCountError=1"%\n%
+If !$argCountError! EQU 0  (%\n%
+If "!@argCount.args:~-1!"==" " Set "@argCount.args=!@argCount.args:~0,-1!"%\n%
+Set /A "$argCount=(((!@argCount.args: =>>31)+3>>1)+((!>>31)+3>>1))"%\n%
+)%\n%
+) Else Set @argCount.Args=
+======================================================================================
+
+
+======================================================================================
+@argCount=For %. in (1 2)Do if %.==2 (For /f "tokens=1,* Delims= " %? in ("@!@argCount.Args:-=!")Do Set "@argCount.args=%@"
+Set /a "$argCount=0","$argCountError=0"
+For /f "delims=-\@$.[]{}:;_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ " %G in ("!@argCount.args!")Do Set "$argCountError=1"
+If !$argCountError! EQU 0  (If "!@argCount.args:~-1!"==" " Set "@argCount.args=!@argCount.args:~0,-1!"
+Set /A "$argCount=(((!@argCount.args: =>>31)+3>>1)+((!>>31)+3>>1))")) Else Set @argCount.Args=
+@argCount.end=28
+@argCount.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\Strings\@argCount.mac
+@argCount.start=4
+@argCount.switches= @ArgCount /args /selfRef
+@argCount_usage=@argCount Usage:
+
+[36m%[33m@argCount[36m%[33m [90m<[33mlist[90m>[33m [0m
+  Only supports args containing alphanumerical characters [0m
+  with the following exceptions: -\@$.[]{}:;_ [0m
+
+======================================================================================
+

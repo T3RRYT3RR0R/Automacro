@@ -1,0 +1,138 @@
+raw.3:   For /f "tokens=1,2,3,4" %%1 in ("^!@.args^!")do (
+exp.3:   For /f "tokens=1,2,3,4" %%1 in ("!@.args!")do (
+
+raw.4:     !@strLen! %%1 $len
+exp.4:     For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strLen.Args!")Do (Set "@strLen.t=!%~i!"
+If defined @strLen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strLen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strLen.t=!@strLen.t:~%P!")))Else set "%~j=0")) Else Set @strLen.Args= %%1 $len
+
+raw.5:     Set /a "rb_phase=1"
+exp.5:     Set /a "rb_phase=1"
+
+raw.6:     For /l %%z in (1 1 %%2)do (
+exp.6:     For /l %%z in (1 1 %%2)do (
+
+raw.7:       Set /a "rb_phase=rb_phase %% 255 + 1"
+exp.7:       Set /a "rb_phase=rb_phase %% 255 + 1"
+
+raw.8:       Set "output=[?25l[%%3;%%4H"
+exp.8:       Set "output=[?25l[%%3;%%4H"
+
+raw.9:       for /l %%i in (0,1,^!$len^!) do (set "char=^!%%1:~%%i,1^!"
+exp.9:       for /l %%i in (0,1,!$len!) do (set "char=!%%1:~%%i,1!"
+
+raw.10:         set /a "ratio=(%%i*360)/$len+(rb_phase*360/100)"
+exp.10:         set /a "ratio=(%%i*360)/$len+(rb_phase*360/100)"
+
+raw.11:         if ^^^!ratio^^^! geq 360 set /a ratio-=360
+exp.11:         if ^!ratio^! geq 360 set /a ratio-=360
+
+raw.12:         set /a "r=g=b=0,section=ratio/60"
+exp.12:         set /a "r=g=b=0,section=ratio/60"
+
+raw.13:         if "^!section^!" == "0" (set /a "r=255, g=(ratio*255)/60"
+exp.13:         if "!section!" == "0" (set /a "r=255, g=(ratio*255)/60"
+
+raw.14:         ) else if "^!section^!" == "1" (set /a "r=255-(ratio-60)*255/60, g=255"
+exp.14:         ) else if "!section!" == "1" (set /a "r=255-(ratio-60)*255/60, g=255"
+
+raw.15:         ) else if "^!section^!" == "2" (set /a "g=255, b=(ratio-120)*255/60"
+exp.15:         ) else if "!section!" == "2" (set /a "g=255, b=(ratio-120)*255/60"
+
+raw.16:         ) else if "^!section^!" == "3" (set /a "g=255-(ratio-180)*255/60, b=255"
+exp.16:         ) else if "!section!" == "3" (set /a "g=255-(ratio-180)*255/60, b=255"
+
+raw.17:         ) else if "^!section^!" == "4" (set /a "r=(ratio-240)*255/60, b=255"
+exp.17:         ) else if "!section!" == "4" (set /a "r=(ratio-240)*255/60, b=255"
+
+raw.18:         ) else (set /a "r=255, b=255-(ratio-300)*255/60"
+exp.18:         ) else (set /a "r=255, b=255-(ratio-300)*255/60"
+
+raw.19:         )
+exp.19:         )
+
+raw.20:         if defined rb_dark (
+exp.20:         if defined rb_dark (
+
+raw.21:           for %%a in (r,g,b) do (
+exp.21:           for %%a in (r,g,b) do (
+
+raw.22:             set /a "value=%%a-rb_dark"
+exp.22:             set /a "value=%%a-rb_dark"
+
+raw.23:             if ^^^!value^^^! lss 12 (
+exp.23:             if ^!value^! lss 12 (
+
+raw.24:               set "%%a=12"
+exp.24:               set "%%a=12"
+
+raw.25:             ) else (
+exp.25:             ) else (
+
+raw.26:               set "%%a=^!value^!"
+exp.26:               set "%%a=!value!"
+
+raw.27:             )
+exp.27:             )
+
+raw.28:           )
+exp.28:           )
+
+raw.29:         )
+exp.29:         )
+
+raw.30:         set "output=^!output^![38;2;^!r^!;^!g^!;^!b^!m^!char^![0m"
+exp.30:         set "output=!output![38;2;!r!;!g!;!b!m!char![0m"
+
+raw.31:       )
+exp.31:       )
+
+raw.32:       echo(^!output^![?25h
+exp.32:       echo(!output![?25h
+
+raw.33:       !@wait! 4
+exp.33:       For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitamount !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j"
+if !%i! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,%i=0"
+Set "$wait.do=" )))) Else Set @wait.Args= 4
+
+raw.34:     )
+exp.34:     )
+
+raw.35:   )
+exp.35:   )
+
+
+======================================================================================
+@rainbowText=For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3,4" %1 in ("!@.args!")do (For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strLen.Args!")Do (Set "@strLen.t=!%~i!"
+If defined @strLen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strLen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strLen.t=!@strLen.t:~%P!")))Else set "%~j=0")) Else Set @strLen.Args= %1 $len
+Set /a "rb_phase=1"
+For /l %z in (1 1 %2)do (Set /a "rb_phase=rb_phase % 255 + 1"
+Set "output=[?25l[%3;%4H"
+for /l %i in (0,1,!$len!) do (set "char=!%1:~%i,1!"
+set /a "ratio=(%i*360)/$len+(rb_phase*360/100)"
+if ^!ratio^! geq 360 set /a ratio-=360
+set /a "r=g=b=0,section=ratio/60"
+if "!section!" == "0" (set /a "r=255, g=(ratio*255)/60") else if "!section!" == "1" (set /a "r=255-(ratio-60)*255/60, g=255") else if "!section!" == "2" (set /a "g=255, b=(ratio-120)*255/60") else if "!section!" == "3" (set /a "g=255-(ratio-180)*255/60, b=255") else if "!section!" == "4" (set /a "r=(ratio-240)*255/60, b=255") else (set /a "r=255, b=255-(ratio-300)*255/60")
+if defined rb_dark (for %a in (r,g,b) do (set /a "value=%a-rb_dark"
+if ^!value^! lss 12 (set "%a=12") else (set "%a=!value!")))
+set "output=!output![38;2;!r!;!g!;!b!m!char![0m")
+echo(!output![?25h
+For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitamount !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j"
+if !%i! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,%i=0"
+Set "$wait.do=" )))) Else Set @wait.Args= 4))) Else Set @.Args=
+@rainbowText.end=36
+@rainbowText.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\graphical\@rainbowText.mac
+@rainbowText.start=2
+@rainbowText.switches= @rainbowText /args
+@rainbowText_Dependencies= @strLen @wait
+@rainbowText_usage=@rainbowText Usage:
+
+[36m%[33m@rainbowText[36m%[33m sourceVar iterations Y X [0m
+
+======================================================================================
+

@@ -1,0 +1,226 @@
+raw.12:   Set "@.FG=!\e![38;2;242;242;242m"
+exp.12:   Set "@.FG=[38;2;242;242;242m"
+
+raw.13:   Set "@.BG=!\e![48;2;12;12;12m"
+exp.13:   Set "@.BG=[48;2;12;12;12m"
+
+raw.14:   Set "@.end="
+exp.14:   Set "@.end="
+
+raw.15:   Set "@.interval="
+exp.15:   Set "@.interval="
+
+raw.16:   For /f "tokens=1,2,3 delims= " %%1 in ("^!@.args^!") do (
+exp.16:   For /f "tokens=1,2,3 delims= " %%1 in ("!@.args!") do (
+
+raw.17:     If not "%%~2" == "" Set "@.FG=!\e![38;2;%%~2m"
+exp.17:     If not "%%~2" == "" Set "@.FG=[38;2;%%~2m"
+
+raw.18:     If not "%%~3" == "" Set "@.BG=!\e![48;2;%%~3m"
+exp.18:     If not "%%~3" == "" Set "@.BG=[48;2;%%~3m"
+
+raw.19:     !@Strlen! %%1 $len
+exp.19:     For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0")) Else Set @strlen.Args= %%1 $len
+
+raw.20:     For /l %%i in (0 1 ^!$len^!)Do if not defined @.end (
+exp.20:     For /l %%i in (0 1 !$len!)Do if not defined @.end (
+
+raw.21:       Set /a "@.mistake=^!random^! %% 24 + 1","@.distracted=^!random^! %% 150 + 1","@.i=^!random^! %% 5"
+exp.21:       Set /a "@.mistake=!random! %% 24 + 1","@.distracted=!random! %% 150 + 1","@.i=!random! %% 5"
+
+raw.22:       if not "^!@.interval^!" == "0" Set /a "@.interval=^!random^! %% 10 + (^!random^! %% 8 + (^!random^! %% 4 + 4))"
+exp.22:       if not "!@.interval!" == "0" Set /a "@.interval=!random! %% 10 + (!random! %% 8 + (!random! %% 4 + 4))"
+
+raw.23:       !@getkey! /nonblocking
+exp.23:       For %. in (1 2)Do if %.==2 (Set "@.mode=kbd"
+Set "@.cls="
+If not "!@.args!" == "" If not "!@.args: /cls=!" == "!@.args!" (Set "@.args=!@.args: /cls=!"
+Set "@.cls=1")
+If not "!@.args!" == "" If not "!@.args: /nonblocking=!" == "!@.args!" (Set "@.args=!@.args: /nonblocking=!"
+Set "@.mode=lastkbd")
+If not "!@.args!" == "" If not "!@.args: /prompt=!" == "!@.args!" (Set "@.output="
+Set "@.args=!@.args:* /prompt =!"
+If not "!@.args!" == "" Set "@.args=!@.args:* /prompt=!"
+If not "!@.args!" == "" Set "@.output=!@.args!"
+If not "!@.output!" == "" Set "@.output=!@.output: /p=[EPress any key to continue.!"
+If not "!@.output!" == "" echo(!@.output:\n =[E!
+If "!@.args!" == "" Echo(Press any key to continue.
+Set "@.args=")
+For /f "tokens=1 Delims= " %1 in ("!@.args! $Key")Do (Set "%~1="
+Set "$key="
+Set /a "@getKey.while=@getKey.while.start","@getKey.while.do=1" & For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do Set /a "@getKey.while+=1" &  if not defined %~1 ("C:\Users\tcdou\AppData\Local\Temp\BG.exe" !@.mode!
+Set "%~1=!errorlevel!"
+For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3,4" %K in ("!@lookup.args: /o=! !@lookup.Keypair.Delim!")Do (If not "!%L:%N%~K%N=!" == "!%L!" (For /f "tokens=1 Delims=:" %1 in ("!%L:*%N%~K%N=!")Do Set "%M=%1"
+If not "!@lookup.args: /o=!" == "!@lookup.args!" echo(^!%M^!))) Else Set @lookup.Args= !errorlevel! $BG.keytable %~1
+Set "%~1=!%~1:semicolon=;!"
+Set "%~1=!%~1:colon=:!"
+Set "%~1=!%~1:nul=!"
+If /i "!@.mode!" == "lastkbd" (Set "@getKey.while.do="))Else Set "@getKey.while.do="
+If not "!@.cls!" == "" CLS)) Else Set @.Args= /nonblocking
+
+raw.24:       If defined $key (
+exp.24:       If defined $key (
+
+raw.25:         If /i "^!$key^!" == "escape" set "@.end=1"
+exp.25:         If /i "!$key!" == "escape" set "@.end=1"
+
+raw.26:         If /i "^!$key^!" == "tab" set "@.interval=0"
+exp.26:         If /i "!$key!" == "tab" set "@.interval=0"
+
+raw.27:       )
+exp.27:       )
+
+raw.28:       if not "^!@.interval^!" == "0" (
+exp.28:       if not "!@.interval!" == "0" (
+
+raw.29:         If "^!@.distracted^!" == "75" (
+exp.29:         If "!@.distracted!" == "75" (
+
+raw.30:           !@wait! "^!random^!%%75+40"
+exp.30:           For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitCS !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff"
+Set /a "@wait.Target=%~j","@wait.current=%i")
+if !@wait.current! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,$WaitCS=0"
+Set "$wait.do=" ))) Else Set @wait.Args= "!random!%%75+40"
+
+raw.31:         )
+exp.31:         )
+
+raw.32:         If "^!@.mistake^!" == "14" (
+exp.32:         If "!@.mistake!" == "14" (
+
+raw.33:           For %%n in ("^!@.i^!")do (
+exp.33:           For %%n in ("!@.i!")do (
+
+raw.34:            !@lookup! ^^^!%%1:~%%i,1^^^! @typewriter.errors $typewriter.error
+exp.34:            For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3,4" %K in ("!@lookup.args: /o=! !@lookup.Keypair.Delim!")Do (If not "!%L:%N%~K%N=!" == "!%L!" (For /f "tokens=1 Delims=:" %1 in ("!%L:*%N%~K%N=!")Do Set "%M=%1"
+If not "!@lookup.args: /o=!" == "!@lookup.args!" echo(^!%M^!))) Else Set @lookup.Args= ^!%%1:~%%i,1^! @typewriter.errors $typewriter.error
+
+raw.35:            if defined $typewriter.error (
+exp.35:            if defined $typewriter.error (
+
+raw.36:              ^<nul set /p "=^!@.FG^!^!@.BG^!^!$typewriter.error:~%%~n,1^!!\e![K"
+exp.36:              <nul set /p "=!@.FG!!@.BG!!$typewriter.error:~%%~n,1![K"
+
+raw.37:              !@wait! "^!random^! %% 9 + 9"
+exp.37:              For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitCS !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff"
+Set /a "@wait.Target=%~j","@wait.current=%i")
+if !@wait.current! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,$WaitCS=0"
+Set "$wait.do=" ))) Else Set @wait.Args= "!random! %% 9 + 9"
+
+raw.38:              ^<nul set /p "=^!@.FG^!^!@.BG^!^!BS^!!\e![K"
+exp.38:              <nul set /p "=!@.FG!!@.BG!!BS![K"
+
+raw.39:            )
+exp.39:            )
+
+raw.40:          )
+exp.40:          )
+
+raw.41:        )
+exp.41:        )
+
+raw.42:        !@wait! "^!@.interval^!"
+exp.42:        For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitCS !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff"
+Set /a "@wait.Target=%~j","@wait.current=%i")
+if !@wait.current! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,$WaitCS=0"
+Set "$wait.do=" ))) Else Set @wait.Args= "!@.interval!"
+
+raw.43:      )
+exp.43:      )
+
+raw.44:       ^<nul set /p "=^!@.FG^!^!@.BG^!^!%%1:~%%i,1^!!\e![K"
+exp.44:       <nul set /p "=!@.FG!!@.BG!!%%1:~%%i,1![K"
+
+raw.45:     )
+exp.45:     )
+
+raw.46:     ^<nul set /p "=!\e![E!\e![0m"
+exp.46:     <nul set /p "=[E[0m"
+
+raw.47:   )
+exp.47:   )
+
+
+======================================================================================
+@typewriter=For %. in (1 2)Do if %.==2 (If not "!@typewriter.Args!"=="" (Set "@typewriter.FG=[38;2;242;242;242m"
+Set "@typewriter.BG=[48;2;12;12;12m"
+Set "@typewriter.end="
+Set "@typewriter.interval="
+For /f "tokens=1,2,3 delims= " %1 in ("!@typewriter.args!") do (If not "%~2" == "" Set "@typewriter.FG=[38;2;%~2m"
+If not "%~3" == "" Set "@typewriter.BG=[48;2;%~3m"
+For %. in (1 2)Do if %.==2 (For /f "tokens=1,2" %i in ("!@strlen.Args!")Do (Set "@strlen.t=!%~i!"
+If defined @strlen.t (Set "%j=1"
+For %P in ( 4096 2048 1024 512 256 128 64 32 16 8 4 2 1 )Do (If not "!@strlen.t:~%P,1!" == "" (Set /a "%~j+=%P"
+Set "@strlen.t=!@strlen.t:~%P!")))Else set "%~j=0")) Else Set @strlen.Args= %1 $len
+For /l %i in (0 1 !$len!)Do if not defined @typewriter.end (Set /a "@typewriter.mistake=!random! % 24 + 1","@typewriter.distracted=!random! % 150 + 1","@typewriter.i=!random! % 5"
+if not "!@typewriter.interval!" == "0" Set /a "@typewriter.interval=!random! % 10 + (!random! % 8 + (!random! % 4 + 4))"
+For %. in (1 2)Do if %.==2 (Set "@typewriter.mode=kbd"
+Set "@typewriter.cls="
+If not "!@typewriter.args!" == "" If not "!@typewriter.args: /cls=!" == "!@typewriter.args!" (Set "@typewriter.args=!@typewriter.args: /cls=!"
+Set "@typewriter.cls=1")
+If not "!@typewriter.args!" == "" If not "!@typewriter.args: /nonblocking=!" == "!@typewriter.args!" (Set "@typewriter.args=!@typewriter.args: /nonblocking=!"
+Set "@typewriter.mode=lastkbd")
+If not "!@typewriter.args!" == "" If not "!@typewriter.args: /prompt=!" == "!@typewriter.args!" (Set "@typewriter.output="
+Set "@typewriter.args=!@typewriter.args:* /prompt =!"
+If not "!@typewriter.args!" == "" Set "@typewriter.args=!@typewriter.args:* /prompt=!"
+If not "!@typewriter.args!" == "" Set "@typewriter.output=!@typewriter.args!"
+If not "!@typewriter.output!" == "" Set "@typewriter.output=!@typewriter.output: /p=[EPress any key to continue.!"
+If not "!@typewriter.output!" == "" echo(!@typewriter.output:\n =[E!
+If "!@typewriter.args!" == "" Echo(Press any key to continue.
+Set "@typewriter.args=")
+For /f "tokens=1 Delims= " %1 in ("!@typewriter.args! $Key")Do (Set "%~1="
+Set "$key="
+Set /a "@getKey.while=@getKey.while.start","@getKey.while.do=1" & For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do For /l %^~ in (1 1 16)Do if defined @getKey.while.do Set /a "@getKey.while+=1" &  if not defined %~1 ("C:\Users\tcdou\AppData\Local\Temp\BG.exe" !@typewriter.mode!
+Set "%~1=!errorlevel!"
+For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3,4" %K in ("!@lookup.args: /o=! !@lookup.Keypair.Delim!")Do (If not "!%L:%N%~K%N=!" == "!%L!" (For /f "tokens=1 Delims=:" %1 in ("!%L:*%N%~K%N=!")Do Set "%M=%1"
+If not "!@lookup.args: /o=!" == "!@lookup.args!" echo(^!%M^!))) Else Set @lookup.Args= !errorlevel! $BG.keytable %~1
+Set "%~1=!%~1:semicolon=;!"
+Set "%~1=!%~1:colon=:!"
+Set "%~1=!%~1:nul=!"
+If /i "!@typewriter.mode!" == "lastkbd" (Set "@getKey.while.do="))Else Set "@getKey.while.do="
+If not "!@typewriter.cls!" == "" CLS)) Else Set @typewriter.Args= /nonblocking
+If defined $key (If /i "!$key!" == "escape" set "@typewriter.end=1"
+If /i "!$key!" == "tab" set "@typewriter.interval=0")
+if not "!@typewriter.interval!" == "0" (If "!@typewriter.distracted!" == "75" (For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitCS !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff"
+Set /a "@wait.Target=%~j","@wait.current=%i")
+if !@wait.current! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,$WaitCS=0"
+Set "$wait.do=" ))) Else Set @wait.Args= "!random!%75+40")
+If "!@typewriter.mistake!" == "14" (For %n in ("!@typewriter.i!")do (For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3,4" %K in ("!@lookup.args: /o=! !@lookup.Keypair.Delim!")Do (If not "!%L:%N%~K%N=!" == "!%L!" (For /f "tokens=1 Delims=:" %1 in ("!%L:*%N%~K%N=!")Do Set "%M=%1"
+If not "!@lookup.args: /o=!" == "!@lookup.args!" echo(^!%M^!))) Else Set @lookup.Args= ^!%1:~%i,1^! @typewriter.errors $typewriter.error
+if defined $typewriter.error (<nul set /p "=!@typewriter.FG!!@typewriter.BG!!$typewriter.error:~%~n,1![K"
+For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitCS !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff"
+Set /a "@wait.Target=%~j","@wait.current=%i")
+if !@wait.current! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,$WaitCS=0"
+Set "$wait.do=" ))) Else Set @wait.Args= "!random! % 9 + 9"
+<nul set /p "=!@typewriter.FG!!@typewriter.BG!!BS![K")))
+For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitCS !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff"
+Set /a "@wait.Target=%~j","@wait.current=%i")
+if !@wait.current! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,$WaitCS=0"
+Set "$wait.do=" ))) Else Set @wait.Args= "!@typewriter.interval!")
+<nul set /p "=!@typewriter.FG!!@typewriter.BG!!%1:~%i,1![K")
+<nul set /p "=[E[0m"))Else Echo(!@typewriter_usage!) Else Set @typewriter.Args=
+@typewriter.end=48
+@typewriter.errors=:a:qzwsx:b: vghn:c: xdfv:d:cresf:e:wsdrf:f:drgvc:g:ftyhb:h:gyujn:i:olkju:j:uiknh:k:il,mj:l:pokmi:m: njkl:n:bhjkm:o:iklp;:p:0ol;[:q:wsa12:r:tgfde:s:awedx:t:yrgfh:u:yhjki:v:cfgb :w:qeads:x:zasdc:y:tghju:z:asx x:0:123.o:1:240qw:2:10.35:3:.265e:4:7513r:5:r6t24:6:57y93:7:8456u:8:/7954:9:8560i:
+@typewriter.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\graphical\@typewriter.mac
+@typewriter.start=6
+@typewriter.switches= @typewriter /args /selfref /help
+@typewriter_Dependencies= @getkey @wait @strlen @lookup
+@typewriter_usage=@typewriter Usage:
+
+[36m%[33m@typewriter[36m%[33m [90m<[33msourceVar[90m>[33m [90m[[33mR;G;B[90m][33m [90m[[33mR;G;B[90m][33m [0m
+[33m sourceVar [0m: arg 1 <mandatory> [0m: the variable containing the string to be 'written. [0m
+[33m R;G;B     [0m: arg 2 [optional]  [0m: foreground color. default [0m: white [0m
+[33m R;G;B     [0m: arg 3 [optional]  [0m: background color. default [0m: black [0m
+[33m[36m%[33m@typewriter[36m%[33m [0m: No arguments   [0m: this help output [0m
+
+======================================================================================
+

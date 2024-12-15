@@ -1,0 +1,33 @@
+@rgbText { dependencies: @wait @strLen
+  @rgbText usage: %@rgbText% <sourceVar> <Cycles> [Y] [X]
+  @rgbText usage: sourceVar : The variable containing the string to be animated
+  @rgbText usage: Cycles    : The numer of steps in the animation
+  @rgbText usage:             Animation steps have a 4 centisecond interval.
+  @rgbText usage: Y         : The Y position of the string [ requires X ]
+  @rgbText usage: X         : The X position of the string [ requires Y ]
+  For /f "tokens=1,2,3,4" %%1 in ("^!@.args^!")do (
+    if not "%%~4" == "" (
+      Set "@.pos=!\E![%%~3;%%4H"
+    )else (
+      Set "@.pos=!\E!7"
+      <nul Set /P "=!\E!7"
+    )
+    !@strLen! %%1 $len
+    Set "$string="
+    Set "$colShift="
+    For /l %%i in (0 1 ^!$len^!)do (
+      Set "$string=^!$string^!!\E![38;5;^^^!c.%%i^^^!m^!%%1:~%%i,1^!"
+      Set /a "c.%%i=(%%i+50) %% 255 + 1"
+      if "^!$colShift^!" == "" (
+        Set "$colShift=c.%%i=c.%%i %% 255 + 1"
+      )else Set "$colShift=^!$colShift^!,c.%%i=c.%%i %% 255 + 1"
+    )
+    Set "$string=^!$String^!!\E![0m"
+    For /l %%i in (1 1 %%2)do (
+      For /f "delims=" %%G in ("^!$string^!")do Set "@.output=%%G"
+      <nul Set /P "=!\E!8^!@.pos^!^!@.output^!"
+      Set /a "^!$colShift^!"
+      !@wait! 4
+    )
+  )
+} @rgbText /args

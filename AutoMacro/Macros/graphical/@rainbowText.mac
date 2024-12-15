@@ -1,0 +1,36 @@
+@rainbowText { dependencies: @strLen @wait
+  @rainbowText usage: %@rainbowText% <sourceVar> <iterations | returnVar> <Y> <X>
+  @rainbowText usage: sourceVar  : The variable containing the string to output
+  @rainbowText usage: iterations : The number of times to iterate the animation
+  @rainbowText usage: returnVar  : Return the ouput in a variable to facilitate multiple
+  @rainbowText usage:              lines of output. Excludes iterations.
+  @rainbowText usage: Y          : The row position of the output
+  @rainbowText usage: X          : The column position of the output
+
+  For /f "tokens=1,2,3,4" %%1 in ("^!@.args^!")do (
+    !@strLen! %%1 $len
+    Set /a "@.i=%%~2"
+    If not "%%~2" == "^!@.i^!" Set "@.i=1"
+    For /l %%z in ( 1 1 ^^^!@.i^^^! )do (
+      Set /a "rb_phase=(rb_phase+1) %% 100 + 4"
+      Set "$rainbowText=[?25l[%%3;%%4H"
+      for /l %%i in (0,1,^!$len^!) do (set "char=^!%%1:~%%i,1^!"
+        set /a "ratio=(%%i*360)/$len+(rb_phase*360/100)"
+        if ^^^!ratio^^^! geq 360 set /a ratio-=360
+        set /a "r=g=b=0,section=ratio/60"
+        if "^!section^!" == "0" (set /a "r=255, g=(ratio*255)/60"
+        ) else if "^!section^!" == "1" (set /a "r=255-(ratio-60)*255/60, g=255"
+        ) else if "^!section^!" == "2" (set /a "g=255, b=(ratio-120)*255/60"
+        ) else if "^!section^!" == "3" (set /a "g=255-(ratio-180)*255/60, b=255"
+        ) else if "^!section^!" == "4" (set /a "r=(ratio-240)*255/60, b=255"
+        ) else (set /a "r=255, b=255-(ratio-300)*255/60"
+        )
+        set "$rainbowText=^!$rainbowText^![38;2;^!r^!;^!g^!;^!b^!m^!char^![0m"
+      )
+      If "%%~2" == "^!@.i^!" (
+        echo(^!$rainbowText^![?25h
+        !@wait! 4
+      )else Set "%%~2=^!$rainbowText^![?25h"
+    )
+  )
+} @rainbowText /args

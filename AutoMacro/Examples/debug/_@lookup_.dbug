@@ -1,0 +1,69 @@
+raw.41:   For /f "tokens=1,2,3,4" %%K in ("^!@.args: /o=^! ^!@lookup.Keypair.Delim^!")Do (
+exp.41:   For /f "tokens=1,2,3,4" %%K in ("!@.args: /o=! !@lookup.Keypair.Delim!")Do (
+
+raw.42:     If not "^!%%L:%%N%%~K%%N=^!" == "^!%%L^!" (
+exp.42:     If not "!%%L:%%N%%~K%%N=!" == "!%%L!" (
+
+raw.43:       For /f "tokens=1 Delims=!@lookup.Keypair.Delim!" %%1 in ("^!%%L:*%%N%%~K%%N=^!")Do Set ^"%%M=%%1"
+exp.43:       For /f "tokens=1 Delims=:" %%1 in ("!%%L:*%%N%%~K%%N=!")Do Set "%%M=%%1"
+
+raw.44:       If not "^!@.args: /o=^!" == "^!@.args^!" echo(^^^!%%M^^^!
+exp.44:       If not "!@.args: /o=!" == "!@.args!" echo(^!%%M^!
+
+raw.45:     )
+exp.45:     )
+
+raw.46:   )
+exp.46:   )
+
+======================================================================================
+ traditional macro. requires escaping to be added.
+======================================================================================
+Set @lookup.clone=For %. in (1 2)Do if %.==2 (%\n%
+For /f "tokens=1,2,3,4" %%K in ("!@lookup.args: /o=! !@lookup.Keypair.Delim!")Do (%\n%
+If not "!%%L:%%N%%~K%%N=!" == "!%%L!" (%\n%
+For /f "tokens=1 Delims=:" %%1 in ("!%%L:*%%N%%~K%%N=!")Do Set "%%M=%%1"%\n%
+If not "!@lookup.args: /o=!" == "!@lookup.args!" echo(^!%%M^!%\n%
+)%\n%
+)%\n%
+) Else Set @lookup.Args=
+======================================================================================
+
+
+======================================================================================
+@lookup=For %. in (1 2)Do if %.==2 (For /f "tokens=1,2,3,4" %K in ("!@lookup.args: /o=! !@lookup.Keypair.Delim!")Do (If not "!%L:%N%~K%N=!" == "!%L!" (For /f "tokens=1 Delims=:" %1 in ("!%L:*%N%~K%N=!")Do Set "%M=%1"
+If not "!@lookup.args: /o=!" == "!@lookup.args!" echo(^!%M^!))) Else Set @lookup.Args=
+@lookup.end=47
+@lookup.Keypair.Delim=:
+@lookup.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\datastructures\@lookup.mac
+@lookup.start=26
+@lookup.switches= @lookup /args /selfref
+@lookup_usage=@lookup Usage:
+
+[36m%[33m@lookup[36m%[33m [90m<[33mkey[90m>[33m [90m<[33msourceVar[90m>[33m [90m<[33mreturnVar[90m>[33m [0m
+[33m key       [0m: the string used to find the lookup value [0m
+[33m sourceVar [0m: the variable containing the list of keys and values. IE: [0m
+ [33mweekday.lookup[0m=[32m:mon:Monday:tue:Tuesday:wed:Wednesday:thu:Thursday:fri:Friday:sat:Saturday:sun:Sunday: [0m
+[33m returnVar [0m: your custom return variable [0m
+ Returns the first value following a matched key. [0m
+ Default delimiter for [33mkey:value[0m pairs is the semicolon '[33m:[0m' [0m
+   ! Key strings must be unique. The first match will always be treated as the Key [0m
+     any subsequent matches will be disregarded - effectively treated as a value, not the key. [0m
+     To prevent a value being indavertantly treated as the key if it is a match, it must [0m
+     be positioned after the matching key. IE: [0m
+     [33mSet "integerToggle.table=:1:one:1:2:two:2:" [0m
+     [33mSet "$toggle=1" [0m
+     [36m%[33m@lookup[36m%[33m !$toggle! integerToggle.table $toggle [0m
+     $toggle=one [0m
+     [36m%[33m@lookup[36m%[33m !$toggle! integerToggle.table $toggle [0m
+     $toggle=1 [0m
+ [0m
+ [33m@lookup[0m Supports automacro definition argument: [0m
+ [0m
+ [33mCall automacro.bat "@lookup [90m[[32mdelimCharacter[90m][33m" [0m
+  Valid argument value: A printable ASCCI character excluding whitespace and: < > | & ~ = ! [0m
+  - modifies the delimiter to be used for the lookup table. [0m
+ [0m
+
+======================================================================================
+

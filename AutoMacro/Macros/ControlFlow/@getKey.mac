@@ -4,7 +4,7 @@
   @getKey usage: Default return: The literal keypress is returned to the variable: <yellow>$key
   @getKey usage: returnVar         : Override the default. The provided variable name replaces $key
   @getKey usage: /nonblocking      : returns if a keypress event has occured but does not wait.
-  @getKey usage:    -> Used when the script should continue until a desired input is recieved.
+  @getKey usage:                     Used when the script should continue until a desired input is recieved.
   @getKey usage: /prompt           : Use @getkey as an alternative for pause. Returns the key pressed.
   @getKey usage: /prompt string    : Uses the custom prompt string instead of 'Press any key to continue.'
   @getKey usage: /prompt string /p : custom prompt string followed by 'Press any key to continue.'
@@ -62,10 +62,9 @@ $>
     Set "@.output="
     Set "@.args=^!@.args:* /prompt =^!"
     If not "^!@.args^!" == "" Set "@.args=^!@.args:* /prompt=^!"
-
     If not "^!@.args^!" == "" Set "@.output=^!@.args^!"
     If not "^!@.output^!" == "" Set "@.output=^!@.output: /p=[EPress any key to continue.^!"
-    If not "^!@.output^!" == "" Echo(^!@.output:\n=%\E%[E^!
+    If not "^!@.output^!" == "" echo(^!@.output:\n =!\E![E^!
     If "^!@.args^!" == "" Echo(Press any key to continue.
     Set "@.args="
   )

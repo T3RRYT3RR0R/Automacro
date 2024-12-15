@@ -26,9 +26,9 @@ Syntax for defining macros with AutoMacro:
         If usage info is provided using the on the line following the opening tag, it will be defined to [33mmacroname_usage.[0m
 
         Macro usage info is defined by prefixing lines using:
-[33m        @macroname usage:[0m
+[33m        @macroname usage:[0m or [33m/?:[0m
         Macro usage info supports the following styling tags to apply VT color codes and graphics rendition settings:
-[0m        [31m<red> [32m<green> [33m<yellow> [34m<darkblue> [35m<purple> [36m<lightblue> [37m<white> [0m<default> [5m<flash>[0m
+[0m        [31m<red> [32m<green> [33m<yellow> [34m<darkblue> [35m<purple> [36m<lightblue> [37m<white> [90m<grey> [0m<default> [5m<flash>[0m
 
 [33m         $Set[0m : defines the subsequent variable / value pair and excludes the line from the macro.
                 use this when a variable only needs to be defined once for use during macro expansions.
@@ -69,7 +69,11 @@ Syntax for defining macros with AutoMacro:
 
 Troubleshooting:
  In the event your macro is not defined, and no debug data is present in the scripts debug file when /debug is used:
- Your script has a syntax or spelling error with one or more of the following tags:
+ Your script may have a syntax or spelling error with one or more of the following tags:
  opening tag:[33m @macroname {[0m
  closing tag:[33m } @macroname[0m
  usage   tag:[33m @macroname usage:[0m
+ If your macro is not behaving as expected, you have likely failed to properly escape a variable or poison character.
+ REG ADD HKCU\CONSOLE /f /v VirtualTerminalLevel /t REG_DWORD /d 1 [G[K[A
+ If you can see this line during Help output, open cmd.exe and paste the above line, then press enter.[G[K[A
+ Setting will be applied in a fresh cmd.exe session. Do NOT include trailing VT sequence: [G[K[A

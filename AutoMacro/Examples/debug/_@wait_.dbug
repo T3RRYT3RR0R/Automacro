@@ -1,0 +1,55 @@
+raw.15:   !@while:$while=$wait! (
+exp.15:   Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (
+
+raw.16:     For /f "tokens=1,* Delims= " %%i in ("$waitamount ^!@.args:* =^!")Do If not "^!%%i.CS^!"=="^!time:~-1^!" (
+exp.16:     For /f "tokens=1,* Delims= " %%i in ("$waitamount !@.args:* =!")Do If not "!%%i.CS!"=="!time:~-1!" (
+
+raw.17:       Set /A "@.tDiff=^!time:~-1^!-%%i.CS","%%i.CS=^!time:~-1^!"
+exp.17:       Set /A "@.tDiff=!time:~-1!-%%i.CS","%%i.CS=!time:~-1!"
+
+raw.18:       If "^!@.tDiff:~0,-1^!"=="-" (
+exp.18:       If "!@.tDiff:~0,-1!"=="-" (
+
+raw.19:         Set /A "@.tDiff+=10,%%i.elapsed=%%i.elapsed %% 100000000+@.tDiff,%%i=%%i %% 100000000+@.tDiff","@.Target=%%~j"
+exp.19:         Set /A "@.tDiff+=10,%%i.elapsed=%%i.elapsed %% 100000000+@.tDiff,%%i=%%i %% 100000000+@.tDiff","@.Target=%%~j"
+
+raw.20:       )Else Set /A "%%i.elapsed=%%i.elapsed %% 100000000+@.tDiff,%%i=%%i %% 100000000+@.tDiff","@.Target=%%~j"
+exp.20:       )Else Set /A "%%i.elapsed=%%i.elapsed %% 100000000+@.tDiff,%%i=%%i %% 100000000+@.tDiff","@.Target=%%~j"
+
+raw.21:       if ^!%%i^! GEQ ^!@.TARGET^! (
+exp.21:       if !%%i! GEQ !@.TARGET! (
+
+raw.22:          Set /a "@.tDiff=0,@.current=0,%%i=0"
+exp.22:          Set /a "@.tDiff=0,@.current=0,%%i=0"
+
+raw.23:         !@EndWhile:$while=$wait! 
+exp.23:         Set "$wait.do=" 
+
+raw.24:       )
+exp.24:       )
+
+raw.25:     )
+exp.25:     )
+
+raw.26:   )
+exp.26:   )
+
+
+======================================================================================
+@wait=For %. in (1 2)Do if %.==2 (Set /a "$wait=$wait.start","$wait.do=1" & For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do For /l %^~ in (1 1 16)Do if defined $wait.do Set /a "$wait+=1" &  (For /f "tokens=1,* Delims= " %i in ("$waitamount !@wait.args:* =!")Do If not "!%i.CS!"=="!time:~-1!" (Set /A "@wait.tDiff=!time:~-1!-%i.CS","%i.CS=!time:~-1!"
+If "!@wait.tDiff:~0,-1!"=="-" (Set /A "@wait.tDiff+=10,%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j")Else Set /A "%i.elapsed=%i.elapsed % 100000000+@wait.tDiff,%i=%i % 100000000+@wait.tDiff","@wait.Target=%~j"
+if !%i! GEQ !@wait.TARGET! (Set /a "@wait.tDiff=0,@wait.current=0,%i=0"
+Set "$wait.do=" )))) Else Set @wait.Args=
+@wait.end=27
+@wait.path=C:\Users\tcdou\Desktop\AutoMacro\Macros\ControlFlow\@wait.mac
+@wait.start=5
+@wait.switches= @wait /args /selfRef
+@wait_Dependencies= @while
+@wait_usage=@wait Usage:
+
+[36m%[33m@wait[36m%[33m [90m<[33mcentiseconds[90m>[33m  [0m
+[33m centiseconds [0m: number of centiseconds to wait as an integer. [0m
+  [0m
+
+======================================================================================
+

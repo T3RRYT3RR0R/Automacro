@@ -1,0 +1,32 @@
+@ifContains { dependencies: @strlen
+  /?: %@ifContains% <searchVar> <substringVar> [/E]
+  /?: searchVar    : the variable containing a string to test
+  /?: substringVar : the variable containing the substring being tested.
+  /?: /E : Optional switch. returns the following errorlevels:
+  /?:  0 : False. Search string does not contain the substring. 
+  /?:  1 : True.  Search string contains the substring
+  /?: Additional returns:
+  /?: @ifContains.true : The first index at which the string is found if true.
+  /?:            notes - @ifContains.true is Undefined if not true.
+  /?:                  - @ifContains.true returns the position from a zero index.
+
+  // In event an input is undefined return false.
+  Set "@.true="
+  For /f "tokens=1,2,3" %%1 in ("^!@.args^!") Do If defined %%1 If defined %%2 (
+    !@strlen! %%1 @.len[1]
+    !@strlen! %%2 @.len[2]
+    If ^^^!@.len[2]^^^! LEQ ^^^!@.len[1]^^^! (
+      For /f "tokens=1,2" %%i in ("^!@.len[1]^! ^!@.len[2]^!") Do (
+        // iterate while not found
+        For /l %%# in (0 1 %%i)do if "^!@.true^!" == "" (
+          if "^!%%1:~%%#,%%j^!"=="^!%%2^!" (
+            Set "@.true=%%#"
+          )
+        )
+      )
+    )
+    // set errorlevel if exitcode requested utilizing undocumented behaviour of call within parentheses.
+    If /i "%%3" == "/e" If defined @.true ((call))else ((call ))
+  )
+  // This macro requires Automacro version 3.0.0 or newer
+} @ifContains /args /selfref /Ver:3.0.0

@@ -1,6 +1,10 @@
 @windowFrame {
   @windowFrame usage: %@windowFrame% <Width:min=3> <height:min=3> <1~255> <1~255> <character>
-  @windowFrame usage: returnVars = $windowFrame $windowFrame.invertedColor
+  @windowFrame usage: returnVars   : $windowFrame $windowFrame.Color $windowFrame.invertedColor
+  @windowFrame usage: $windowFrame               : The generated framed Window.
+  @windowFrame usage: $windowFrame.Color         : The fore and bacground color of the window.
+  @windowFrame usage: $windowFrame.invertedColor : The inverse of the windows fore and background colors.
+
 <; Constructs a framed window using the properties of the args provided.
    Author: T3RRY
    Contributers: Einst; Icarus
