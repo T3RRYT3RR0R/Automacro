@@ -1,8 +1,0 @@
-@demo {
-  @demo usage: %@demo% <string>
-  Echo %%@demo%% !@demo.switches:*@demo =!
-  <nul set /p "=Echo ^^^!@.args:~1^^^!!\E![E"
-  Echo ^!@.args:~1^!
-  // add / substitute any of the following switches to the closing line:
-  // /selfRef /help /argRequired /flush /?
-} @demo /args /argRequired
