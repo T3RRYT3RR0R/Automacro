@@ -35,7 +35,7 @@ Set "$outPath=!$outPath:%$project%=!"
 Set "$pushed="
 If not "%~1" == "" (
   If not "!$outPath!" == "" (
-    If not exist "..\!$outPath!" MD "..\!$outPath!"
+    rem If not exist "..\!$outPath!" MD "..\!$outPath!"
     For %%F in ("automacro.bat" "readme.txt" "!$project!")do for /f "delims=" %%G in ('Dir /b /S "!$projectPATH!*%%~F"')do (
       If "!$pushed!" == "" (
         Set $pushed=!$pushed! "%%~fG"
