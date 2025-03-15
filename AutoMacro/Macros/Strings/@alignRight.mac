@@ -1,5 +1,8 @@
 @alignRight { dependencies: @strlen
-  @alignRight usage: %@alignRight% <Xright> <stringVar> <returnVar> ["yPos"]
+  /?: %@alignRight% <Xright> <stringVar> <returnVar> ["yPos"]
+  /?:    Xright : the X position for the END of the string.
+  /?: stringVar : the Variable containing the string to be aligned.
+  /?: returnVar : the Variable the aligned string will be returned to.
 
   // split arg variables and optional integer/sum for yPos
   For /f "tokens=1,2,3,* delims= " %%1 in ("^!@.args^!")Do (
@@ -21,4 +24,4 @@
      Set "%%3=[^!$right.y^!d^!%%3^!"
     )
   )
-} @alignRight /args /help
+} @alignRight /args /ver:3.0.0

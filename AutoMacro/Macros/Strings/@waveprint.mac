@@ -14,5 +14,4 @@
     )
     If not "%%~5" == "" Set "$wavePrint=[%%~5m^!$wavePrint^!"
   )
- } @waveprint /args
-
+ } @waveprint /args /Ver:3.0.0

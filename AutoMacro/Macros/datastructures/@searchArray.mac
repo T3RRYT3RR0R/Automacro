@@ -1,10 +1,10 @@
 @searchArray { dependencies: @push @pop
-  @searchArray usage: %@searchArray% <arrayName> <returnVar> <searchStringVar"> [/E]
-  @searchArray usage: /E : return exact matches to the search value only
-  @searchArray usage:      Default behaviour returns any value containing the search string
-  @searchArray usage:      
-  @searchArray usage:      Matches are returned as a ` delimited list: "value"`"value"
-  @searchArray usage:      the @pop macro can be used to get individual reeturn values.
+  /?: %@searchArray% <arrayName> <returnVar> <searchStringVar"> [/E]
+  /?: /E : return exact matches to the search value only
+  /?:      Default behaviour returns any value containing the search string
+  /?:      
+  /?:      Matches are returned as a ` delimited list: "value"`"value"
+  /?:      the @pop macro can be used to get individual reeturn values.
 
   // set exact flag if switch present
   If not "^!@.args: /E=^!" == "^!@.args^!" (
@@ -28,4 +28,4 @@
       )
     )
   )
-} @searchArray /args
+} @searchArray /args /ver:3.0.0

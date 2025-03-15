@@ -1,0 +1,5 @@
+@set {
+  @set usage: %@Set% <"varname=value"> ["varname=value"]
+  /?: Note : Key value pairings MUST be doublequoted.
+  For %%V in (^^^!@.args^^^!)Do set %%V
+} @set /args /selfRef /Ver:3.0.0

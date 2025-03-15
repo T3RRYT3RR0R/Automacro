@@ -1,18 +1,21 @@
 @getKey { dependencies: @while @lookup
-  @getKey usage: %@getKey% [returnVar] [/nonblocking] [/prompt [string] [/p] [/cls]]
+  /?: %@getKey% [returnVar] [/nonblocking] [/escapeExit] [/notifyExit] [/prompt [string] [/p] [/cls]]
+  /?: Default return: The literal keypress is returned to the variable: <yellow>$key
+  /?: returnVar         : Override the default. The provided variable name replaces $key
+  /?: /nonblocking      : returns if a keypress event has occured but does not wait.
+  /?:              Note : Used when the script should continue until a desired input is recieved.
+  /?: /escapeExit       : enact exit via GOTO:EOF if escape key pressed
+  /?:                     - Will return to point of call if actioned during a function or subscript.
+  /?: /notifyExit       : Notify end user of escape exit option. /escapeExit implicit for current macro expansion
+  /?: /prompt           : Use @getkey as an alternative for pause. Returns the key pressed.
+  /?: /prompt string    : Uses the custom prompt string instead of 'Press any key to continue.'
+  /?: /prompt string /p : custom prompt string followed by 'Press any key to continue.'
+  /?: /cls              : clear the screen after recieving input.
 
-  @getKey usage: Default return: The literal keypress is returned to the variable: <yellow>$key
-  @getKey usage: returnVar         : Override the default. The provided variable name replaces $key
-  @getKey usage: /nonblocking      : returns if a keypress event has occured but does not wait.
-  @getKey usage:                     Used when the script should continue until a desired input is recieved.
-  @getKey usage: /prompt           : Use @getkey as an alternative for pause. Returns the key pressed.
-  @getKey usage: /prompt string    : Uses the custom prompt string instead of 'Press any key to continue.'
-  @getKey usage: /prompt string /p : custom prompt string followed by 'Press any key to continue.'
-  @getKey usage: /cls              : clear the screen after recieving input.
 
 <;
-  // This macro generates an exe file 'BG.exe' to facilitate capture of extended keys 
-  // and permit input in either a blocking or non-blocking manner
+  This macro generates an exe file 'BG.exe' to facilitate capture of extended keys 
+  and permit input in either a blocking or non-blocking manner
   Author: T3RRY aka T3RRYT3RR0R
   Discord: https://discord.gg/batch
   Github: https://github.com/T3RRYT3RR0R/
@@ -57,6 +60,15 @@ $>
     Set "@.args=^!@.args: /nonblocking=^!"
     Set "@.mode=lastkbd"
   )
+  Set "@.escape="
+  If not "^!@.args^!" == "" If not "^!@.args: /notifyExit=^!" == "^!@.args^!" (
+    Echo - Exit this application at any time by pressing escape -
+    Set "@.args=^!@.args: /notifyExit= /escapeExit^!"
+  )
+  If not "^!@.args^!" == "" If not "^!@.args: /escapeExit=^!" == "^!@.args^!" (
+    Set "@.args=^!@.args: /escapeExit=^!"
+    Set "@.escape=true"
+  )
 
   If not "^!@.args^!" == "" If not "^!@.args: /prompt=^!" == "^!@.args^!" (
     Set "@.output="
@@ -99,8 +111,9 @@ $>
       )
     )Else !@endWhile:$while=@getKey.while!
     If not "^!@.cls^!" == "" CLS
+    if defined @.escape If /i "^!%%~1^!" == "escape" GOTO:EOF
   )
-} @getKey /args
+} @getKey /args /selfref /ver:3.0.0
 
 ==========================
 :# REQUIRED UTILITY BG.exe

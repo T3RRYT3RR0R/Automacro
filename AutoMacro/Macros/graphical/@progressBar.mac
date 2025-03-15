@@ -1,19 +1,36 @@
-@progressBar {
+@progressBar { dependencies: @alignRight @alignCentre
   // uses VT sequences to output an animated progress bar and status info at lines 1 and 2.
 
-  @progressBar usage: %@progressBar% <iteration> <end> <barWidth> [color]
-  @progressBar usage: arg syntax: <required> [optional]
-  @progressBar usage:
-  @progressBar usage: iteration : the current count of operations performed
-  @progressBar usage: end       : the expected total count of operations
-  @progressBar usage: barWidth  : the desired width the bar
-  @progressBar usage: * above arguments expect integer values or a variable name defined with such.
-  @progressBar usage:
-  @progressBar usage: color     : vt color sequence IE: 5;<0~255> or 2;<0~255>;<0~255>;<0~255>
+  /?: %@progressBar% <iteration> <end> <barWidth> [color] [/r | /c] [/nb]
+  /?: arg syntax: <required> [optional]
+  /?:      note : -+required+- and -+optional+- argument positions must match the above Order.
+  /?:      note : -+/switches+- are position independent.
+  /?: iteration : the current count of operations performed
+  /?: end       : the expected total count of operations
+  /?: barWidth  : the desired width the bar
+  /?: *{  the Above arguments expect integer values or a variable name defined with such  }*
+  /?:
+  /?: color     : vt color sequence IE: 5;<0~255> or 2;<0~255>;<0~255>;<0~255>
+  /?: /c        : centre align the progress data.
+  /?: /r        : right align the progress data.
+  /?: /nb       : specify No Background color for the progress bar.
 
-  // void custom color variable
+    // void custom color variable
   Set "@.barcolor="
-
+  If not defined @progressBar.BG Set "@progressBar.BG=[48;2;30;35;40m"
+  Set "$align="
+  If not "^!@.args: /r=^!" == "^!@.args^!" (
+    Set "@.args=^!@.args: /r=^!"
+    Set "$align=right"
+  )
+  If not "^!@.args: /c=^!" == "^!@.args^!" (
+    Set "@.args=^!@.args: /c=^!"
+    Set "$align=centre"
+  )
+  If not "^!@.args:/nb=^!" == "^!@.args^!" (
+    Set "@.args=^!@.args: /nb=^!"
+    Set "@progressBar.BG=[48;2;12;12;12m"
+  )
   // split args
   For /f "tokens=1,2,3,* delims= " %%1 in ("^!@.args^!")Do (
 
@@ -22,10 +39,13 @@
     If not "%%~4" == "" Set "@.barcolor=!\E![48;%%~4m"
 
     // calculate percentage and default color gradients
-    Set /a "@.$end=(%%~2)","$percent=((%%~1)*100)/(%%~2)","$Bar=($percent*(%%~3))/100","$R=255-(($percent*15)/10)" ,"$G=(($percent*20)/10)"
+    Set /a "@.$end=(%%~2)","$percent=((%%~1)*100)/(%%~2)","$Bar=($percent*(%%~3))/100","$R=255-(($percent*15)/10)" ,"$G=(($percent*20)/10)","$remain=^!%%~3^!-$bar"
 
     // output progress bar and associated info.
-    Echo(!\E![H!\E![K!\E![48;2;^!$R^!;^!$G^!;0m^!@.barcolor^!!\E![^!$bar^!X!\E![0m!\E![E%%1/^!@.$end^! {^!$percent^!%%} ^!time^!!\E![K!\E![B!\E![K
+    Set "$output=[H[K[48;2;^!$R^!;^!$G^!;0m[K^!@progressBar.barcolor^![^!$bar^!X[^!$bar^!G^!@progressBar.BG^![^!$remain^!X[^!%%~3^!G[^!%%~3^!G[0m[K[E"
+    Set "$info=%%1/^!@.$end^! {^!$percent^!%%} ^!$start^!^!time^!"
+    If "^!$align^!" == "right" !@alignRight! %%~3+1 $info $info
+    If "^!$align^!" == "centre" !@alignCentre! 0 %%~3 $info $info
+    Echo(^!$output^!^!$info^!!\E![K!\E![B!\E![K
   )
-} @progressBar /args /selfRef
-
+} @progressBar /args /selfRef /ver:3.0.0

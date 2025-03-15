@@ -1,5 +1,5 @@
-@getKey { dependencies: @while @lookup
-@getKey usage: %@getKey% <returnVar>
+@anyKey { dependencies: @while @lookup
+@anyKey usage: %@getKey% <returnVar>
 <$
  Set "$keytable=:8:backspace:33:^^^!:35:#:36:$:37:%%:38:^&:39:':40:(:41:):42:*:60:^<:62:^>:63:?:64:@:124:^|:331:left:333:right:328:up:336:down"
  Set "$keytable=!$keytable!:65:A:66:B:67:C:68:D:69:E:70:F:71:G:72:H:73:I:74:J:75:K:76:L:77:M:78:N:79:O:80:P:81:Q:82:R:83:S:84:T:85:U:86:V:87:W:88:X:89:Y:90:Z"
@@ -23,7 +23,7 @@ $>
       Set "^!$return^!=^!%%~V:colon=:^!"
     )
   )Else !@endWhile!
-} @getKey /args
+} @anyKey /args
 
 ==========================
 :# REQUIRED UTILITY BG.exe

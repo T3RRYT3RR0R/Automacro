@@ -1,27 +1,27 @@
 @menu { dependencies: @lookup @while
 
-  @menu usage: %@Menu% "DoubleQuoted List" "Of Options"
-  @menu usage: %@Menu%
-  @menu usage: Expansion without Arguments will display this help info.
-  @menu usage:
-  @menu usage:Return Variables:
-  @menu usage:      Menu{String}  :  The literal String
-  @menu usage:      Menu{Key}     :  The Key Pressed
-  @menu usage:      Menu{Number}  :  The Integer value of the options argument index
-  @menu usage:        IE: Option 1 = 1, Option A = 10
-  @menu usage:
-  @menu usage: Defining @menu:
-  @menu usage: <yellow>Call "automacro.bat" @Menu
-  @menu usage:   - Default definition, supports header and outputs dividing line.
-  @menu usage: <lightblue><flash>*<default><green> @menu supports the following optional automacro definition arguments <lightblue><flash>*
-  @menu usage: <yellow>Call "automacro.bat" "@Menu /basic"
-  @menu usage:   - Disables dividing line and removes support for custom headers and colors.
-  @menu usage: <yellow>Call "automacro.bat" "@Menu <grey>[<yellow>R;G;B<grey>] <grey>[<yellow>R;G;B<grey>] [<yellow>R;G;B<grey>]<yellow>"
-  @menu usage:   Where <yellow>R G<default> and <yellow>B <default>are integer values in the range <yellow>0<grey>~<yellow>255<default>:
-  @menu usage:   - first  R;G;B : Dividing line color
-  @menu usage:   - second R;G;B : Option foreground Color
-  @menu usage:   - third  R;G;B : Option background Color
-  @menu usage: 
+  /?:  %@Menu% "DoubleQuoted List" "Of Options"
+  /?:  %@Menu%
+  /?: Note : Expansion without Arguments will display this help info.
+  /?:
+  /?: -+Return Variables+-:
+  /?:   Menu{String}  :  The literal String
+  /?:   Menu{Key}     :  The Key Pressed
+  /?:   Menu{Number}  :  The Integer value of the options argument index
+  /?:    IE: Option 1 = 1, Option A = 10
+  /?:
+  /?: Defining @menu:
+  /?: <yellow>Call "automacro.bat" @Menu
+  /?:   - Default definition, supports header and outputs dividing line.
+  /?: Note :  %@menu% {  supports the following optional automacro definition arguments  }
+  /?: <yellow>Call "automacro.bat" "@Menu /basic"
+  /?:   - Disables dividing line and removes support for custom headers and colors.
+  /?: <yellow>Call "automacro.bat" "@Menu <grey>[<yellow>R;G;B<grey>] <grey>[<yellow>R;G;B<grey>] [<yellow>R;G;B<grey>]<yellow>"
+  /?:   Where <yellow>R G<default> and <yellow>B <default>are integer values in the range <yellow>0<grey>~<yellow>255<default>:
+  /?:   - first  R;G;B : Dividing line color
+  /?:   - second R;G;B : Option foreground Color
+  /?:   - third  R;G;B : Option background Color
+  /?: 
 
 <;
   Author: T3RRY aka T3RRYT3RR0R
@@ -104,4 +104,4 @@ $>
       )
     ) Else !@endWhile:$while=$menu!
   )
-} @menu /args /selfRef /help
+} @menu /args /selfRef /help /ver:3.0.0

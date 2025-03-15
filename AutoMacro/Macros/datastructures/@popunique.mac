@@ -1,6 +1,7 @@
 @popUnique {
-  @popUnique usage: %@popUnique% <varName> <returnVar> [/append|/prepend] [rvDelimiter]
-  for /f "tokens=1,2,3,* delims= " %%U in ("^!@.args^!")Do if defined %%U (
+  /?: %@popUnique% <varName> <returnVar> [/append|/prepend] [rvDelimiter]
+ 
+ for /f "tokens=1,2,3,* delims= " %%U in ("^!@.args^!")Do if defined %%U (
     for /f "tokens=1 delims=`" %%1 in ("^!%%U^!")Do ( 
       If /i "%%W" == "/append" (
         If defined %%V (
@@ -15,4 +16,4 @@
     )
     If defined %%U Set /a %%U.i=1-%%U.i
   )else 1>&2 echo array:"%%~U" undefined.
-} @popUnique /args
+} @popUnique /args /ver:3.0.0

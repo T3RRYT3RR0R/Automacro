@@ -1,5 +1,8 @@
 @sanitize { dependencies: @strlen
-  @sanitize usage: %@sanitize% sourceVar whitelistVar returnVar
+  /?: %@sanitize% sourceVar whitelistVar returnVar
+  /?: sourceVar    : contains the string to be sanitised.
+  /?: whitelistVar : contains the characters to be accepted.
+  /?: returnVar    : contains the sanitised string.
   For /f "tokens=1,2,3,4 Delims= " %%1 in ("^!@.args^!")Do (
     Set "%%~3="
     !@strlen! %%1 %%1_len
@@ -15,4 +18,4 @@
       )
     )
   )
-} @sanitize /args
+} @sanitize /args /Ver:3.0.0

@@ -1,8 +1,11 @@
-:AutoMacro <macroname> [macroname]
-:AutoMacro <macroname> /? [/centre] [/right]
-:AutoMacro <macroname> /? [macroname]
+:AutoMacro <macroname> [macroname]                ; Define macroname/s.
+:AutoMacro <macroname> [-?|/?]                    ; view help of macroname.
+:AutoMacro <macroname> [-?|/?] [/centre] [/right] ; view help of macroname in specified formatting. 
+@rem use -? when calling.
+
 @echo off
 REM Designed for use with Codepage 850 with UTF-8 bom-less encoding. Untested for other codepages / encodings.
+REM for /f "tokens=2 delims=:" %%G in ('CHCP')Do For %%N in (%%G)Do If %%N NEQ 850 Exit /b 1
 
 (More <"%~f0:firstRun.dat") 2> nul 1> nul || (
   REM apply read only attribute to automacro.bat and it's helpfile.
@@ -72,7 +75,7 @@ If "%~1"=="" (
 Set "AutoMacros= %*"
 
 Set AutoMacros | %systemroot%\system32\findstr.exe /li "\/\? \-\?" > nul && (
-  mode 130,70
+  mode 150,70
   Setlocal EnableDelayedExpansion
   Set "AutoMacro.help=true"
   If defined AutoMacros Set "AutoMacros=!AutoMacros: /?=!"
@@ -98,6 +101,10 @@ Set "AutoMacroScripting="
 
 If defined AutoMacros If not "!AutoMacros: /debug=!" == "!AutoMacros!" (
   Set "AutoMacro.debug=true"
+  If not "!AutoMacros: /debugNoLog=!" == "!AutoMacros!" (
+    Set "AutoMacro.debug=NoLog"
+  )else If not exist "%~dp0debug" MD "%~dp0debug"
+  Set "AutoMacros=!AutoMacros: /debugNoLog=!"
   Set "AutoMacros=!AutoMacros: /debug=!"
 )
 
@@ -108,8 +115,6 @@ REM      exp.#: the line after expansions occur
 REM      =====
 REM      macroName=defined lines
 REM      =====
-
-If not exist "%~dp0debug" MD "%~dp0debug"
 
 Set "AutomacroRoot=%~dp0_END_"
 Set AutomacroRoot="!AutomacroRoot:\=" "!"
@@ -234,11 +239,20 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
         rem unless line is contionation / bullet point marked by ' - '
         If /i not "!Line: : =!" == "!line!" If "!Line: - =!" == "!line!" (
           Set "Line=!Line:usage:=usage:<yellow>!"
+          If not "!line:note : =!" == "!line!" Set "Line=!Line:note=<grey><underline>note<default>!"
           Set "Line=<yellow>!Line: : = <default>: !"
         )
+        If /i not "!Line:{  =!" == "!line!" If /i not "!Line:  }=!" == "!line!" (
+          Set "Line=!Line:{  =<lightBlue> !"
+          Set "Line=!Line:  }=<default> !"
+        )
+        Set "line=!line:-+=<bold><underline>!"
+        Set "line=!line:+-=<nobold><nounderline>!"
         Set "!AutoMacro!_usage=!%%~1_usage!!line:*usage:=!!\E![0m!LF!"
       )
       If defined !AutoMacro!_Usage (
+        Set "!Automacro!_usage=!%%~1_usage:<bold>=%\E%[1m!"
+        Set "!Automacro!_usage=!%%~1_usage:<nobold>=%\E%[22m!"
         Set "!Automacro!_usage=!%%~1_usage:<red>=%\E%[31m!"
         Set "!Automacro!_usage=!%%~1_usage:<green>=%\E%[32m!"
         Set "!Automacro!_usage=!%%~1_usage:<yellow>=%\E%[33m!"
@@ -249,6 +263,8 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
         Set "!Automacro!_usage=!%%~1_usage:<grey>=%\E%[90m!"
         Set "!Automacro!_usage=!%%~1_usage:<flash>=%\E%[5m!"
         Set "!Automacro!_usage=!%%~1_usage:<default>=%\E%[0m!"
+        Set "!Automacro!_usage=!%%~1_usage:<underline>=%\E%[4m!"
+        Set "!Automacro!_usage=!%%~1_usage:<nounderline>=%\E%[24m!"
       )
     )
 
@@ -265,7 +281,7 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
       Set "debug.file=%~dp0debug\_!AutoMacro!_.dbug"
     )
     Set "!AutoMacro!.end="
-    For /f "tokens=1,* Delims=:" %%I in ('%SystemRoot%\System32\findstr.exe /NIRC:"}\ !AutoMacro!\^>" "!%%~1.path!"')Do (
+    For /f "tokens=1,* Delims=:" %%I in ('%SystemRoot%\System32\findstr.exe /NBIRC:"\ *}\ !AutoMacro!\^>" "!%%~1.path!"')Do (
       Set "!AutoMacro!.end=%%I"
       Set "!AutoMacro!.switches=%%~J"
       If defined AutoMacro.debug Echo Defining: !Automacro!%\E%[K
@@ -289,11 +305,20 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
         )
       )		
     )
+    If not defined !AutoMacro!.end (
+      2> con echo Macro terminator invalid in definition of: !automacro! :
+      1> con %SystemRoot%\System32\findstr.exe /BRC:"\ *}\^>" "!%%~1.path!"
+      1> con echo(
+      2> con echo Expected format:
+      2> con echo } !Automacro! [switches] 
+      1> con Pause
+      EXIT
+    )
     If defined !AutoMacro!_usage If not "!%%~1_switches:/?=!" == "!%%~1_switches!" (
       >"%TEMP%\!AutoMacro!.hlp" Echo(!%%~1_usage!
     )
     <"!%%~1.path!" (
-      If defined AutoMacro.debug break >"!debug.file!"
+      If defined AutoMacro.debug if /i not "!AutoMacro.debug!" == "NoLog" break >"!debug.file!"
       For /l %%i in (1 1 !%%~1.end!)Do (
         Set "line="
         Set /p "line="
@@ -388,8 +413,8 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
           )
 
           If defined line (
-            If defined AutoMacro.Debug >>"!debug.file!" Echo(%%~"raw.%%i: !line!%%~"
-            If defined AutoMacro.Debug For /f "delims=" %%G in ("!line!")Do (
+            If defined AutoMacro.Debug if /i not "!AutoMacro.debug!" == "NoLog" >>"!debug.file!" Echo(%%~"raw.%%i: !line!%%~"
+            If defined AutoMacro.Debug if /i not "!AutoMacro.debug!" == "NoLog" For /f "delims=" %%G in ("!line!")Do (
               Set "AutoMacro.out=%%G"
               >>"!debug.file!" Echo(%%~"exp.%%i: !AutoMacro.out!!LF!%%~"
             )
@@ -425,7 +450,7 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
       If not "!%%~1.switches:/selfRef=!" == "!%%~1.switches!" Set "!AutoMacro!=!%%~1:@.=%%~1.!"
     )
 
-    If defined AutoMacro.debug >>"!debug.file!" (
+    If defined AutoMacro.debug if /i not "!AutoMacro.debug!" == "NoLog" >>"!debug.file!" (
        Set "!AutoMacro!.clone=!%%~1:~0,-4!"
        Set ^"!AutoMacro!.clone=!%%~1.clone:[LF]=%%\n%%^%LF%%LF%!"
        Echo(======================================================================================
@@ -456,7 +481,7 @@ For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
     Set "!AutoMacro!=!%%~1:)))[LF])))[LF]=))))))[LF]!"
     Set "!AutoMacro!=!%%~1:[LF][LF]=[LF]!"
     Set ^"!AutoMacro!=!%%~1:[LF]=^%LF%%LF%!"
-    If defined AutoMacro.debug >>"!debug.file!" (
+    If defined AutoMacro.debug if /i not "!AutoMacro.debug!" == "NoLog" >>"!debug.file!" (
        Echo(
        Echo(======================================================================================
        Set "!AutoMacro!"
@@ -548,12 +573,16 @@ Call:DefMacros
  )
 :Branch
  CLS
- %menu:Return=Tree% Back End Open Edit "Select New" /H: !Branch.Header!
+ %menu:Return=Tree% Back End Open help Edit /div "Select New" /H: !Branch.Header!
  If /i "!Menu{String}!" == "Open" (
    attrib +r !filepath!
    start /wait "" notepad.exe !filepath!
    attrib -r !filepath!
    goto:Tree
+ )
+ If /i "!Menu{String}!" == "help" For /f %%O in ("!filepath!")do (
+   Call "%~f0" -? %%~nO
+   Goto:Branch
  )
  If /i "!Menu{String}!" == "Edit" (
    Notepad.exe !filepath!
@@ -646,7 +675,7 @@ Set Menu=For %%n in (1 2)Do if %%n==2 (%\n%
                                                        )%\n%
     %= Return record name                       =%     Set "menu{record}=%%2"%\n%
                                                    ) )%\n%
-    %= For Each in list;                        =% If defined Menu{Args} For %%G in (^^^!Menu{Args}^^^!)Do (%\n%
+    %= For Each in list;                        =% If defined Menu{Args} For %%G in (^^^!Menu{Args}^^^!)Do If /i not "%%G" == "/div" (%\n%
     %= For Menu.Item Index value                =%   For %%i in (^^^!Menu.#^^^!)Do If not %%i GTR 35 (%\n%
     %= Build the Choice key list                =%     Set "Menu.Chars=^!Menu.Chars^!^!Menu.Keys:~%%i,1^!"%\n%
     %= Define Menu.Item array                   =%     Set "Menu.Item[^!Menu.Keys:~%%i,1^!]=%%~G"%\n%
@@ -654,7 +683,7 @@ Set Menu=For %%n in (1 2)Do if %%n==2 (%\n%
     %= Display as [key] Option String           =%     Echo([^^^!Menu.Keys:~%%i,1^^^!] ^^^!Menu.Output^^^!%\n%
     %= Increment Menu.# Index var               =%     Set /A "Menu.#+=1"%\n%
     %= Close Menu.# expansion loop              =%   )%\n%
-    %= Close Menu{Args} String loop             =% )%\n%
+    %= Close Menu{Args} String loop             =% )else Echo(^^^!Menu_Div^^^!%\n%
     %= Output Dividing Line                     =% If Defined Menu_Div Echo(^^^!Menu_Div^^^!%\n%
     %= Select option by character index         =% For /f "delims=" %%o in ('%__APPDIR__%Choice.exe /N /C:^^^!Menu.Chars^^^!')Do For /f "tokens=1,2 delims=;" %%V in ("^!Menu.Item[%%o]^!;^!Menu@%%o^!")Do (%\n%
     %= exit [sub]script w/out modifying option  =%   If /I "%%V" == "Exit" Exit /B 2%\n%

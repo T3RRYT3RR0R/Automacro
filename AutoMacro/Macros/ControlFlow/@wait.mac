@@ -1,8 +1,7 @@
 @wait { dependencies: @while
 
-  @wait usage: %@wait% <centiseconds> 
-  @wait usage: centiseconds : number of centiseconds to wait as an integer.
-  @wait usage: 
+  /?: %@wait% <centiseconds> 
+  /?: centiseconds : number of centiseconds to wait as an integer.
 
 <; Macro function:
    Waits n centiseconds
@@ -24,4 +23,4 @@
       )
     )
   )
-} @wait /args /selfRef
+} @wait /args /selfRef /ver:3.0.0

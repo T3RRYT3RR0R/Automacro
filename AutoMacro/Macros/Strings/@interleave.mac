@@ -1,9 +1,9 @@
-@interleave { dependencies @strlen @while
+@interleave { dependencies: @strlen @while
 
-  @interleave usage: %@interleave% <sourceVar1> <sourceVar2> <returnVar> [/R] [/fuse]
-  @interleave usage: /R    : remove duplicate whitespace from the interleaved string
-  @interleave usage: /fuse : merges the top half of the first string with
-  @interleave usage:         the bottom half of the second string.
+  /?: %@interleave% <sourceVar1> <sourceVar2> <returnVar> [/R] [/fuse]
+  /?: /R    : remove duplicate whitespace from the interleaved string
+  /?: /fuse : merges the top half of the first string with
+  /?:         the bottom half of the second string.
 
 <;
   Interweaves the characters of two source variables, returning in arg 3.
@@ -53,4 +53,4 @@
     )
     Set "%3=^!@.startfuse^!^!%%3:`=^!^!@.endfuse^!"
   )
-} @interleave /args /selfref /flush
+} @interleave /args /selfref /flush /ver:3.0.0

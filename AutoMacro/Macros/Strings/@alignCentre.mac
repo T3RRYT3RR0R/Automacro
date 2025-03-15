@@ -8,7 +8,6 @@
 
     // Get length of string
     !@strlen! %%3 $len
-
     // calculate centre x position
     Set /a "$centre=((%%2/2)-($len/2))+%%1"
 

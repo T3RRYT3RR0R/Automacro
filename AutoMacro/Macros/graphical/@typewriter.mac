@@ -52,4 +52,4 @@ $>
     )
     ^<nul set /p "=!\e![E!\e![0m"
   )
-} @typewriter /args /selfref /help
+} @typewriter /args /selfref /Ver:3.0.0
