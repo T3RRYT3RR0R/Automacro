@@ -79,7 +79,7 @@ Endlocal & Goto:eof
 :GetDependencies
   For %%1 in (%*) Do (
     For /f "delims=" %%G in ('dir /b /s "%%~1.mac" 2^> nul') do (
-      If "!$pushed:%%~fG=!" == "!$pushed!" Set $pushed=!$pushed! "%%~fG"
+      If "!$pushed:%%~nxG=!" == "!$pushed!" Set $pushed=!$pushed! "%%~fG"
       For /f "tokens=2* delims=:" %%_ in ('findstr /li "dependencies:" "%%~fG"') do Call:GetDependencies %%_
     )
   )
