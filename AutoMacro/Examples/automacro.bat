@@ -120,7 +120,8 @@ Set "AutomacroRoot=%~dp0_END_"
 Set AutomacroRoot="!AutomacroRoot:\=" "!"
 For %%G in (!AutomacroRoot!)Do if not "%%~G" == "_END_" Set "last=%%~G"
 Set "AutomacroRoot=%~dp0"
-Set "AutomacroRoot=!AutomacroRoot:\%last%=!"
+Set "AutomacroRoot=!AutomacroRoot:\%last%\=!"
+
 If not "!PATH:;%~dp0=!" == "!PATH!" Set "PATH=%Path%;%~dp0"
 If not "!PATH:;%automacroRoot%=!" == "!PATH!" Set "PATH=%Path%;%automacroRoot%"
 If /i not "!PATHEXT:.mac=!" == "!PATHEXT!" Set "PATHEXT=!PATHEXT!;.mac"
@@ -187,6 +188,7 @@ Set HELP=For %%. in (1 2)Do if %%. EQU 2 (For %%H in (^^^!helpfiles^^^!)Do If ex
 
 
 %= above empty lines required =%)
+
 
 For /f "tokens=2 delims=+" %%^" in ("+"+"+")Do (
   For %%1 in (!AutoMacros!)Do For /f "tokens=1,*" %%1 in ("%%~1")Do If "!%%~1!" == "" (
